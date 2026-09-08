@@ -1,0 +1,40 @@
+# Python cache & build
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+
+# Google OAuth & Secrets
+.env
+credentials.json
+token.json
+service_account.json
+*.secret.json
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Scratch & dumps
+sheet_dump.json
+scratch*
+
