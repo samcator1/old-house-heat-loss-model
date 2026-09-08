@@ -12,7 +12,11 @@ from .tabs.fabric_tab import build_fabric_tab
 from .tabs.dhw_pool_tab import build_dhw_pool_tab
 from .tabs.systems_tab import build_systems_tab
 from .tabs.room_tab import build_room_tab
-from .formatting import create_clear_formatting_request, create_unmerge_cells_request
+from .formatting import (
+    create_clear_formatting_request,
+    create_unmerge_cells_request,
+    create_clear_data_validation_request
+)
 
 class HeatLossModelBuilder:
     """Orchestrates building and syncing the complete heat loss model in Google Sheets."""
@@ -98,6 +102,7 @@ class HeatLossModelBuilder:
         for ws in active_worksheets:
             all_formatting_requests.append(create_unmerge_cells_request(ws.id, max_rows=150, max_cols=45))
             all_formatting_requests.append(create_clear_formatting_request(ws.id, max_rows=150, max_cols=45))
+            all_formatting_requests.append(create_clear_data_validation_request(ws.id, max_rows=150, max_cols=45))
 
         # Step 5: Add targeted theme formatting
         all_formatting_requests.extend(fmt_dashboard)

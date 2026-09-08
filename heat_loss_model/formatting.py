@@ -243,3 +243,21 @@ def create_data_validation_request(
         }
     }
 
+def create_clear_data_validation_request(
+    sheet_id: int,
+    max_rows: int = 150,
+    max_cols: int = 45
+) -> Dict[str, Any]:
+    """Clears all data validation rules in the given range."""
+    return {
+        "setDataValidation": {
+            "range": {
+                "sheetId": sheet_id,
+                "startRowIndex": 0,
+                "endRowIndex": max_rows,
+                "startColumnIndex": 0,
+                "endColumnIndex": max_cols
+            }
+        }
+    }
+
