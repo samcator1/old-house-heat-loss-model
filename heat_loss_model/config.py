@@ -142,3 +142,37 @@ DEFAULT_ZONES = [
         "zone_type": "Old House"
     }
 ]
+
+# Room Infiltration Questionnaire Calibration (CIBSE Guide A & BS EN 12831)
+INFILTRATION_QUESTIONNAIRE = {
+    "base_construction": [
+        {"label": "New Build (Cavity / Insulated)", "ach": 0.30},
+        {"label": "Renovated Historic (Draught-proofed)", "ach": 0.60},
+        {"label": "Standard Historic (Solid Masonry)", "ach": 0.80},
+        {"label": "Exposed Historic (High Wind / Exposed Site)", "ach": 1.00}
+    ],
+    "chimney_flue": [
+        {"label": "No Chimney / Permanently Sealed", "ach": 0.00},
+        {"label": "Room-Sealed Stove with Ext Air", "ach": 0.05},
+        {"label": "Flue Damper / Chimney Balloon Fitted", "ach": 0.15},
+        {"label": "Open Fireplace (Unsealed Flue)", "ach": 0.60}
+    ],
+    "windows_doors": [
+        {"label": "Modern High-Performance (Compression Gaskets)", "ach": 0.00},
+        {"label": "Secondary Glazing Fitted", "ach": 0.10},
+        {"label": "Retrofitted Brush / Pile Draught Seals", "ach": 0.15},
+        {"label": "Original Loose Sash / Casement (Undraughted)", "ach": 0.40}
+    ],
+    "floor_construction": [
+        {"label": "Solid Concrete Slab / Insulated Floor", "ach": 0.00},
+        {"label": "Suspended Timber (Sealed / Carpet & Underlay)", "ach": 0.10},
+        {"label": "Suspended Timber (Unsealed Boards over Cold Void)", "ach": 0.35}
+    ],
+    "ceiling_boundary": [
+        {"label": "Intermediate Floor (Heated Space Above)", "ach": 0.00},
+        {"label": "Insulated Loft (Sealed Plaster & Sealed Hatch)", "ach": 0.05},
+        {"label": "Attic Downlights / Unsealed Loft Hatch", "ach": 0.20},
+        {"label": "Sloping Roof / Exposed Eaves / Thatched Ridge", "ach": 0.30}
+    ]
+}
+

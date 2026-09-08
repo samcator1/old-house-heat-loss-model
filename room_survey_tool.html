@@ -168,37 +168,99 @@
   <script>
     // Initial 23 Room Dataset matching 5_Room_Heat_Loss
     let rooms = [
-      { code: "GF-01", name: "Entrance & Stair Hall (GF to FF)", floor: "Ground Floor", zone: "Georgian end", temp: 18, len: 6.25, wid: 4.5, ht: 5.6, extWall: 10.75, uWall: 1.4, winArea: 6.5, uWin: 4.8, flArea: 28.1, uFl: 0.8, roofArea: 0, uRoof: 0.18, ach: 1.8, wallType: "Solid 9in Georgian Brick", floorType: "Suspended Timber uninsulated", radType: "Type 22 (Double)", radSize: "600x1200", pipeSize: "15mm copper", notes: "Double-height open stair volume connecting GF to FF. Check draught seal on front door." },
-      { code: "GF-02", name: "Drawing Room / Main Living", floor: "Ground Floor", zone: "Georgian end", temp: 21, len: 8.5, wid: 6.25, ht: 2.8, extWall: 14.75, uWall: 1.4, winArea: 9.2, uWin: 4.8, flArea: 53.1, uFl: 0.8, roofArea: 0, uRoof: 0.18, ach: 1.8, wallType: "Solid 9in Georgian Brick", floorType: "Suspended Timber uninsulated", radType: "Column Radiator", radSize: "600x1400", pipeSize: "15mm copper", notes: "Solid Georgian brick wall. Open fireplace needs chimney balloon or flue damper." },
-      { code: "GF-03", name: "Dining Room", floor: "Ground Floor", zone: "Thatched gable ended", temp: 21, len: 6.0, wid: 5.5, ht: 2.8, extWall: 11.5, uWall: 1.8, winArea: 5.0, uWin: 4.8, flArea: 33.0, uFl: 0.6, roofArea: 0, uRoof: 0.3, ach: 1.8, wallType: "Solid Brick / Timber frame", floorType: "Suspended Timber over crawlspace", radType: "Type 21", radSize: "600x1000", pipeSize: "15mm copper", notes: "Check floor void beneath timber boards. Good candidate for underfloor insulation." },
-      { code: "GF-04", name: "Kitchen & Breakfast Area", floor: "Ground Floor", zone: "New build", temp: 18, len: 7.5, wid: 6.5, ht: 2.8, extWall: 14.0, uWall: 0.22, winArea: 8.0, uWin: 1.4, flArea: 48.8, uFl: 0.15, roofArea: 0, uRoof: 0.15, ach: 0.5, wallType: "Insulated Cavity Wall", floorType: "Insulated Concrete Slab", radType: "Underfloor Heating", radSize: "UFH Loops", pipeSize: "16mm PEX manifold", notes: "New insulated cavity wall & insulated slab. High thermal performance." },
-      { code: "GF-05", name: "Orangery / Garden Room", floor: "Ground Floor", zone: "Orangery", temp: 20, len: 10.0, wid: 6.0, ht: 2.8, extWall: 22.0, uWall: 0.25, winArea: 35.0, uWin: 1.4, flArea: 60.0, uFl: 0.15, roofArea: 60.0, uRoof: 1.5, ach: 0.6, wallType: "Glazed / Low brick dwarf wall", floorType: "Insulated Slab", radType: "Trench Heaters / UFH", radSize: "Trench 200x2000", pipeSize: "15mm copper", notes: "Large glazed roof lantern and double glazed perimeter. High heat loss density." },
-      { code: "GF-06", name: "Snug / Family Sitting Room", floor: "Ground Floor", zone: "Thatched gable ended", temp: 21, len: 6.0, wid: 5.0, ht: 2.8, extWall: 11.0, uWall: 1.8, winArea: 4.5, uWin: 4.8, flArea: 30.0, uFl: 0.6, roofArea: 0, uRoof: 0.3, ach: 1.8, wallType: "Solid Brick", floorType: "Timber over void", radType: "Type 11 (Single)", radSize: "600x1200", pipeSize: "10mm microbore", notes: "Timber beam ceiling. Space available for Type 22 or Type 33 radiator." },
-      { code: "GF-07", name: "Study / Home Office", floor: "Ground Floor", zone: "Thatched gable ended", temp: 20, len: 6.0, wid: 4.0, ht: 2.8, extWall: 10.0, uWall: 1.8, winArea: 3.8, uWin: 4.8, flArea: 24.0, uFl: 0.6, roofArea: 0, uRoof: 0.3, ach: 1.8, wallType: "Solid Brick", floorType: "Timber over void", radType: "Type 21", radSize: "600x1000", pipeSize: "15mm copper", notes: "Continuous occupancy during workdays. Comfort requires 20°C." },
-      { code: "GF-08", name: "Utility & Boot Room", floor: "Ground Floor", zone: "Lean to West", temp: 18, len: 4.0, wid: 3.5, ht: 2.6, extWall: 7.5, uWall: 2.2, winArea: 2.2, uWin: 4.8, flArea: 14.0, uFl: 1.1, roofArea: 14.0, uRoof: 2.0, ach: 1.8, wallType: "Uninsulated solid 9in", floorType: "Uninsulated quarry tile", radType: "Type 11", radSize: "600x800", pipeSize: "15mm copper", notes: "Solid uninsulated wall & sloping roof. Prime candidate for roof & wall insulation." },
-      { code: "GF-09", name: "Ground Floor Cloakroom / WC", floor: "Ground Floor", zone: "Lean to West", temp: 18, len: 2.5, wid: 4.0, ht: 2.6, extWall: 2.5, uWall: 2.2, winArea: 1.0, uWin: 4.8, flArea: 10.0, uFl: 1.1, roofArea: 10.0, uRoof: 2.0, ach: 1.8, wallType: "Uninsulated solid", floorType: "Solid concrete", radType: "Towel Rail", radSize: "800x500", pipeSize: "15mm copper", notes: "Small heated towel rail or compact radiator needed." },
-      { code: "GF-10", name: "Plant Room / Back Scullery", floor: "Ground Floor", zone: "Lean to North", temp: 16, len: 6.0, wid: 3.0, ht: 2.6, extWall: 6.0, uWall: 2.2, winArea: 1.8, uWin: 4.8, flArea: 18.0, uFl: 1.1, roofArea: 18.0, uRoof: 2.0, ach: 1.8, wallType: "Solid wall", floorType: "Solid concrete", radType: "None / Pipe gains", radSize: "-", pipeSize: "28mm primary headers", notes: "Buffer cylinder & manifolds location. Unintentional heat gains from pipework." },
+      { code: "GF-01", name: "Entrance & Stair Hall (GF to FF)", floor: "Ground Floor", zone: "Georgian end", temp: 18, len: 6.25, wid: 4.5, ht: 5.6, extWall: 10.75, uWall: 1.4, winArea: 6.5, uWin: 4.8, flArea: 28.1, uFl: 0.8, roofArea: 0, uRoof: 0.18, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Suspended Timber (Unsealed Boards over Cold Void)", qCeil: "Intermediate Floor (Heated Space Above)", wallType: "Solid 9in Georgian Brick", floorType: "Suspended Timber uninsulated", radType: "Type 22 (Double)", radSize: "600x1200", pipeSize: "15mm copper", notes: "Double-height open stair volume connecting GF to FF. Check draught seal on front door." },
+      { code: "GF-02", name: "Drawing Room / Main Living", floor: "Ground Floor", zone: "Georgian end", temp: 21, len: 8.5, wid: 6.25, ht: 2.8, extWall: 14.75, uWall: 1.4, winArea: 9.2, uWin: 4.8, flArea: 53.1, uFl: 0.8, roofArea: 0, uRoof: 0.18, qBase: "Standard Historic (Solid Masonry)", qChimney: "Open Fireplace (Unsealed Flue)", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Suspended Timber (Unsealed Boards over Cold Void)", qCeil: "Intermediate Floor (Heated Space Above)", wallType: "Solid 9in Georgian Brick", floorType: "Suspended Timber uninsulated", radType: "Column Radiator", radSize: "600x1400", pipeSize: "15mm copper", notes: "Solid Georgian brick wall. Open fireplace needs chimney balloon or flue damper to cut 0.6 ACH." },
+      { code: "GF-03", name: "Dining Room", floor: "Ground Floor", zone: "Thatched gable ended", temp: 21, len: 6.0, wid: 5.5, ht: 2.8, extWall: 11.5, uWall: 1.8, winArea: 5.0, uWin: 4.8, flArea: 33.0, uFl: 0.6, roofArea: 0, uRoof: 0.3, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Suspended Timber (Unsealed Boards over Cold Void)", qCeil: "Intermediate Floor (Heated Space Above)", wallType: "Solid Brick / Timber frame", floorType: "Suspended Timber over crawlspace", radType: "Type 21", radSize: "600x1000", pipeSize: "15mm copper", notes: "Check floor void beneath timber boards. Good candidate for underfloor insulation." },
+      { code: "GF-04", name: "Kitchen & Breakfast Area", floor: "Ground Floor", zone: "New build", temp: 18, len: 7.5, wid: 6.5, ht: 2.8, extWall: 14.0, uWall: 0.22, winArea: 8.0, uWin: 1.4, flArea: 48.8, uFl: 0.15, roofArea: 0, uRoof: 0.15, qBase: "New Build (Cavity / Insulated)", qChimney: "No Chimney / Permanently Sealed", qWin: "Modern High-Performance (Compression Gaskets)", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Intermediate Floor (Heated Space Above)", wallType: "Insulated Cavity Wall", floorType: "Insulated Concrete Slab", radType: "Underfloor Heating", radSize: "UFH Loops", pipeSize: "16mm PEX manifold", notes: "New insulated cavity wall & insulated slab. High thermal and airtight performance." },
+      { code: "GF-05", name: "Orangery / Garden Room", floor: "Ground Floor", zone: "Orangery", temp: 20, len: 10.0, wid: 6.0, ht: 2.8, extWall: 22.0, uWall: 0.25, winArea: 35.0, uWin: 1.4, flArea: 60.0, uFl: 0.15, roofArea: 60.0, uRoof: 1.5, qBase: "New Build (Cavity / Insulated)", qChimney: "No Chimney / Permanently Sealed", qWin: "Modern High-Performance (Compression Gaskets)", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Sloping Roof / Exposed Eaves / Thatched Ridge", wallType: "Glazed / Low brick dwarf wall", floorType: "Insulated Slab", radType: "Trench Heaters / UFH", radSize: "Trench 200x2000", pipeSize: "15mm copper", notes: "Large glazed roof lantern and double glazed perimeter. High heat loss density." },
+      { code: "GF-06", name: "Snug / Family Sitting Room", floor: "Ground Floor", zone: "Thatched gable ended", temp: 21, len: 6.0, wid: 5.0, ht: 2.8, extWall: 11.0, uWall: 1.8, winArea: 4.5, uWin: 4.8, flArea: 30.0, uFl: 0.6, roofArea: 0, uRoof: 0.3, qBase: "Standard Historic (Solid Masonry)", qChimney: "Room-Sealed Stove with Ext Air", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Suspended Timber (Unsealed Boards over Cold Void)", qCeil: "Intermediate Floor (Heated Space Above)", wallType: "Solid Brick", floorType: "Timber over void", radType: "Type 11 (Single)", radSize: "600x1200", pipeSize: "10mm microbore", notes: "Timber beam ceiling. Space available for Type 22 or Type 33 radiator." },
+      { code: "GF-07", name: "Study / Home Office", floor: "Ground Floor", zone: "Thatched gable ended", temp: 20, len: 6.0, wid: 4.0, ht: 2.8, extWall: 10.0, uWall: 1.8, winArea: 3.8, uWin: 4.8, flArea: 24.0, uFl: 0.6, roofArea: 0, uRoof: 0.3, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Suspended Timber (Unsealed Boards over Cold Void)", qCeil: "Intermediate Floor (Heated Space Above)", wallType: "Solid Brick", floorType: "Timber over void", radType: "Type 21", radSize: "600x1000", pipeSize: "15mm copper", notes: "Continuous occupancy during workdays. Comfort requires 20°C." },
+      { code: "GF-08", name: "Utility & Boot Room", floor: "Ground Floor", zone: "Lean to West", temp: 18, len: 4.0, wid: 3.5, ht: 2.6, extWall: 7.5, uWall: 2.2, winArea: 2.2, uWin: 4.8, flArea: 14.0, uFl: 1.1, roofArea: 14.0, uRoof: 2.0, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Suspended Timber (Unsealed Boards over Cold Void)", qCeil: "Sloping Roof / Exposed Eaves / Thatched Ridge", wallType: "Uninsulated solid 9in", floorType: "Uninsulated quarry tile", radType: "Type 11", radSize: "600x800", pipeSize: "15mm copper", notes: "Solid uninsulated wall & sloping roof. Prime candidate for roof & wall insulation." },
+      { code: "GF-09", name: "Ground Floor Cloakroom / WC", floor: "Ground Floor", zone: "Lean to West", temp: 18, len: 2.5, wid: 4.0, ht: 2.6, extWall: 2.5, uWall: 2.2, winArea: 1.0, uWin: 4.8, flArea: 10.0, uFl: 1.1, roofArea: 10.0, uRoof: 2.0, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Suspended Timber (Unsealed Boards over Cold Void)", qCeil: "Sloping Roof / Exposed Eaves / Thatched Ridge", wallType: "Uninsulated solid", floorType: "Solid concrete", radType: "Towel Rail", radSize: "800x500", pipeSize: "15mm copper", notes: "Small heated towel rail or compact radiator needed." },
+      { code: "GF-10", name: "Plant Room / Back Scullery", floor: "Ground Floor", zone: "Lean to North", temp: 16, len: 6.0, wid: 3.0, ht: 2.6, extWall: 6.0, uWall: 2.2, winArea: 1.8, uWin: 4.8, flArea: 18.0, uFl: 1.1, roofArea: 18.0, uRoof: 2.0, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Suspended Timber (Unsealed Boards over Cold Void)", qCeil: "Sloping Roof / Exposed Eaves / Thatched Ridge", wallType: "Solid wall", floorType: "Solid concrete", radType: "None / Pipe gains", radSize: "-", pipeSize: "28mm primary headers", notes: "Buffer cylinder & manifolds location. Unintentional heat gains from pipework." },
       
       // First Floor (13 rooms)
-      { code: "FF-01", name: "Upper Stair Landing & Gallery", floor: "First Floor", zone: "Georgian end", temp: 18, len: 6.25, wid: 4.5, ht: 2.8, extWall: 10.75, uWall: 1.4, winArea: 6.0, uWin: 4.8, flArea: 28.1, uFl: 0.0, roofArea: 28.1, uRoof: 0.18, ach: 1.4, wallType: "Solid Georgian Brick", floorType: "Internal joists", radType: "Type 22", radSize: "600x1200", pipeSize: "15mm copper", notes: "Connects with GF-01 hall. Ceiling below insulated attic." },
-      { code: "FF-02", name: "First Floor East Corridor", floor: "First Floor", zone: "Thatched gable ended", temp: 18, len: 12.0, wid: 1.8, ht: 2.6, extWall: 12.0, uWall: 1.8, winArea: 3.0, uWin: 4.8, flArea: 21.6, uFl: 0.0, roofArea: 21.6, uRoof: 0.3, ach: 1.4, wallType: "Solid Brick", floorType: "Internal joists", radType: "Type 11", radSize: "600x1000", pipeSize: "15mm copper", notes: "Internal corridor with external end wall. Long pipe run access in floor void." },
-      { code: "FF-03", name: "Master Bedroom", floor: "First Floor", zone: "Georgian end", temp: 18, len: 6.25, wid: 5.5, ht: 2.8, extWall: 11.75, uWall: 1.4, winArea: 5.8, uWin: 4.8, flArea: 34.4, uFl: 0.0, roofArea: 34.4, uRoof: 0.18, ach: 1.4, wallType: "Solid Georgian Brick", floorType: "Internal joists", radType: "Type 22", radSize: "600x1400", pipeSize: "15mm copper", notes: "Dual aspect windows. Large Type 22 radiator recommended." },
-      { code: "FF-04", name: "Master En-Suite Bathroom", floor: "First Floor", zone: "Georgian end", temp: 22, len: 4.5, wid: 3.0, ht: 2.8, extWall: 4.5, uWall: 1.4, winArea: 1.8, uWin: 4.8, flArea: 13.5, uFl: 0.0, roofArea: 13.5, uRoof: 0.18, ach: 1.5, wallType: "Solid Georgian Brick", floorType: "Internal joists", radType: "Towel Rail + UFH", radSize: "1200x600", pipeSize: "15mm copper", notes: "CIBSE 22°C design temp. Underfloor heating mat or high-output towel radiator." },
-      { code: "FF-05", name: "Bedroom 2 (Guest Suite)", floor: "First Floor", zone: "New build", temp: 18, len: 5.5, wid: 5.0, ht: 2.6, extWall: 10.5, uWall: 0.22, winArea: 4.2, uWin: 1.4, flArea: 27.5, uFl: 0.0, roofArea: 27.5, uRoof: 0.15, ach: 0.4, wallType: "Insulated Cavity Wall", floorType: "Internal joists", radType: "Type 22", radSize: "600x800", pipeSize: "15mm copper", notes: "New build high insulation section. Modest emitter sizing needed." },
-      { code: "FF-06", name: "Bedroom 2 En-Suite", floor: "First Floor", zone: "New build", temp: 22, len: 3.0, wid: 2.5, ht: 2.6, extWall: 3.0, uWall: 0.22, winArea: 1.2, uWin: 1.4, flArea: 7.5, uFl: 0.0, roofArea: 7.5, uRoof: 0.15, ach: 0.5, wallType: "Insulated Cavity Wall", floorType: "Internal joists", radType: "Towel Rail", radSize: "1000x500", pipeSize: "15mm copper", notes: "Warm 22°C design requirement. Extract fan with backdraught shutter." },
-      { code: "FF-07", name: "Bedroom 3", floor: "First Floor", zone: "Thatched gable ended", temp: 18, len: 5.5, wid: 4.5, ht: 2.6, extWall: 10.0, uWall: 1.8, winArea: 3.8, uWin: 4.8, flArea: 24.8, uFl: 0.0, roofArea: 24.8, uRoof: 0.3, ach: 1.4, wallType: "Solid Brick / Timber frame", floorType: "Internal joists", radType: "Type 21", radSize: "600x1000", pipeSize: "15mm copper", notes: "Dormer window and sloping ceiling. Ensure loft insulation reaches eaves." },
-      { code: "FF-08", name: "Bedroom 4", floor: "First Floor", zone: "Thatched gable ended", temp: 18, len: 5.0, wid: 4.5, ht: 2.6, extWall: 9.5, uWall: 1.8, winArea: 3.5, uWin: 4.8, flArea: 22.5, uFl: 0.0, roofArea: 22.5, uRoof: 0.3, ach: 1.4, wallType: "Solid Brick / Gable End", floorType: "Internal joists", radType: "Type 22", radSize: "600x1000", pipeSize: "15mm copper", notes: "Gable end wall exposed. Internal woodfibre insulation would reduce loss by 60%." },
-      { code: "FF-09", name: "Bedroom 5 / Nursery", floor: "First Floor", zone: "New build", temp: 18, len: 4.5, wid: 4.0, ht: 2.6, extWall: 8.5, uWall: 0.22, winArea: 3.2, uWin: 1.4, flArea: 18.0, uFl: 0.0, roofArea: 18.0, uRoof: 0.15, ach: 0.4, wallType: "Insulated Cavity Wall", floorType: "Internal joists", radType: "Type 21", radSize: "600x800", pipeSize: "15mm copper", notes: "Modern insulated timber/cavity construction." },
-      { code: "FF-10", name: "Family Bathroom", floor: "First Floor", zone: "Thatched gable ended", temp: 22, len: 4.0, wid: 3.5, ht: 2.6, extWall: 4.0, uWall: 1.8, winArea: 2.0, uWin: 4.8, flArea: 14.0, uFl: 0.0, roofArea: 14.0, uRoof: 0.3, ach: 1.5, wallType: "Solid Brick", floorType: "Internal joists", radType: "Towel Rail + Rad", radSize: "1200x600", pipeSize: "15mm copper", notes: "High target temp (22°C). Needs dedicated radiator plus heated towel rail." },
-      { code: "FF-11", name: "Laundry & Linen Room", floor: "First Floor", zone: "New build", temp: 18, len: 3.5, wid: 3.0, ht: 2.6, extWall: 3.5, uWall: 0.22, winArea: 1.5, uWin: 1.4, flArea: 10.5, uFl: 0.0, roofArea: 10.5, uRoof: 0.15, ach: 0.5, wallType: "Insulated Cavity Wall", floorType: "Internal joists", radType: "Type 11", radSize: "600x600", pipeSize: "15mm copper", notes: "Washing/drying equipment. Internal heat gains help offset space heating." },
-      { code: "FF-12", name: "Dressing Room / Robes", floor: "First Floor", zone: "Georgian end", temp: 18, len: 4.0, wid: 3.0, ht: 2.8, extWall: 4.0, uWall: 1.4, winArea: 1.8, uWin: 4.8, flArea: 12.0, uFl: 0.0, roofArea: 12.0, uRoof: 0.18, ach: 1.4, wallType: "Solid Georgian Brick", floorType: "Internal joists", radType: "Type 11", radSize: "600x800", pipeSize: "15mm copper", notes: "Fitted wardrobes on external wall create thermal shadowing. Keep background heat." },
-      { code: "FF-13", name: "First Floor Shower Room", floor: "First Floor", zone: "Thatched gable ended", temp: 22, len: 3.0, wid: 2.5, ht: 2.6, extWall: 3.0, uWall: 1.8, winArea: 1.0, uWin: 4.8, flArea: 7.5, uFl: 0.0, roofArea: 7.5, uRoof: 0.3, ach: 1.5, wallType: "Solid Brick", floorType: "Internal joists", radType: "Towel Rail", radSize: "1000x500", pipeSize: "15mm copper", notes: "22°C bathroom comfort criteria. Compact high-efficiency emitter." }
+      { code: "FF-01", name: "Upper Stair Landing & Gallery", floor: "First Floor", zone: "Georgian end", temp: 18, len: 6.25, wid: 4.5, ht: 2.8, extWall: 10.75, uWall: 1.4, winArea: 6.0, uWin: 4.8, flArea: 28.1, uFl: 0.0, roofArea: 28.1, uRoof: 0.18, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Insulated Loft (Sealed Plaster & Sealed Hatch)", wallType: "Solid Georgian Brick", floorType: "Internal joists", radType: "Type 22", radSize: "600x1200", pipeSize: "15mm copper", notes: "Connects with GF-01 hall. Ceiling below insulated attic." },
+      { code: "FF-02", name: "First Floor East Corridor", floor: "First Floor", zone: "Thatched gable ended", temp: 18, len: 12.0, wid: 1.8, ht: 2.6, extWall: 12.0, uWall: 1.8, winArea: 3.0, uWin: 4.8, flArea: 21.6, uFl: 0.0, roofArea: 21.6, uRoof: 0.3, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Sloping Roof / Exposed Eaves / Thatched Ridge", wallType: "Solid Brick", floorType: "Internal joists", radType: "Type 11", radSize: "600x1000", pipeSize: "15mm copper", notes: "Internal corridor with external end wall. Long pipe run access in floor void." },
+      { code: "FF-03", name: "Master Bedroom", floor: "First Floor", zone: "Georgian end", temp: 18, len: 6.25, wid: 5.5, ht: 2.8, extWall: 11.75, uWall: 1.4, winArea: 5.8, uWin: 4.8, flArea: 34.4, uFl: 0.0, roofArea: 34.4, uRoof: 0.18, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Retrofitted Brush / Pile Draught Seals", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Insulated Loft (Sealed Plaster & Sealed Hatch)", wallType: "Solid Georgian Brick", floorType: "Internal joists", radType: "Type 22", radSize: "600x1400", pipeSize: "15mm copper", notes: "Dual aspect windows. Large Type 22 radiator recommended." },
+      { code: "FF-04", name: "Master En-Suite Bathroom", floor: "First Floor", zone: "Georgian end", temp: 22, len: 4.5, wid: 3.0, ht: 2.8, extWall: 4.5, uWall: 1.4, winArea: 1.8, uWin: 4.8, flArea: 13.5, uFl: 0.0, roofArea: 13.5, uRoof: 0.18, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Retrofitted Brush / Pile Draught Seals", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Attic Downlights / Unsealed Loft Hatch", wallType: "Solid Georgian Brick", floorType: "Internal joists", radType: "Towel Rail + UFH", radSize: "1200x600", pipeSize: "15mm copper", notes: "CIBSE 22°C design temp. Underfloor heating mat or high-output towel radiator." },
+      { code: "FF-05", name: "Bedroom 2 (Guest Suite)", floor: "First Floor", zone: "New build", temp: 18, len: 5.5, wid: 5.0, ht: 2.6, extWall: 10.5, uWall: 0.22, winArea: 4.2, uWin: 1.4, flArea: 27.5, uFl: 0.0, roofArea: 27.5, uRoof: 0.15, qBase: "New Build (Cavity / Insulated)", qChimney: "No Chimney / Permanently Sealed", qWin: "Modern High-Performance (Compression Gaskets)", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Insulated Loft (Sealed Plaster & Sealed Hatch)", wallType: "Insulated Cavity Wall", floorType: "Internal joists", radType: "Type 22", radSize: "600x800", pipeSize: "15mm copper", notes: "New build high insulation section. Modest emitter sizing needed." },
+      { code: "FF-06", name: "Bedroom 2 En-Suite", floor: "First Floor", zone: "New build", temp: 22, len: 3.0, wid: 2.5, ht: 2.6, extWall: 3.0, uWall: 0.22, winArea: 1.2, uWin: 1.4, flArea: 7.5, uFl: 0.0, roofArea: 7.5, uRoof: 0.15, qBase: "New Build (Cavity / Insulated)", qChimney: "No Chimney / Permanently Sealed", qWin: "Modern High-Performance (Compression Gaskets)", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Insulated Loft (Sealed Plaster & Sealed Hatch)", wallType: "Insulated Cavity Wall", floorType: "Internal joists", radType: "Towel Rail", radSize: "1000x500", pipeSize: "15mm copper", notes: "Warm 22°C design requirement. Extract fan with backdraught shutter." },
+      { code: "FF-07", name: "Bedroom 3", floor: "First Floor", zone: "Thatched gable ended", temp: 18, len: 5.5, wid: 4.5, ht: 2.6, extWall: 10.0, uWall: 1.8, winArea: 3.8, uWin: 4.8, flArea: 24.8, uFl: 0.0, roofArea: 24.8, uRoof: 0.3, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Sloping Roof / Exposed Eaves / Thatched Ridge", wallType: "Solid Brick / Timber frame", floorType: "Internal joists", radType: "Type 21", radSize: "600x1000", pipeSize: "15mm copper", notes: "Dormer window and sloping ceiling. Ensure loft insulation reaches eaves." },
+      { code: "FF-08", name: "Bedroom 4", floor: "First Floor", zone: "Thatched gable ended", temp: 18, len: 5.0, wid: 4.5, ht: 2.6, extWall: 9.5, uWall: 1.8, winArea: 3.5, uWin: 4.8, flArea: 22.5, uFl: 0.0, roofArea: 22.5, uRoof: 0.3, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Sloping Roof / Exposed Eaves / Thatched Ridge", wallType: "Solid Brick / Gable End", floorType: "Internal joists", radType: "Type 22", radSize: "600x1000", pipeSize: "15mm copper", notes: "Gable end wall exposed. Internal woodfibre insulation would reduce loss by 60%." },
+      { code: "FF-09", name: "Bedroom 5 / Nursery", floor: "First Floor", zone: "New build", temp: 18, len: 4.5, wid: 4.0, ht: 2.6, extWall: 8.5, uWall: 0.22, winArea: 3.2, uWin: 1.4, flArea: 18.0, uFl: 0.0, roofArea: 18.0, uRoof: 0.15, qBase: "New Build (Cavity / Insulated)", qChimney: "No Chimney / Permanently Sealed", qWin: "Modern High-Performance (Compression Gaskets)", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Insulated Loft (Sealed Plaster & Sealed Hatch)", wallType: "Insulated Cavity Wall", floorType: "Internal joists", radType: "Type 21", radSize: "600x800", pipeSize: "15mm copper", notes: "Modern insulated timber/cavity construction." },
+      { code: "FF-10", name: "Family Bathroom", floor: "First Floor", zone: "Thatched gable ended", temp: 22, len: 4.0, wid: 3.5, ht: 2.6, extWall: 4.0, uWall: 1.8, winArea: 2.0, uWin: 4.8, flArea: 14.0, uFl: 0.0, roofArea: 14.0, uRoof: 0.3, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Sloping Roof / Exposed Eaves / Thatched Ridge", wallType: "Solid Brick", floorType: "Internal joists", radType: "Towel Rail + Rad", radSize: "1200x600", pipeSize: "15mm copper", notes: "High target temp (22°C). Needs dedicated radiator plus heated towel rail." },
+      { code: "FF-11", name: "Laundry & Linen Room", floor: "First Floor", zone: "New build", temp: 18, len: 3.5, wid: 3.0, ht: 2.6, extWall: 3.5, uWall: 0.22, winArea: 1.5, uWin: 1.4, flArea: 10.5, uFl: 0.0, roofArea: 10.5, uRoof: 0.15, qBase: "New Build (Cavity / Insulated)", qChimney: "No Chimney / Permanently Sealed", qWin: "Modern High-Performance (Compression Gaskets)", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Insulated Loft (Sealed Plaster & Sealed Hatch)", wallType: "Insulated Cavity Wall", floorType: "Internal joists", radType: "Type 11", radSize: "600x600", pipeSize: "15mm copper", notes: "Washing/drying equipment. Internal heat gains help offset space heating." },
+      { code: "FF-12", name: "Dressing Room / Robes", floor: "First Floor", zone: "Georgian end", temp: 18, len: 4.0, wid: 3.0, ht: 2.8, extWall: 4.0, uWall: 1.4, winArea: 1.8, uWin: 4.8, flArea: 12.0, uFl: 0.0, roofArea: 12.0, uRoof: 0.18, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Insulated Loft (Sealed Plaster & Sealed Hatch)", wallType: "Solid Georgian Brick", floorType: "Internal joists", radType: "Type 11", radSize: "600x800", pipeSize: "15mm copper", notes: "Fitted wardrobes on external wall create thermal shadowing. Keep background heat." },
+      { code: "FF-13", name: "First Floor Shower Room", floor: "First Floor", zone: "Thatched gable ended", temp: 22, len: 3.0, wid: 2.5, ht: 2.6, extWall: 3.0, uWall: 1.8, winArea: 1.0, uWin: 4.8, flArea: 7.5, uFl: 0.0, roofArea: 7.5, uRoof: 0.3, qBase: "Standard Historic (Solid Masonry)", qChimney: "No Chimney / Permanently Sealed", qWin: "Original Loose Sash / Casement (Undraughted)", qFloor: "Solid Concrete Slab / Insulated Floor", qCeil: "Sloping Roof / Exposed Eaves / Thatched Ridge", wallType: "Solid Brick", floorType: "Internal joists", radType: "Towel Rail", radSize: "1000x500", pipeSize: "15mm copper", notes: "22°C bathroom comfort criteria. Compact high-efficiency emitter." }
     ];
+
+    // Questionnaire Lookup Options (CIBSE Guide A & BS EN 12831)
+    const QUESTIONNAIRE = {
+      base_construction: [
+        { label: "New Build (Cavity / Insulated)", ach: 0.30 },
+        { label: "Renovated Historic (Draught-proofed)", ach: 0.60 },
+        { label: "Standard Historic (Solid Masonry)", ach: 0.80 },
+        { label: "Exposed Historic (High Wind / Exposed Site)", ach: 1.00 }
+      ],
+      chimney_flue: [
+        { label: "No Chimney / Permanently Sealed", ach: 0.00 },
+        { label: "Room-Sealed Stove with Ext Air", ach: 0.05 },
+        { label: "Flue Damper / Chimney Balloon Fitted", ach: 0.15 },
+        { label: "Open Fireplace (Unsealed Flue)", ach: 0.60 }
+      ],
+      windows_doors: [
+        { label: "Modern High-Performance (Compression Gaskets)", ach: 0.00 },
+        { label: "Secondary Glazing Fitted", ach: 0.10 },
+        { label: "Retrofitted Brush / Pile Draught Seals", ach: 0.15 },
+        { label: "Original Loose Sash / Casement (Undraughted)", ach: 0.40 }
+      ],
+      floor_construction: [
+        { label: "Solid Concrete Slab / Insulated Floor", ach: 0.00 },
+        { label: "Suspended Timber (Sealed / Carpet & Underlay)", ach: 0.10 },
+        { label: "Suspended Timber (Unsealed Boards over Cold Void)", ach: 0.35 }
+      ],
+      ceiling_boundary: [
+        { label: "Intermediate Floor (Heated Space Above)", ach: 0.00 },
+        { label: "Insulated Loft (Sealed Plaster & Sealed Hatch)", ach: 0.05 },
+        { label: "Attic Downlights / Unsealed Loft Hatch", ach: 0.20 },
+        { label: "Sloping Roof / Exposed Eaves / Thatched Ridge", ach: 0.30 }
+      ]
+    };
+
+    function getACHValue(category, label) {
+      const cat = QUESTIONNAIRE[category];
+      if (!cat) return 0.00;
+      const found = cat.find(opt => opt.label === label);
+      return found ? found.ach : 0.00;
+    }
+
+    function calculateACH(r) {
+      const vBase = getACHValue("base_construction", r.qBase);
+      const vChimney = getACHValue("chimney_flue", r.qChimney);
+      const vWin = getACHValue("windows_doors", r.qWin);
+      const vFloor = getACHValue("floor_construction", r.qFloor);
+      const vCeil = getACHValue("ceiling_boundary", r.qCeil);
+      return Math.round((vBase + vChimney + vWin + vFloor + vCeil) * 100) / 100;
+    }
 
     // Load from localStorage if user previously edited
     const savedData = localStorage.getItem("heat_loss_survey_rooms");
     if (savedData) {
-      try { rooms = JSON.parse(savedData); } catch (e) {}
+      try {
+        const loaded = JSON.parse(savedData);
+        if (Array.isArray(loaded) && loaded.length === rooms.length) {
+          rooms = loaded.map((r, i) => ({
+            ...rooms[i],
+            ...r,
+            qBase: r.qBase || rooms[i].qBase,
+            qChimney: r.qChimney || rooms[i].qChimney,
+            qWin: r.qWin || rooms[i].qWin,
+            qFloor: r.qFloor || rooms[i].qFloor,
+            qCeil: r.qCeil || rooms[i].qCeil
+          }));
+        }
+      } catch (e) {}
     }
 
     let activeIndex = 0;
@@ -213,6 +275,7 @@
     }
 
     function calculateRoom(r) {
+      r.ach = calculateACH(r);
       const area = r.len * r.wid;
       const vol = area * r.ht;
       const grossWall = r.extWall * r.ht;
@@ -241,7 +304,8 @@
         totalLoss: Math.round(totalLoss),
         intensity: intensity.toFixed(1),
         rad45: Math.round(rad45),
-        radBoiler: radBoiler
+        radBoiler: radBoiler,
+        ach: r.ach.toFixed(2)
       };
     }
 
@@ -347,10 +411,80 @@
             <input type="number" step="0.1" value="${r.ht}" onchange="updateField(${activeIndex}, 'ht', parseFloat(this.value))" class="w-full bg-white border border-slate-300 rounded p-1 text-center font-medium">
             <div class="text-[10px] text-slate-400 mt-1">Volume: ${c.vol} m³</div>
           </div>
-          <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200">
-            <label class="font-semibold text-slate-700 block mb-1">Air Infiltration (ACH)</label>
-            <input type="number" step="0.1" value="${r.ach}" onchange="updateField(${activeIndex}, 'ach', parseFloat(this.value))" class="w-full bg-white border border-slate-300 rounded p-1 text-center font-medium">
-            <div class="text-[10px] text-slate-400 mt-1">Loss: ${c.ventLoss} W</div>
+          <div class="bg-indigo-50/60 p-2.5 rounded-xl border border-indigo-100">
+            <div class="font-semibold text-slate-700 mb-1 flex items-center justify-between">
+              <span>Calculated ACH</span>
+              <span class="text-[10px] bg-indigo-100 text-indigo-800 px-1.5 py-0.5 rounded font-bold">Dynamic</span>
+            </div>
+            <div class="text-lg font-black text-indigo-700">${c.ach} <span class="text-xs font-semibold">ACH</span></div>
+            <div class="text-[10px] text-slate-500 mt-0.5">Vent Loss: <span class="font-semibold text-rose-600">${c.ventLoss} W</span></div>
+          </div>
+        </div>
+
+        <!-- Infiltration & Ventilation Questionnaire Section -->
+        <div class="border border-indigo-200 rounded-xl p-4 bg-indigo-50/20 mb-6 space-y-3">
+          <div class="flex items-center justify-between border-b border-indigo-100 pb-2.5">
+            <div>
+              <span class="text-xs font-bold text-indigo-950 uppercase tracking-wider">Air Infiltration & Draught Questionnaire (5-Factor Assessment)</span>
+              <p class="text-[11px] text-slate-500">Pick room characteristics from dropdowns to dynamically calculate room ACH & ventilation heat loss</p>
+            </div>
+            <div class="text-right">
+              <span class="text-xs font-bold text-indigo-700 bg-white px-2.5 py-1 rounded-lg border border-indigo-200 shadow-sm">${c.ach} ACH · ${c.ventLoss} W</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+            <!-- Q1: Base Construction Era -->
+            <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+              <label class="font-semibold text-slate-800 block mb-1">1. Base Construction Era</label>
+              <select onchange="updateField(${activeIndex}, 'qBase', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs font-medium">
+                ${QUESTIONNAIRE.base_construction.map(opt => `<option value="${opt.label}" ${r.qBase === opt.label ? 'selected' : ''}>${opt.label} (+${opt.ach.toFixed(2)} ACH)</option>`).join('')}
+              </select>
+              <div class="text-[10px] text-slate-400 mt-1">Penalty: +${getACHValue('base_construction', r.qBase).toFixed(2)} ACH</div>
+            </div>
+
+            <!-- Q2: Chimneys / Flues -->
+            <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+              <label class="font-semibold text-slate-800 block mb-1">2. Chimney / Open Flues</label>
+              <select onchange="updateField(${activeIndex}, 'qChimney', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs font-medium">
+                ${QUESTIONNAIRE.chimney_flue.map(opt => `<option value="${opt.label}" ${r.qChimney === opt.label ? 'selected' : ''}>${opt.label} (+${opt.ach.toFixed(2)} ACH)</option>`).join('')}
+              </select>
+              <div class="text-[10px] text-slate-400 mt-1">Penalty: +${getACHValue('chimney_flue', r.qChimney).toFixed(2)} ACH</div>
+            </div>
+
+            <!-- Q3: Windows & External Doors -->
+            <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+              <label class="font-semibold text-slate-800 block mb-1">3. Windows & External Doors</label>
+              <select onchange="updateField(${activeIndex}, 'qWin', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs font-medium">
+                ${QUESTIONNAIRE.windows_doors.map(opt => `<option value="${opt.label}" ${r.qWin === opt.label ? 'selected' : ''}>${opt.label} (+${opt.ach.toFixed(2)} ACH)</option>`).join('')}
+              </select>
+              <div class="text-[10px] text-slate-400 mt-1">Penalty: +${getACHValue('windows_doors', r.qWin).toFixed(2)} ACH</div>
+            </div>
+
+            <!-- Q4: Floor Boundary -->
+            <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+              <label class="font-semibold text-slate-800 block mb-1">4. Floor Boundary</label>
+              <select onchange="updateField(${activeIndex}, 'qFloor', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs font-medium">
+                ${QUESTIONNAIRE.floor_construction.map(opt => `<option value="${opt.label}" ${r.qFloor === opt.label ? 'selected' : ''}>${opt.label} (+${opt.ach.toFixed(2)} ACH)</option>`).join('')}
+              </select>
+              <div class="text-[10px] text-slate-400 mt-1">Penalty: +${getACHValue('floor_construction', r.qFloor).toFixed(2)} ACH</div>
+            </div>
+
+            <!-- Q5: Ceiling & Attic Boundary -->
+            <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+              <label class="font-semibold text-slate-800 block mb-1">5. Ceiling & Attic Boundary</label>
+              <select onchange="updateField(${activeIndex}, 'qCeil', this.value)" class="w-full bg-slate-50 border border-slate-300 rounded p-1.5 text-xs font-medium">
+                ${QUESTIONNAIRE.ceiling_boundary.map(opt => `<option value="${opt.label}" ${r.qCeil === opt.label ? 'selected' : ''}>${opt.label} (+${opt.ach.toFixed(2)} ACH)</option>`).join('')}
+              </select>
+              <div class="text-[10px] text-slate-400 mt-1">Penalty: +${getACHValue('ceiling_boundary', r.qCeil).toFixed(2)} ACH</div>
+            </div>
+
+            <!-- Total Infiltration Summary Card -->
+            <div class="bg-indigo-50/80 p-3 rounded-lg border border-indigo-200 flex flex-col justify-center text-center">
+              <span class="text-[11px] font-semibold text-indigo-900">Calculated Room ACH</span>
+              <span class="text-2xl font-black text-indigo-700 my-0.5">${c.ach} ACH</span>
+              <span class="text-[10px] text-indigo-900 font-medium">Sum of 5 CIBSE Factors</span>
+            </div>
           </div>
         </div>
 
@@ -498,12 +632,12 @@
     }
 
     function exportCSV() {
-      let csv = "Code,Room Name,Floor,Zone,Design Ti (C),Length (m),Width (m),Area (m2),Height (m),Volume (m3),Ext Wall (m),U-Wall,Window Area (m2),U-Win,Floor Area (m2),U-Floor,Ceiling Area (m2),U-Ceiling,ACH,Total Loss (W),Intensity (W/m2),Req Rad 45C (W),Boiler Eqv 50C (W),Wall Type,Radiator Type,Rad Size,Pipework,Notes\n";
+      let csv = "Code,Room Name,Floor,Zone,Design Ti (C),Length (m),Width (m),Area (m2),Height (m),Volume (m3),Ext Wall (m),U-Wall,Window Area (m2),U-Win,Floor Area (m2),U-Floor,Ceiling Area (m2),U-Ceiling,Base Construction,Chimney Flue,Windows Doors,Floor Boundary,Ceiling Boundary,ACH,Total Loss (W),Intensity (W/m2),Req Rad 45C (W),Boiler Eqv 50C (W),Wall Type,Radiator Type,Rad Size,Pipework,Notes\n";
 
       rooms.forEach(r => {
         const c = calculateRoom(r);
         const cleanNotes = (r.notes || "").replace(/"/g, '""');
-        csv += `"${r.code}","${r.name}","${r.floor}","${r.zone}",${r.temp},${r.len},${r.wid},${c.area},${r.ht},${c.vol},${r.extWall},${r.uWall},${r.winArea},${r.uWin},${r.flArea || 0},${r.uFl || 0},${r.roofArea || 0},${r.uRoof || 0},${r.ach},${c.totalLoss},${c.intensity},${c.rad45},${c.radBoiler},"${r.wallType || ''}","${r.radType || ''}","${r.radSize || ''}","${r.pipeSize || ''}","${cleanNotes}"\n`;
+        csv += `"${r.code}","${r.name}","${r.floor}","${r.zone}",${r.temp},${r.len},${r.wid},${c.area},${r.ht},${c.vol},${r.extWall},${r.uWall},${r.winArea},${r.uWin},${r.flArea || 0},${r.uFl || 0},${r.roofArea || 0},${r.uRoof || 0},"${r.qBase}","${r.qChimney}","${r.qWin}","${r.qFloor}","${r.qCeil}",${c.ach},${c.totalLoss},${c.intensity},${c.rad45},${c.radBoiler},"${r.wallType || ''}","${r.radType || ''}","${r.radSize || ''}","${r.pipeSize || ''}","${cleanNotes}"\n`;
       });
 
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });

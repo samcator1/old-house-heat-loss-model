@@ -211,3 +211,35 @@ def create_auto_resize_request(sheet_id: int, num_columns: int) -> Dict[str, Any
             }
         }
     }
+
+def create_data_validation_request(
+    sheet_id: int,
+    start_row: int,
+    end_row: int,
+    start_col: int,
+    end_col: int,
+    options: List[str],
+    show_custom_ui: bool = True,
+    strict: bool = False
+) -> Dict[str, Any]:
+    """Creates a setDataValidation request to render in-cell dropdown chips in Google Sheets."""
+    return {
+        "setDataValidation": {
+            "range": {
+                "sheetId": sheet_id,
+                "startRowIndex": start_row,
+                "endRowIndex": end_row,
+                "startColumnIndex": start_col,
+                "endColumnIndex": end_col
+            },
+            "rule": {
+                "condition": {
+                    "type": "ONE_OF_LIST",
+                    "values": [{"userEnteredValue": opt} for opt in options]
+                },
+                "showCustomUi": show_custom_ui,
+                "strict": strict
+            }
+        }
+    }
+

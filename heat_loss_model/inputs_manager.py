@@ -84,6 +84,27 @@ INPUT_DEFINITIONS: List[Dict[str, Any]] = [
     {"row": 68, "key": "capex_battery_per_kwh", "section": "7. Capital Equipment Cost Rates & Carbon Factors", "label": "Battery Storage Cost Rate", "default": 500, "unit": "£/kWh", "fmt": FORMATS["CURRENCY_GBP"], "notes": "Installed modular battery storage"},
     {"row": 69, "key": "carbon_grid_electricity", "section": "7. Capital Equipment Cost Rates & Carbon Factors", "label": "Grid Electricity Carbon Intensity", "default": 0.150, "unit": "kg CO2/kWh", "fmt": FORMATS["DECIMAL_2"], "notes": "UK grid average operational emissions"},
     {"row": 70, "key": "carbon_heating_oil", "section": "7. Capital Equipment Cost Rates & Carbon Factors", "label": "Heating Oil Carbon Intensity", "default": 0.298, "unit": "kg CO2/kWh", "fmt": FORMATS["DECIMAL_2"], "notes": "Kerosene burning direct carbon emissions"},
+
+    # Section 8: Infiltration Questionnaire Scoring (CIBSE Guide A & BS EN 12831)
+    {"row": 76, "key": "ach_base_new", "section": "8. Infiltration Questionnaire Scoring", "label": "New Build (Cavity / Insulated)", "default": 0.30, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Modern insulated cavity wall and airtight membrane"},
+    {"row": 77, "key": "ach_base_reno", "section": "8. Infiltration Questionnaire Scoring", "label": "Renovated Historic (Draught-proofed)", "default": 0.60, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Solid masonry with retrofitted draught-proofing and sealed penetrations"},
+    {"row": 78, "key": "ach_base_solid", "section": "8. Infiltration Questionnaire Scoring", "label": "Standard Historic (Solid Masonry)", "default": 0.80, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Traditional uninsulated solid brick / stone without airtightness layer"},
+    {"row": 79, "key": "ach_base_exposed", "section": "8. Infiltration Questionnaire Scoring", "label": "Exposed Historic (High Wind / Exposed Site)", "default": 1.00, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Hilltop or coastal windward facade with high stack pressure"},
+    {"row": 80, "key": "ach_chimney_none", "section": "8. Infiltration Questionnaire Scoring", "label": "No Chimney / Permanently Sealed", "default": 0.00, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "No open flue or chimney has been permanently capped/sealed"},
+    {"row": 81, "key": "ach_chimney_stove", "section": "8. Infiltration Questionnaire Scoring", "label": "Room-Sealed Stove with Ext Air", "default": 0.05, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Closed woodburner with dedicated direct external combustion air duct"},
+    {"row": 82, "key": "ach_chimney_balloon", "section": "8. Infiltration Questionnaire Scoring", "label": "Flue Damper / Chimney Balloon Fitted", "default": 0.15, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Open chimney fitted with inflatable throat balloon or mechanical damper"},
+    {"row": 83, "key": "ach_chimney_open", "section": "8. Infiltration Questionnaire Scoring", "label": "Open Fireplace (Unsealed Flue)", "default": 0.60, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Unrestricted open chimney flue driving continuous warm air stack extraction"},
+    {"row": 84, "key": "ach_win_modern", "section": "8. Infiltration Questionnaire Scoring", "label": "Modern High-Performance (Compression Gaskets)", "default": 0.00, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Double/triple glazed casement with intact rubber compression gaskets"},
+    {"row": 85, "key": "ach_win_sec", "section": "8. Infiltration Questionnaire Scoring", "label": "Secondary Glazing Fitted", "default": 0.10, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Internal secondary glazing panes providing sealed air buffer"},
+    {"row": 86, "key": "ach_win_brush", "section": "8. Infiltration Questionnaire Scoring", "label": "Retrofitted Brush / Pile Draught Seals", "default": 0.15, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Timber sash or casement retrofitted with routed brush pile carrier strips"},
+    {"row": 87, "key": "ach_win_loose", "section": "8. Infiltration Questionnaire Scoring", "label": "Original Loose Sash / Casement (Undraughted)", "default": 0.40, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Traditional loose-fitting timber sash rattles in track with air gaps"},
+    {"row": 88, "key": "ach_floor_slab", "section": "8. Infiltration Questionnaire Scoring", "label": "Solid Concrete Slab / Insulated Floor", "default": 0.00, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Continuous concrete slab or insulated screed without air leakage"},
+    {"row": 89, "key": "ach_floor_sealed", "section": "8. Infiltration Questionnaire Scoring", "label": "Suspended Timber (Sealed / Carpet & Underlay)", "default": 0.10, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Suspended joists with tongue-and-groove boards and heavy underlay"},
+    {"row": 90, "key": "ach_floor_draughty", "section": "8. Infiltration Questionnaire Scoring", "label": "Suspended Timber (Unsealed Boards over Cold Void)", "default": 0.35, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Air bricks beneath unsealed floorboards with noticeable crawlspace draughts"},
+    {"row": 91, "key": "ach_ceil_inter", "section": "8. Infiltration Questionnaire Scoring", "label": "Intermediate Floor (Heated Space Above)", "default": 0.00, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Internal ceiling with actively heated room above"},
+    {"row": 92, "key": "ach_ceil_sealed", "section": "8. Infiltration Questionnaire Scoring", "label": "Insulated Loft (Sealed Plaster & Sealed Hatch)", "default": 0.05, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Airtight plaster ceiling with draught-stripped insulated loft trapdoor"},
+    {"row": 93, "key": "ach_ceil_downlights", "section": "8. Infiltration Questionnaire Scoring", "label": "Attic Downlights / Unsealed Loft Hatch", "default": 0.20, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Recessed downlight penetrations or loose loft hatch venting into cold roof"},
+    {"row": 94, "key": "ach_ceil_sloping", "section": "8. Infiltration Questionnaire Scoring", "label": "Sloping Roof / Exposed Eaves / Thatched Ridge", "default": 0.30, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Historic uncounter-battened thatched ridge or open soffit eaves"}
 ]
 
 SECTION_HEADERS = [
@@ -94,6 +115,7 @@ SECTION_HEADERS = [
     {"row": 41, "title": "5. HEATING SYSTEM EFFICIENCIES & SCOPS"},
     {"row": 51, "title": "6. ENERGY TARIFFS, SOLAR PV & BATTERY STORAGE"},
     {"row": 63, "title": "7. CAPITAL EQUIPMENT COST RATES & CARBON FACTORS"},
+    {"row": 74, "title": "8. INFILTRATION QUESTIONNAIRE SCORING & AIR CHANGE RATE (ACH) PENALTIES"}
 ]
 
 class InputsManager:
@@ -141,9 +163,9 @@ class InputsManager:
                                         flt = flt / 100.0
                             merged[item["key"]] = flt
                         else:
-                            merged[item["key"]] = val
+                            merged[item["key"]] = clean_val
                     except Exception:
-                        merged[item["key"]] = val
+                        pass
         return merged
 
     def render_inputs_tab(self, merged_inputs: Dict[str, Any]) -> Tuple[gspread.Worksheet, List[Dict[str, Any]]]:
@@ -153,9 +175,9 @@ class InputsManager:
         try:
             ws = self.ss.worksheet("1_Inputs")
         except gspread.WorksheetNotFound:
-            ws = self.ss.add_worksheet(title="1_Inputs", rows=80, cols=6)
+            ws = self.ss.add_worksheet(title="1_Inputs", rows=105, cols=6)
 
-        total_rows = 72
+        total_rows = 96
         grid: List[List[str]] = [["" for _ in range(5)] for _ in range(total_rows)]
 
         # Banner & Column Headers
