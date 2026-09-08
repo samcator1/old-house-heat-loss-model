@@ -117,7 +117,21 @@ INPUT_DEFINITIONS: List[Dict[str, Any]] = [
     {"row": 105, "key": "u_win_double_modern", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "Modern Double Glazing (Argon, Low-E, Warm Edge)", "default": 1.40, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Current UK Building Regulations Part L standard domestic double glazing"},
     {"row": 106, "key": "u_win_triple_modern", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "Modern High-Performance Triple Glazing", "default": 0.80, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Passivhaus standard triple glazing with two Low-E coats and warm edge spacer"},
     {"row": 107, "key": "u_win_roof_lantern", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "Glazed Roof Lantern / Sloping Skylight", "default": 1.80, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Sloping or horizontal glazed orientation with increased internal convective transfer"},
-    {"row": 108, "key": "u_win_none", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "No External Glazing (Enclosed / Blind Room)", "default": 0.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Internal corridors, enclosed cloakrooms, or windowless plantrooms"}
+    {"row": 108, "key": "u_win_none", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "No External Glazing (Enclosed / Blind Room)", "default": 0.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Internal corridors, enclosed cloakrooms, or windowless plantrooms"},
+
+    # Section 10: Ceiling & Roof U-Value Specifications (CIBSE Guide A & Historic England)
+    {"row": 113, "key": "u_ceil_intermediate", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Intermediate Floor (Heated Space Above)", "default": 0.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Internal ceiling below heated room on upper floor; zero envelope transmission loss"},
+    {"row": 114, "key": "u_ceil_loft_uninsulated", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Uninsulated Loft (Bare Joists, No Quilt)", "default": 2.30, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "CIBSE Guide A Table 3.19: lath/plaster ceiling below cold ventilated attic without insulation"},
+    {"row": 115, "key": "u_ceil_thatched", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Historic Thatched Roof (Straw / Reed Thatch)", "default": 0.30, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Traditional 300-450mm straw/water reed thatch naturally provides continuous thermal insulation"},
+    {"row": 116, "key": "u_ceil_loft_50mm", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Older Loft Insulation: 50mm (Pre-1980 Quilt)", "default": 0.80, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Thin historic mineral wool between ceiling joists, often degraded or compressed"},
+    {"row": 117, "key": "u_ceil_loft_100mm", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Older Loft Insulation: 100mm (1980s-1990s Standard)", "default": 0.40, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Single layer mineral wool quilt filling joist depth only"},
+    {"row": 118, "key": "u_ceil_loft_200mm", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Moderate Loft Insulation: 150-200mm (Pre-2002 Standard)", "default": 0.22, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Joists filled plus partial top-up layer, typical existing retrofitted loft"},
+    {"row": 119, "key": "u_ceil_loft_270mm", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Modern Building Regs Loft: 270-300mm (Mineral Wool)", "default": 0.16, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Current Building Regulations Part L: 100mm between joists + 170mm cross-laid quilt"},
+    {"row": 120, "key": "u_ceil_loft_350mm", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "High-Performance Deep Loft: 350-400mm (Quilt / Cellulose)", "default": 0.11, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Deep quilt or blown cellulose insulation achieving near-Passivhaus thermal resistance"},
+    {"row": 121, "key": "u_ceil_sloping_uninsulated", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Uninsulated Sloping Roof / Lean-to (Lath & Plaster to Rafters)", "default": 2.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Sloping roof with lath & plaster directly under slate/tile rafters, no loft void (e.g. Lean-to scullery)"},
+    {"row": 122, "key": "u_ceil_sloping_insulated", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Insulated Sloping Rafters (50-100mm PIR / Woodfibre)", "default": 0.35, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Sloping cathedral ceiling retrofitted with rigid PIR or breathable woodfibre board between rafters"},
+    {"row": 123, "key": "u_ceil_flatroof_modern", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Modern Insulated Warm Flat Roof Extension", "default": 0.18, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Flat timber deck roof with 120-150mm rigid PIR insulation above deck (Building Regs compliant)"},
+    {"row": 124, "key": "u_ceil_roof_lantern", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Glazed Roof Lantern / Sloping Skylight (Orangery)", "default": 1.50, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Extensive sloping double glazed roof lantern over Orangery or garden room"}
 ]
 
 SECTION_HEADERS = [
@@ -129,7 +143,8 @@ SECTION_HEADERS = [
     {"row": 51, "title": "6. ENERGY TARIFFS, SOLAR PV & BATTERY STORAGE"},
     {"row": 63, "title": "7. CAPITAL EQUIPMENT COST RATES & CARBON FACTORS"},
     {"row": 74, "title": "8. INFILTRATION QUESTIONNAIRE SCORING & AIR CHANGE RATE (ACH) PENALTIES"},
-    {"row": 96, "title": "9. WINDOW & GLAZING THERMAL TRANSMITTANCE (U-VALUES)"}
+    {"row": 96, "title": "9. WINDOW & GLAZING THERMAL TRANSMITTANCE (U-VALUES)"},
+    {"row": 111, "title": "10. CEILING & ROOF THERMAL TRANSMITTANCE (U-VALUES)"}
 ]
 
 class InputsManager:
@@ -188,10 +203,12 @@ class InputsManager:
         """
         try:
             ws = self.ss.worksheet("1_Inputs")
+            if ws.row_count < 140:
+                ws.resize(rows=140, cols=max(ws.col_count, 6))
         except gspread.WorksheetNotFound:
-            ws = self.ss.add_worksheet(title="1_Inputs", rows=120, cols=6)
+            ws = self.ss.add_worksheet(title="1_Inputs", rows=140, cols=6)
 
-        total_rows = 112
+        total_rows = 128
         grid: List[List[str]] = [["" for _ in range(5)] for _ in range(total_rows)]
 
         # Banner & Column Headers

@@ -235,4 +235,68 @@ WINDOW_SPECIFICATIONS = [
     }
 ]
 
+# Ceiling & Roof U-Value Specifications (CIBSE Guide A Table 3.19/3.20 & Historic England)
+CEILING_SPECIFICATIONS = [
+    {
+        "label": "Intermediate Floor (Heated Space Above)",
+        "u_value": 0.00,
+        "notes": "Internal ceiling below heated room on upper floor; zero envelope transmission loss"
+    },
+    {
+        "label": "Uninsulated Loft (Bare Joists, No Quilt)",
+        "u_value": 2.30,
+        "notes": "CIBSE Guide A Table 3.19: lath/plaster ceiling below cold ventilated attic without insulation"
+    },
+    {
+        "label": "Historic Thatched Roof (Straw / Reed Thatch)",
+        "u_value": 0.30,
+        "notes": "Traditional 300-450mm straw/water reed thatch naturally provides continuous thermal insulation"
+    },
+    {
+        "label": "Older Loft Insulation: 50mm (Pre-1980 Quilt)",
+        "u_value": 0.80,
+        "notes": "Thin historic mineral wool between ceiling joists, often degraded or compressed"
+    },
+    {
+        "label": "Older Loft Insulation: 100mm (1980s-1990s Standard)",
+        "u_value": 0.40,
+        "notes": "Single layer mineral wool quilt filling joist depth only"
+    },
+    {
+        "label": "Moderate Loft Insulation: 150-200mm (Pre-2002 Standard)",
+        "u_value": 0.22,
+        "notes": "Joists filled plus partial top-up layer, typical existing retrofitted loft"
+    },
+    {
+        "label": "Modern Building Regs Loft: 270-300mm (Mineral Wool)",
+        "u_value": 0.16,
+        "notes": "Current Building Regulations Part L: 100mm between joists + 170mm cross-laid quilt"
+    },
+    {
+        "label": "High-Performance Deep Loft: 350-400mm (Quilt / Cellulose)",
+        "u_value": 0.11,
+        "notes": "Deep quilt or blown cellulose insulation achieving near-Passivhaus thermal resistance"
+    },
+    {
+        "label": "Uninsulated Sloping Roof / Lean-to (Lath & Plaster to Rafters)",
+        "u_value": 2.00,
+        "notes": "Sloping roof with lath & plaster directly under slate/tile rafters, no loft void (e.g. Lean-to scullery)"
+    },
+    {
+        "label": "Insulated Sloping Rafters (50-100mm PIR / Woodfibre)",
+        "u_value": 0.35,
+        "notes": "Sloping cathedral ceiling retrofitted with rigid PIR or breathable woodfibre board between rafters"
+    },
+    {
+        "label": "Modern Insulated Warm Flat Roof Extension",
+        "u_value": 0.18,
+        "notes": "Flat timber deck roof with 120-150mm rigid PIR insulation above deck (Building Regs compliant)"
+    },
+    {
+        "label": "Glazed Roof Lantern / Sloping Skylight (Orangery)",
+        "u_value": 1.50,
+        "notes": "Extensive sloping double glazed roof lantern over Orangery or garden room"
+    }
+]
+
 

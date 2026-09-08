@@ -52,7 +52,8 @@ def main():
     n_data = []
     o_data = []
     r_s_data = []
-    u_v_data = []
+    u_data = []
+    v_data = []
     q_dropdown_data = []
     notes_data = []
 
@@ -71,7 +72,9 @@ def main():
             fl_area = row.get("Floor Area (m2)", "")
             u_fl = row.get("U-Floor", "")
             roof_area = row.get("Ceiling Area (m2)", "")
-            u_roof = row.get("U-Ceiling", "")
+            ceil_spec = row.get("Ceiling Specification", "")
+            if not ceil_spec:
+                ceil_spec = "Intermediate Floor (Heated Space Above)"
             
             q_base = row.get("Base Construction", "")
             q_chimney = row.get("Chimney Flue", "")
@@ -93,7 +96,8 @@ def main():
             n_data.append([win_area])
             o_data.append([win_spec])
             r_s_data.append([fl_area, u_fl])
-            u_v_data.append([roof_area, u_roof])
+            u_data.append([roof_area])
+            v_data.append([ceil_spec])
             if q_base:
                 q_dropdown_data.append([q_base, q_chimney, q_win, q_floor, q_ceil])
             notes_data.append([combined_notes])
@@ -111,11 +115,12 @@ def main():
         {"range": f"N5:N{end_row}", "values": n_data},
         {"range": f"O5:O{end_row}", "values": o_data},
         {"range": f"R5:S{end_row}", "values": r_s_data},
-        {"range": f"U5:V{end_row}", "values": u_v_data},
-        {"range": f"AJ5:AJ{end_row}", "values": notes_data}
+        {"range": f"U5:U{end_row}", "values": u_data},
+        {"range": f"V5:V{end_row}", "values": v_data},
+        {"range": f"AK5:AK{end_row}", "values": notes_data}
     ]
     if len(q_dropdown_data) == num_rooms:
-        batch_updates.append({"range": f"X5:AB{end_row}", "values": q_dropdown_data})
+        batch_updates.append({"range": f"Y5:AC{end_row}", "values": q_dropdown_data})
 
     ws.batch_update(batch_updates)
     console.print(f"[bold green]✓ Successfully updated {num_rooms} rooms in {tab_name} via batch API![/bold green]")
