@@ -30,25 +30,42 @@ class HeatLossModelBuilder:
             self.ss = self.gc.open_by_key(self.spreadsheet_id)
         return self.ss
 
-    def preserve_legacy_sheet(self) -> None:
-        """Safely renames existing 'Heating' tab to '_Legacy_Heating' to protect original data."""
+    def migrate_sheet_titles(self) -> None:
+        """Safely renames and migrates sheet titles to preserve history and set up clean structure."""
         if not self.ss:
             self.open_spreadsheet()
         ss = self.ss
 
-        existing_titles = [w.title for w in ss.worksheets()]
-        if "Heating" in existing_titles and "_Legacy_Heating" not in existing_titles:
+        existing = {w.title: w for w in ss.worksheets()}
+
+        # 1. Protect original 'Heating'
+        if "Heating" in existing and "_Legacy_Heating" not in existing:
             try:
-                legacy_ws = ss.worksheet("Heating")
-                legacy_ws.update_title("_Legacy_Heating")
+                existing["Heating"].update_title("_Legacy_Heating")
                 print("✓ Preserved original 'Heating' tab as '_Legacy_Heating'")
             except Exception as e:
                 print(f"Note on legacy sheet rename: {e}")
 
+        # 2. Rename 2_Building_Heat_Loss -> _Archive_Wing_Heat_Loss
+        if "2_Building_Heat_Loss" in existing and "_Archive_Wing_Heat_Loss" not in existing:
+            try:
+                existing["2_Building_Heat_Loss"].update_title("_Archive_Wing_Heat_Loss")
+                print("✓ Archived '2_Building_Heat_Loss' to '_Archive_Wing_Heat_Loss'")
+            except Exception as e:
+                print(f"Note on archive wing rename: {e}")
+
+        # 3. Rename 5_Room_Heat_Loss -> 2_Room_Heat_Loss
+        if "5_Room_Heat_Loss" in existing and "2_Room_Heat_Loss" not in existing:
+            try:
+                existing["5_Room_Heat_Loss"].update_title("2_Room_Heat_Loss")
+                print("✓ Promoted '5_Room_Heat_Loss' to master driver '2_Room_Heat_Loss'")
+            except Exception as e:
+                print(f"Note on room tab rename: {e}")
+
     def sync(self, preserve_inputs: bool = True) -> Dict[str, Any]:
         """
         Synchronizes the upgraded modular model to Google Sheets:
-        1. Protects the original sheet by renaming 'Heating' to '_Legacy_Heating'.
+        1. Migrates sheet titles safely (preserves legacy, archives wing calc, promotes room schedule).
         2. Reads existing user modifications on '1_Inputs' non-destructively.
         3. Updates all calculation grids with 100% native Google Sheets formulas.
         4. Clears previous formatting and applies crisp modern theme styling in batch.
@@ -59,8 +76,8 @@ class HeatLossModelBuilder:
 
         ss = self.ss
 
-        # Step 1: Protect original legacy sheet
-        self.preserve_legacy_sheet()
+        # Step 1: Migrate sheet titles
+        self.migrate_sheet_titles()
 
         # Step 2: Read existing inputs & merge
         inputs_mgr = InputsManager(ss)
@@ -68,13 +85,13 @@ class HeatLossModelBuilder:
 
         # Step 3: Render Tabs in dependency order
         ws_inputs, fmt_inputs = inputs_mgr.render_inputs_tab(merged_inputs)
-        ws_fabric, fmt_fabric = build_fabric_tab(ss)
+        ws_room, fmt_room = build_room_tab(ss)
         ws_dhw, fmt_dhw = build_dhw_pool_tab(ss)
         ws_systems, fmt_systems = build_systems_tab(ss)
-        ws_room, fmt_room = build_room_tab(ss)
         ws_dashboard, fmt_dashboard = build_dashboard_tab(ss)
+        ws_archive_wing, fmt_archive_wing = build_fabric_tab(ss)
 
-        active_worksheets = [ws_dashboard, ws_inputs, ws_fabric, ws_dhw, ws_systems, ws_room]
+        active_worksheets = [ws_dashboard, ws_inputs, ws_room, ws_dhw, ws_systems, ws_archive_wing]
 
         # Step 4: Clear leftover formatting and unmerge on active tabs
         all_formatting_requests: List[Dict[str, Any]] = []
@@ -85,10 +102,10 @@ class HeatLossModelBuilder:
         # Step 5: Add targeted theme formatting
         all_formatting_requests.extend(fmt_dashboard)
         all_formatting_requests.extend(fmt_inputs)
-        all_formatting_requests.extend(fmt_fabric)
+        all_formatting_requests.extend(fmt_room)
         all_formatting_requests.extend(fmt_dhw)
         all_formatting_requests.extend(fmt_systems)
-        all_formatting_requests.extend(fmt_room)
+        all_formatting_requests.extend(fmt_archive_wing)
 
         # Step 6: Execute batch formatting in 1 API call
         if all_formatting_requests:
@@ -101,10 +118,10 @@ class HeatLossModelBuilder:
         desired_order = [
             "0_Executive_Dashboard",
             "1_Inputs",
-            "2_Building_Heat_Loss",
+            "2_Room_Heat_Loss",
             "3_DHW_and_Pool",
             "4_Heating_and_Renewables",
-            "5_Room_Heat_Loss",
+            "_Archive_Wing_Heat_Loss",
             "_Legacy_Heating"
         ]
 

@@ -33,8 +33,8 @@ def build_dashboard_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, Lis
     # Row 3-6: KPI Cards
     # Card 1: Peak Heat Loss (Cols A-B, Rows 4-6)
     grid[2][0] = "PEAK HEAT LOSS (-4°C)"
-    grid[3][0] = "='2_Building_Heat_Loss'!$AD$11"
-    grid[4][0] = "='2_Building_Heat_Loss'!$AE$11"
+    grid[3][0] = "='2_Room_Heat_Loss'!$Y$28/1000"
+    grid[4][0] = "=TEXT('2_Room_Heat_Loss'!$Z$28, \"0.0\") & \" W/m² whole-house average\""
 
     # Card 2: Total Delivered Heat (Cols C-D, Rows 4-6)
     grid[2][2] = "ANNUAL DELIVERED HEAT"
@@ -90,11 +90,11 @@ def build_dashboard_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, Lis
         for c_i in range(7):
             grid[r_num][c_i] = tr[c_i]
 
-    # Row 22: Section 2 - Zone Breakdown
-    grid[21][0] = "ZONE-BY-ZONE FABRIC & INFILTRATION PEAK HEAT LOSS BREAKDOWN"
+    # Row 22: Section 2 - Bottom-Up Architectural Wing & Room Breakdown
+    grid[21][0] = "BOTTOM-UP ARCHITECTURAL WING & ROOM HEAT LOSS BREAKDOWN (23 ROOMS)"
     headers_zone = [
         "Zone / Wing",
-        "Type",
+        "Room Count & Type",
         "Floor Area (m²)",
         "Area Share (%)",
         "Peak Heat Loss (kW)",
@@ -104,25 +104,35 @@ def build_dashboard_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, Lis
     for c_i, h in enumerate(headers_zone):
         grid[22][c_i] = h
 
+    zone_types = {
+        "Georgian end": "Solid Brick",
+        "Thatched gable ended": "Solid Stone",
+        "New build": "Insulated Cavity",
+        "Orangery": "Glazed Lantern",
+        "Lean to West": "Uninsulated Solid",
+        "Lean to North": "Plant Room"
+    }
+
     for z_idx, z in enumerate(DEFAULT_ZONES):
-        sheet_r = z_idx + 5  # rows 5 to 10 in 2_Building_Heat_Loss
+        z_name = z["name"]
+        z_desc = zone_types.get(z_name, z.get("zone_type", "Standard"))
         dash_r = 23 + z_idx
-        grid[dash_r][0] = f"='2_Building_Heat_Loss'!A{sheet_r}"
-        grid[dash_r][1] = f"='2_Building_Heat_Loss'!B{sheet_r}"
-        grid[dash_r][2] = f"='2_Building_Heat_Loss'!G{sheet_r}"
+        grid[dash_r][0] = z_name
+        grid[dash_r][1] = f'=COUNTIF(\'2_Room_Heat_Loss\'!$D$5:$D$27, A{dash_r+1}) & " rms (" & "{z_desc})"'
+        grid[dash_r][2] = f"=SUMIF('2_Room_Heat_Loss'!$D$5:$D$27, A{dash_r+1}, '2_Room_Heat_Loss'!$H$5:$H$27)"
         grid[dash_r][3] = f"=C{dash_r+1}/$C$30"
-        grid[dash_r][4] = f"='2_Building_Heat_Loss'!AD{sheet_r}"
+        grid[dash_r][4] = f"=SUMIF('2_Room_Heat_Loss'!$D$5:$D$27, A{dash_r+1}, '2_Room_Heat_Loss'!$Y$5:$Y$27)/1000"
         grid[dash_r][5] = f"=E{dash_r+1}/$E$30"
-        grid[dash_r][6] = f"='2_Building_Heat_Loss'!AE{sheet_r}"
+        grid[dash_r][6] = f"=(E{dash_r+1}*1000)/C{dash_r+1}"
 
     # Total Zone Row (Row 30)
     grid[29][0] = "Total Whole Building"
-    grid[29][1] = "All Zones"
-    grid[29][2] = "='2_Building_Heat_Loss'!$G$11"
+    grid[29][1] = '="All " & COUNT(\'2_Room_Heat_Loss\'!$H$5:$H$27) & " Rooms"'
+    grid[29][2] = "='2_Room_Heat_Loss'!$H$28"
     grid[29][3] = "=SUM(D24:D29)"
-    grid[29][4] = "='2_Building_Heat_Loss'!$AD$11"
+    grid[29][4] = "='2_Room_Heat_Loss'!$Y$28/1000"
     grid[29][5] = "=SUM(F24:F29)"
-    grid[29][6] = "='2_Building_Heat_Loss'!$AE$11"
+    grid[29][6] = "='2_Room_Heat_Loss'!$Z$28"
 
     # Row 33: Section 3 - Solar PV & Battery Self-Sufficiency Summary
     grid[32][0] = "SOLAR PV & BATTERY DISPATCH SUMMARY (GSHP SCENARIO)"

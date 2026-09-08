@@ -43,7 +43,8 @@ def main():
 
     gc = get_gspread_client()
     ss = gc.open_by_key(args.sheet_id)
-    ws = ss.worksheet("5_Room_Heat_Loss")
+    tab_name = "2_Room_Heat_Loss" if "2_Room_Heat_Loss" in [w.title for w in ss.worksheets()] else "5_Room_Heat_Loss"
+    ws = ss.worksheet(tab_name)
 
     rows_to_update = []
     with open(csv_file, "r", encoding="utf-8") as f:
@@ -88,7 +89,7 @@ def main():
             ws.update(range_name=f"W{sheet_row}:W{sheet_row}", values=[[ach]])
             ws.update(range_name=f"AD{sheet_row}:AD{sheet_row}", values=[[combined_notes]])
 
-    console.print(f"[bold green]✓ Successfully updated 5_Room_Heat_Loss from survey CSV![/bold green]")
+    console.print(f"[bold green]✓ Successfully updated {tab_name} from survey CSV![/bold green]")
 
 if __name__ == "__main__":
     main()

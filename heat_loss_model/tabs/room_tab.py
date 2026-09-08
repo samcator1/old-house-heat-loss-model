@@ -48,8 +48,8 @@ DEFAULT_ROOMS = [
 ]
 
 def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dict[str, Any]]]:
-    """Builds and formats the 5_Room_Heat_Loss schedule worksheet."""
-    tab_name = "5_Room_Heat_Loss"
+    """Builds and formats the 2_Room_Heat_Loss master schedule worksheet."""
+    tab_name = "2_Room_Heat_Loss"
     try:
         ws = ss.worksheet(tab_name)
     except gspread.WorksheetNotFound:
@@ -60,8 +60,8 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
     grid: List[List[str]] = [["" for _ in range(total_cols)] for _ in range(total_rows)]
 
     # Row 1 & 2: Banner
-    grid[0][0] = "5_Room_Heat_Loss: Room-by-Room Heat Loss Assessment & Low-Flow Radiator Sizing"
-    grid[1][0] = "MCS / CIBSE BS EN 12831 Room Schedule: 10 Ground Floor & 13 First Floor Rooms, Sized for 45°C Heat Pump Flow Temperature."
+    grid[0][0] = "2_Room_Heat_Loss: Room-by-Room Heat Loss Assessment & Low-Flow Radiator Sizing"
+    grid[1][0] = "Master MCS / CIBSE BS EN 12831 Room Schedule: 10 Ground Floor & 13 First Floor Rooms, Sized for 45°C Heat Pump Flow Temperature."
 
     # Row 3: Category Groups
     grid[2][0] = "ROOM IDENTIFICATION"           # Cols A-D (0-3)
@@ -150,7 +150,7 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
         "23 Assessed Rooms",
         "Ground & First",
         "All Wings",
-        "=AVERAGE(E5:E27)",
+        "=SUMPRODUCT(E5:E27, H5:H27)/SUM(H5:H27)",
         "-",
         "-",
         "=SUM(H5:H27)",

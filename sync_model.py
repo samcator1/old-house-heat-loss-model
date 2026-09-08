@@ -110,16 +110,16 @@ def main():
     table.add_column("Type", style="green")
     table.add_column("Description")
 
-    table.add_row("0_Executive_Dashboard", "Formula View", "KPI cards, heating options comparison, zone breakdown & solar balance")
+    table.add_row("0_Executive_Dashboard", "Formula View", "KPI cards, heating options comparison, bottom-up wing breakdown & solar balance")
     table.add_row(
         "1_Inputs", 
         "User Control" if result["inputs_preserved"] else "Reset to Default", 
         f"Central parameters & assumptions ({'Preserved user edits' if result['inputs_preserved'] else 'Reset to baseline defaults'})"
     )
-    table.add_row("2_Building_Heat_Loss", "Dynamic Formula", "Zone geometry, transparent element-by-element fabric losses (corrected ground ΔT) & infiltration")
+    table.add_row("2_Room_Heat_Loss", "Master Dynamic Formula", "23-room schedule (10 GF + 13 FF), fabric & vent loss, and 45°C low-flow radiator sizing")
     table.add_row("3_DHW_and_Pool", "Dynamic Formula", "800L DHW storage, recharge rate, secondary circulation, Legionella cycle & pool thermal demand")
     table.add_row("4_Heating_and_Renewables", "Dynamic Formula", "GSHP vs ASHP vs Oil Boiler, Solar PV & battery load shifting, and smart tariff economics")
-    table.add_row("5_Room_Heat_Loss", "Dynamic Formula", "23-room schedule (10 GF + 13 FF), fabric & vent loss, and 45°C low-flow radiator sizing")
+    table.add_row("_Archive_Wing_Heat_Loss", "Protected Archive", "Preserved macro 6-zone approximation with corrected ground ΔT (superseded by room schedule)")
     table.add_row("_Legacy_Heating", "Protected Archive", "Original user sheet preserved untouched as a historical reference")
 
     console.print(table)

@@ -15,8 +15,8 @@ from ..formatting import (
 )
 
 def build_fabric_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dict[str, Any]]]:
-    """Builds and formats the 2_Building_Heat_Loss worksheet."""
-    tab_name = "2_Building_Heat_Loss"
+    """Builds and formats the _Archive_Wing_Heat_Loss worksheet."""
+    tab_name = "_Archive_Wing_Heat_Loss"
     try:
         ws = ss.worksheet(tab_name)
     except gspread.WorksheetNotFound:
@@ -27,10 +27,10 @@ def build_fabric_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[D
     grid: List[List[str]] = [["" for _ in range(total_cols)] for _ in range(total_rows)]
 
     # Row 1: Title Banner
-    grid[0][0] = "2_Building_Heat_Loss: Zone Fabric & Infiltration Heat Loss Analysis"
+    grid[0][0] = "_Archive_Wing_Heat_Loss: Preserved Macro Wing Fabric & Infiltration Analysis"
 
     # Row 2: Explainer
-    grid[1][0] = "Transparent element-by-element peak heat loss at -4°C external design temperature and 10°C ground temperature."
+    grid[1][0] = "Preserved macro 6-zone approximation with corrected ground ΔT (superseded by bottom-up master 2_Room_Heat_Loss schedule)."
 
     # Row 3: Group Headers
     grid[2][0] = "ZONE IDENTIFICATION & GEOMETRY"   # A-I (Cols 0-8)

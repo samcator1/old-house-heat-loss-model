@@ -40,10 +40,10 @@ def build_systems_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[
 
     grid[4] = [
         "Space heating annual demand",
-        "=((('2_Building_Heat_Loss'!$X$11+'2_Building_Heat_Loss'!$AB$11)/('1_Inputs'!$C$4-'1_Inputs'!$C$5))*'1_Inputs'!$C$7*24/1000)*'1_Inputs'!$C$8",
+        "=(('2_Room_Heat_Loss'!$Y$28/('2_Room_Heat_Loss'!$E$28-'1_Inputs'!$C$5))*'1_Inputs'!$C$7*24/1000)*'1_Inputs'!$C$8",
         "=B5/$B$8",
         "=(HLC × HDD × 24 / 1000) × f_usage",
-        "Degree-day method using diversified building average infiltration"
+        "Degree-day method using bottom-up 23-room schedule heat loss coefficient"
     ]
     grid[5] = [
         "Domestic hot water (DHW) demand",
@@ -85,7 +85,7 @@ def build_systems_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[
 
     grid[12] = [
         "Ground Source Heat Pump (GSHP)",
-        "=(('2_Building_Heat_Loss'!$AC$11/1000)*(1+'1_Inputs'!$C$16))",
+        "=(('2_Room_Heat_Loss'!$Y$28/1000)*(1+'1_Inputs'!$C$16))",
         "kW heat",
         "='1_Inputs'!$C$64",
         "=B13*D13",
@@ -93,7 +93,7 @@ def build_systems_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[
     ]
     grid[13] = [
         "Air Source Heat Pump (ASHP)",
-        "=(('2_Building_Heat_Loss'!$AC$11/1000)*(1+'1_Inputs'!$C$16))",
+        "=(('2_Room_Heat_Loss'!$Y$28/1000)*(1+'1_Inputs'!$C$16))",
         "kW heat",
         "='1_Inputs'!$C$65",
         "=B14*D14",
@@ -101,7 +101,7 @@ def build_systems_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[
     ]
     grid[14] = [
         "Commercial Oil Boiler",
-        "=(('2_Building_Heat_Loss'!$AC$11/1000)*(1+'1_Inputs'!$C$17))",
+        "=(('2_Room_Heat_Loss'!$Y$28/1000)*(1+'1_Inputs'!$C$17))",
         "kW heat",
         "='1_Inputs'!$C$66",
         "=B15*D15",
