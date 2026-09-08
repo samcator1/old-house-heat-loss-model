@@ -33,8 +33,8 @@ def build_dashboard_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, Lis
     # Row 3-6: KPI Cards
     # Card 1: Peak Heat Loss (Cols A-B, Rows 4-6)
     grid[2][0] = "PEAK HEAT LOSS (-4°C)"
-    grid[3][0] = "='2_Room_Heat_Loss'!$AD$28/1000"
-    grid[4][0] = "=TEXT('2_Room_Heat_Loss'!$AE$28, \"0.0\") & \" W/m² whole-house average\""
+    grid[3][0] = "='2_Room_Heat_Loss'!$AE$28/1000"
+    grid[4][0] = "=TEXT('2_Room_Heat_Loss'!$AF$28, \"0.0\") & \" W/m² whole-house average\""
 
     # Card 2: Total Delivered Heat (Cols C-D, Rows 4-6)
     grid[2][2] = "ANNUAL DELIVERED HEAT"
@@ -121,7 +121,7 @@ def build_dashboard_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, Lis
         grid[dash_r][1] = f'=COUNTIF(\'2_Room_Heat_Loss\'!$D$5:$D$27, A{dash_r+1}) & " rms (" & "{z_desc})"'
         grid[dash_r][2] = f"=SUMIF('2_Room_Heat_Loss'!$D$5:$D$27, A{dash_r+1}, '2_Room_Heat_Loss'!$H$5:$H$27)"
         grid[dash_r][3] = f"=C{dash_r+1}/$C$30"
-        grid[dash_r][4] = f"=SUMIF('2_Room_Heat_Loss'!$D$5:$D$27, A{dash_r+1}, '2_Room_Heat_Loss'!$AD$5:$AD$27)/1000"
+        grid[dash_r][4] = f"=SUMIF('2_Room_Heat_Loss'!$D$5:$D$27, A{dash_r+1}, '2_Room_Heat_Loss'!$AE$5:$AE$27)/1000"
         grid[dash_r][5] = f"=E{dash_r+1}/$E$30"
         grid[dash_r][6] = f"=(E{dash_r+1}*1000)/C{dash_r+1}"
 
@@ -130,9 +130,9 @@ def build_dashboard_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, Lis
     grid[29][1] = '="All " & COUNT(\'2_Room_Heat_Loss\'!$H$5:$H$27) & " Rooms"'
     grid[29][2] = "='2_Room_Heat_Loss'!$H$28"
     grid[29][3] = "=SUM(D24:D29)"
-    grid[29][4] = "='2_Room_Heat_Loss'!$AD$28/1000"
+    grid[29][4] = "='2_Room_Heat_Loss'!$AE$28/1000"
     grid[29][5] = "=SUM(F24:F29)"
-    grid[29][6] = "='2_Room_Heat_Loss'!$AE$28"
+    grid[29][6] = "='2_Room_Heat_Loss'!$AF$28"
 
     # Row 33: Section 3 - Solar PV & Battery Self-Sufficiency Summary
     grid[32][0] = "SOLAR PV & BATTERY DISPATCH SUMMARY (GSHP SCENARIO)"

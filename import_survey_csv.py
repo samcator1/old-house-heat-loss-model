@@ -49,9 +49,10 @@ def main():
     f_g_data = []
     i_data = []
     k_l_data = []
-    n_o_data = []
-    q_r_data = []
-    t_u_data = []
+    n_data = []
+    o_data = []
+    r_s_data = []
+    u_v_data = []
     q_dropdown_data = []
     notes_data = []
 
@@ -64,7 +65,9 @@ def main():
             ext_wall = row.get("Ext Wall (m)", "")
             u_wall = row.get("U-Wall", "")
             win_area = row.get("Window Area (m2)", "")
-            u_win = row.get("U-Win", "")
+            win_spec = row.get("Window Specification", "")
+            if not win_spec:
+                win_spec = "Single Glazed (Historic Timber Sash / Casement)"
             fl_area = row.get("Floor Area (m2)", "")
             u_fl = row.get("U-Floor", "")
             roof_area = row.get("Ceiling Area (m2)", "")
@@ -87,9 +90,10 @@ def main():
             f_g_data.append([r_len, r_wid])
             i_data.append([r_ht])
             k_l_data.append([ext_wall, u_wall])
-            n_o_data.append([win_area, u_win])
-            q_r_data.append([fl_area, u_fl])
-            t_u_data.append([roof_area, u_roof])
+            n_data.append([win_area])
+            o_data.append([win_spec])
+            r_s_data.append([fl_area, u_fl])
+            u_v_data.append([roof_area, u_roof])
             if q_base:
                 q_dropdown_data.append([q_base, q_chimney, q_win, q_floor, q_ceil])
             notes_data.append([combined_notes])
@@ -104,13 +108,14 @@ def main():
         {"range": f"F5:G{end_row}", "values": f_g_data},
         {"range": f"I5:I{end_row}", "values": i_data},
         {"range": f"K5:L{end_row}", "values": k_l_data},
-        {"range": f"N5:O{end_row}", "values": n_o_data},
-        {"range": f"Q5:R{end_row}", "values": q_r_data},
-        {"range": f"T5:U{end_row}", "values": t_u_data},
-        {"range": f"AI5:AI{end_row}", "values": notes_data}
+        {"range": f"N5:N{end_row}", "values": n_data},
+        {"range": f"O5:O{end_row}", "values": o_data},
+        {"range": f"R5:S{end_row}", "values": r_s_data},
+        {"range": f"U5:V{end_row}", "values": u_v_data},
+        {"range": f"AJ5:AJ{end_row}", "values": notes_data}
     ]
     if len(q_dropdown_data) == num_rooms:
-        batch_updates.append({"range": f"W5:AA{end_row}", "values": q_dropdown_data})
+        batch_updates.append({"range": f"X5:AB{end_row}", "values": q_dropdown_data})
 
     ws.batch_update(batch_updates)
     console.print(f"[bold green]✓ Successfully updated {num_rooms} rooms in {tab_name} via batch API![/bold green]")

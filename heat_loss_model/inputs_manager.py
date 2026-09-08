@@ -104,7 +104,20 @@ INPUT_DEFINITIONS: List[Dict[str, Any]] = [
     {"row": 91, "key": "ach_ceil_inter", "section": "8. Infiltration Questionnaire Scoring", "label": "Intermediate Floor (Heated Space Above)", "default": 0.00, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Internal ceiling with actively heated room above"},
     {"row": 92, "key": "ach_ceil_sealed", "section": "8. Infiltration Questionnaire Scoring", "label": "Insulated Loft (Sealed Plaster & Sealed Hatch)", "default": 0.05, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Airtight plaster ceiling with draught-stripped insulated loft trapdoor"},
     {"row": 93, "key": "ach_ceil_downlights", "section": "8. Infiltration Questionnaire Scoring", "label": "Attic Downlights / Unsealed Loft Hatch", "default": 0.20, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Recessed downlight penetrations or loose loft hatch venting into cold roof"},
-    {"row": 94, "key": "ach_ceil_sloping", "section": "8. Infiltration Questionnaire Scoring", "label": "Sloping Roof / Exposed Eaves / Thatched Ridge", "default": 0.30, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Historic uncounter-battened thatched ridge or open soffit eaves"}
+    {"row": 94, "key": "ach_ceil_sloping", "section": "8. Infiltration Questionnaire Scoring", "label": "Sloping Roof / Exposed Eaves / Thatched Ridge", "default": 0.30, "unit": "ACH", "fmt": FORMATS["DECIMAL_2"], "notes": "Historic uncounter-battened thatched ridge or open soffit eaves"},
+
+    # Section 9: Window & Glazing U-Value Specifications (CIBSE Guide A & Historic England)
+    {"row": 98, "key": "u_win_single_timber", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "Single Glazed (Historic Timber Sash / Casement)", "default": 4.80, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Uninsulated traditional timber sash, 3-4mm float glass (CIBSE Guide A Table 3.29)"},
+    {"row": 99, "key": "u_win_single_metal", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "Single Glazed (Metal / Crittall / Stone Mullion)", "default": 5.60, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Single glazed in uninsulated steel frame or direct to stone mullion"},
+    {"row": 100, "key": "u_win_single_shutters", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "Single Glazed + Heavy Thermal Curtains / Working Shutters", "default": 3.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Traditional solid interior wooden shutters closed or heavy thermal interlined curtains"},
+    {"row": 101, "key": "u_win_single_sec_std", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "Single Glazed + Standard Secondary Glazing", "default": 2.60, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Internal secondary glazing pane with >20mm sealed cavity, clear float glass"},
+    {"row": 102, "key": "u_win_single_sec_lowe", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "Single Glazed + Low-E Secondary Glazing", "default": 1.80, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Secondary glazing pane with pyrolytic Low-E coating, draught-sealed perimeter"},
+    {"row": 103, "key": "u_win_double_slim", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "Heritage Slimline Double Glazing (Timber Frame)", "default": 1.90, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Ultra-slim vacuum or Krypton units (6-8mm) fitting traditional historic glazing rebates"},
+    {"row": 104, "key": "u_win_double_early", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "Early Standard Double Glazing (Pre-2002, Air Gap)", "default": 2.80, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "1st-generation aluminium spacer double glazing without Low-E coating"},
+    {"row": 105, "key": "u_win_double_modern", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "Modern Double Glazing (Argon, Low-E, Warm Edge)", "default": 1.40, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Current UK Building Regulations Part L standard domestic double glazing"},
+    {"row": 106, "key": "u_win_triple_modern", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "Modern High-Performance Triple Glazing", "default": 0.80, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Passivhaus standard triple glazing with two Low-E coats and warm edge spacer"},
+    {"row": 107, "key": "u_win_roof_lantern", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "Glazed Roof Lantern / Sloping Skylight", "default": 1.80, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Sloping or horizontal glazed orientation with increased internal convective transfer"},
+    {"row": 108, "key": "u_win_none", "section": "9. Window & Glazing Thermal Transmittance (U-Values)", "label": "No External Glazing (Enclosed / Blind Room)", "default": 0.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Internal corridors, enclosed cloakrooms, or windowless plantrooms"}
 ]
 
 SECTION_HEADERS = [
@@ -115,7 +128,8 @@ SECTION_HEADERS = [
     {"row": 41, "title": "5. HEATING SYSTEM EFFICIENCIES & SCOPS"},
     {"row": 51, "title": "6. ENERGY TARIFFS, SOLAR PV & BATTERY STORAGE"},
     {"row": 63, "title": "7. CAPITAL EQUIPMENT COST RATES & CARBON FACTORS"},
-    {"row": 74, "title": "8. INFILTRATION QUESTIONNAIRE SCORING & AIR CHANGE RATE (ACH) PENALTIES"}
+    {"row": 74, "title": "8. INFILTRATION QUESTIONNAIRE SCORING & AIR CHANGE RATE (ACH) PENALTIES"},
+    {"row": 96, "title": "9. WINDOW & GLAZING THERMAL TRANSMITTANCE (U-VALUES)"}
 ]
 
 class InputsManager:
@@ -175,9 +189,9 @@ class InputsManager:
         try:
             ws = self.ss.worksheet("1_Inputs")
         except gspread.WorksheetNotFound:
-            ws = self.ss.add_worksheet(title="1_Inputs", rows=105, cols=6)
+            ws = self.ss.add_worksheet(title="1_Inputs", rows=120, cols=6)
 
-        total_rows = 96
+        total_rows = 112
         grid: List[List[str]] = [["" for _ in range(5)] for _ in range(total_rows)]
 
         # Banner & Column Headers

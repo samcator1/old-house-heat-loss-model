@@ -176,3 +176,63 @@ INFILTRATION_QUESTIONNAIRE = {
     ]
 }
 
+# Window & Glazing U-Value Specifications (CIBSE Guide A Table 3.29 & Historic England)
+WINDOW_SPECIFICATIONS = [
+    {
+        "label": "Single Glazed (Historic Timber Sash / Casement)",
+        "u_value": 4.80,
+        "notes": "Uninsulated traditional timber sash, 3-4mm float glass (CIBSE Guide A Table 3.29)"
+    },
+    {
+        "label": "Single Glazed (Metal / Crittall / Stone Mullion)",
+        "u_value": 5.60,
+        "notes": "Single glazed in uninsulated steel frame or direct to stone mullion"
+    },
+    {
+        "label": "Single Glazed + Heavy Thermal Curtains / Working Shutters",
+        "u_value": 3.00,
+        "notes": "Traditional solid interior wooden shutters closed or heavy thermal interlined curtains"
+    },
+    {
+        "label": "Single Glazed + Standard Secondary Glazing",
+        "u_value": 2.60,
+        "notes": "Internal secondary glazing pane with >20mm sealed cavity, clear float glass"
+    },
+    {
+        "label": "Single Glazed + Low-E Secondary Glazing",
+        "u_value": 1.80,
+        "notes": "Secondary glazing pane with pyrolytic Low-E coating, draught-sealed perimeter"
+    },
+    {
+        "label": "Heritage Slimline Double Glazing (Timber Frame)",
+        "u_value": 1.90,
+        "notes": "Ultra-slim vacuum or Krypton units (6-8mm) fitting traditional historic glazing rebates"
+    },
+    {
+        "label": "Early Standard Double Glazing (Pre-2002, Air Gap)",
+        "u_value": 2.80,
+        "notes": "1st-generation aluminium spacer double glazing without Low-E coating"
+    },
+    {
+        "label": "Modern Double Glazing (Argon, Low-E, Warm Edge)",
+        "u_value": 1.40,
+        "notes": "Current UK Building Regulations Part L standard domestic double glazing"
+    },
+    {
+        "label": "Modern High-Performance Triple Glazing",
+        "u_value": 0.80,
+        "notes": "Passivhaus standard triple glazing with two Low-E coats and warm edge spacer"
+    },
+    {
+        "label": "Glazed Roof Lantern / Sloping Skylight",
+        "u_value": 1.80,
+        "notes": "Sloping or horizontal glazed orientation with increased internal convective transfer"
+    },
+    {
+        "label": "No External Glazing (Enclosed / Blind Room)",
+        "u_value": 0.00,
+        "notes": "Internal corridors, enclosed cloakrooms, or windowless plantrooms"
+    }
+]
+
+
