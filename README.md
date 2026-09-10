@@ -75,13 +75,15 @@ python sync_model.py
 
 ---
 
-## 📱 On-Site Room-by-Room Survey Companion
+## 📱 On-Site Room-by-Room Survey Companion (Mobile & Offline)
 
 For walking through the house with your builders and insulation providers:
 
-1. **Open the Survey Tool**:
-   - Double-click `room_survey_tool.html` in your browser on a laptop, tablet, or phone (works 100% offline).
-   - Pre-loaded with all **23 rooms** (10 Ground Floor + 13 First Floor + Attic checklist).
+- **Mobile Web App (Live on GitHub Pages)**: [https://samcator1.github.io/old-house-heat-loss-model/](https://samcator1.github.io/old-house-heat-loss-model/)
+- **Offline Local**: Double-click `index.html` or `room_survey_tool.html` on any laptop, tablet, or phone (works 100% offline).
+
+1. **Pre-Loaded Architecture**:
+   - Pre-loaded with all **24 rooms** (11 Ground Floor + 13 First Floor + Attic checklist).
 2. **Conduct the Assessment**:
    - Verify room dimensions and ceiling heights.
    - Note wall constructions, cavity widths, and insulation opportunities with the insulation provider.
@@ -89,7 +91,7 @@ For walking through the house with your builders and insulation providers:
    - Instantly view real-time calculated room heat losses (Watts) and required 45°C low-flow radiator sizing.
 3. **Export & Sync to Google Sheets**:
    - Click **Export CSV** in the tool.
-   - Run `python import_survey_csv.py` to push all verified on-site dimensions and notes directly into the **`5_Room_Heat_Loss`** tab in your Google Sheet!
+   - Run `python import_survey_csv.py` to push all verified on-site dimensions and notes directly into the **`2_Room_Heat_Loss`** tab in your Google Sheet!
 
 ---
 
