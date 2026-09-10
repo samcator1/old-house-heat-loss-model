@@ -32,6 +32,12 @@ from ..formatting import (
     create_data_validation_request
 )
 
+VALID_BASE = {opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["base_construction"]}
+VALID_CHIMNEY = {opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["chimney_flue"]}
+VALID_WIN = {opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["windows_doors"]}
+VALID_FLOOR = {opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["floor_construction"]}
+VALID_CEIL = {opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["ceiling_boundary"]}
+
 DEFAULT_ROOMS = [
     # Ground Floor (10 rooms)
     {
@@ -340,20 +346,36 @@ def extract_existing_rooms(ws: gspread.Worksheet) -> List[Dict[str, Any]]:
             if not ceil_spec or ceil_spec.startswith("#") or ceil_spec.startswith("="):
                 ceil_spec = csv_r.get("Ceiling Specification", "") or ("Intermediate Floor (Heated Space Above)" if "ground" in floor_level.lower() else "Modern Building Regs Loft: 270-300mm (Mineral Wool)")
             q_base = safe_str(row[RoomCol.idx("Q_BASE")] if len(row) > RoomCol.idx("Q_BASE") else "", "")
-            if not q_base or q_base.startswith("#") or q_base.startswith("="):
-                q_base = csv_r.get("Base Construction", "Standard Historic (Solid Masonry)")
             q_chimney = safe_str(row[RoomCol.idx("Q_CHIMNEY")] if len(row) > RoomCol.idx("Q_CHIMNEY") else "", "")
-            if not q_chimney or q_chimney.startswith("#") or q_chimney.startswith("="):
-                q_chimney = csv_r.get("Chimney Flue", "No Chimney / Permanently Sealed")
             q_win = safe_str(row[RoomCol.idx("Q_WIN")] if len(row) > RoomCol.idx("Q_WIN") else "", "")
-            if not q_win or q_win.startswith("#") or q_win.startswith("="):
-                q_win = csv_r.get("Windows Doors", "Original Loose Sash / Casement (Undraughted)")
             q_floor = safe_str(row[RoomCol.idx("Q_FLOOR")] if len(row) > RoomCol.idx("Q_FLOOR") else "", "")
-            if not q_floor or q_floor.startswith("#") or q_floor.startswith("="):
-                q_floor = csv_r.get("Floor Boundary", "Solid Concrete Slab / Insulated Floor")
             q_ceil = safe_str(row[RoomCol.idx("Q_CEIL")] if len(row) > RoomCol.idx("Q_CEIL") else "", "")
-            if not q_ceil or q_ceil.startswith("#") or q_ceil.startswith("="):
-                q_ceil = csv_r.get("Ceiling Boundary", "Intermediate Floor (Heated Space Above)")
+
+            # Auto-healing: detect if columns were shifted by 1 from legacy layout
+            if q_chimney in VALID_WIN and q_win in VALID_FLOOR and q_floor in VALID_CEIL:
+                real_ceil = q_floor
+                real_floor = q_win
+                real_win = q_chimney
+                real_chimney = q_base if q_base in VALID_CHIMNEY else "No Chimney / Permanently Sealed"
+                real_base = "New Build (Cavity / Insulated)" if "new" in zone.lower() or "orangery" in zone.lower() else "Standard Historic (Solid Masonry)"
+                q_base, q_chimney, q_win, q_floor, q_ceil = real_base, real_chimney, real_win, real_floor, real_ceil
+
+            # Ensure every field is strictly valid against its questionnaire category (fallback to clean CSV or standard defaults)
+            if q_base not in VALID_BASE:
+                csv_b = csv_r.get("Base Construction", "")
+                q_base = csv_b if csv_b in VALID_BASE else ("New Build (Cavity / Insulated)" if "new" in zone.lower() or "orangery" in zone.lower() else "Standard Historic (Solid Masonry)")
+            if q_chimney not in VALID_CHIMNEY:
+                csv_ch = csv_r.get("Chimney Flue", "")
+                q_chimney = csv_ch if csv_ch in VALID_CHIMNEY else "No Chimney / Permanently Sealed"
+            if q_win not in VALID_WIN:
+                csv_w = csv_r.get("Windows Doors", "")
+                q_win = csv_w if csv_w in VALID_WIN else "Original Loose Sash / Casement (Undraughted)"
+            if q_floor not in VALID_FLOOR:
+                csv_fl = csv_r.get("Floor Boundary", "")
+                q_floor = csv_fl if csv_fl in VALID_FLOOR else "Solid Concrete Slab / Insulated Floor"
+            if q_ceil not in VALID_CEIL:
+                csv_ce = csv_r.get("Ceiling Boundary", "")
+                q_ceil = csv_ce if csv_ce in VALID_CEIL else ("Intermediate Floor (Heated Space Above)" if "ground" in floor_level.lower() else "Insulated Loft (Sealed Plaster & Sealed Hatch)")
             notes = safe_str(row[RoomCol.idx("NOTES")] if len(row) > RoomCol.idx("NOTES") else "", "")
         elif has_floor_spec:
             # 39-column layout
