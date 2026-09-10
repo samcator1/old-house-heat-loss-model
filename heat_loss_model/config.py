@@ -299,4 +299,89 @@ CEILING_SPECIFICATIONS = [
     }
 ]
 
+# Wall Construction U-Value Specifications (BS EN 12831-1 & CIBSE Guide A Table 3.3)
+WALL_SPECIFICATIONS = [
+    {
+        "label": "Solid Brick: 9\" / 225mm (Uninsulated)",
+        "u_value": 2.10,
+        "notes": "CIBSE Guide A Table 3.3: 1-brick thick solid wall with interior plaster (e.g. uninsulated lean-to/scullery)"
+    },
+    {
+        "label": "Solid Brick: 13.5\" / 330mm (Uninsulated)",
+        "u_value": 1.70,
+        "notes": "1.5-brick thick traditional solid masonry wall with plaster"
+    },
+    {
+        "label": "Solid Brick: 18\" / 450mm (Georgian Facade)",
+        "u_value": 1.40,
+        "notes": "2-brick thick substantial Georgian external facade with internal lath and plaster finish"
+    },
+    {
+        "label": "Solid Stone: 450-500mm Sandstone / Limestone",
+        "u_value": 1.80,
+        "notes": "Historic England / CIBSE Guide A: Solid dressed or rubble stone wall (e.g. thatched gable wing)"
+    },
+    {
+        "label": "Solid Stone: 500-600mm Dense Granite / Whinstone",
+        "u_value": 2.20,
+        "notes": "Dense crystalline igneous or metamorphic stone without cavity"
+    },
+    {
+        "label": "Historic Timber Frame (Wattle & Daub / Nogging)",
+        "u_value": 1.80,
+        "notes": "Traditional exposed timber box-frame with wattle/daub or brick nogging infill"
+    },
+    {
+        "label": "Cob / Earth Construction (500mm+)",
+        "u_value": 0.90,
+        "notes": "Traditional thick monolithic chalk/clay/straw cob wall with breathable lime render"
+    },
+    {
+        "label": "Uninsulated Cavity Wall (Pre-1976)",
+        "u_value": 1.50,
+        "notes": "Early cavity construction (brick/block or brick/brick) with uninsulated 50mm air gap"
+    },
+    {
+        "label": "Retrofilled Cavity Wall (Blown Mineral / Bead)",
+        "u_value": 0.50,
+        "notes": "Existing masonry cavity injected with bonded EPS beads or blown mineral fibre"
+    },
+    {
+        "label": "Partial-Fill Cavity Wall (1980s-1990s)",
+        "u_value": 0.45,
+        "notes": "25-50mm partial-fill insulation board retained against inner leaf"
+    },
+    {
+        "label": "Modern Building Regs Cavity (100mm PIR / Full Fill)",
+        "u_value": 0.18,
+        "notes": "Current Building Regulations Part L new build standard (e.g. New Build wing)"
+    },
+    {
+        "label": "High-Performance New Build (150mm+ PIR / Passivhaus)",
+        "u_value": 0.12,
+        "notes": "Ultra-low-energy extension specification with thick high-performance insulation"
+    },
+    {
+        "label": "Solid Wall + 50mm Breathable Woodfibre IWI",
+        "u_value": 0.55,
+        "notes": "Historic England recommended internal breathable woodfibre / cork lime retrofit"
+    },
+    {
+        "label": "Solid Wall + 100mm Woodfibre / PIR IWI",
+        "u_value": 0.28,
+        "notes": "Deep internal wall insulation with intelligent vapour control membrane"
+    },
+    {
+        "label": "Solid Wall + 100mm External Wall Insulation (EWI)",
+        "u_value": 0.25,
+        "notes": "External insulation with breathable render finish on non-heritage elevations"
+    },
+    {
+        "label": "Party Wall / Heated Boundary (No Heat Loss)",
+        "u_value": 0.00,
+        "notes": "Internal partition or party wall adjoining heated space; zero envelope transmission loss"
+    }
+]
+
+
 

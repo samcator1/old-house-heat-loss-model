@@ -131,7 +131,25 @@ INPUT_DEFINITIONS: List[Dict[str, Any]] = [
     {"row": 121, "key": "u_ceil_sloping_uninsulated", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Uninsulated Sloping Roof / Lean-to (Lath & Plaster to Rafters)", "default": 2.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Sloping roof with lath & plaster directly under slate/tile rafters, no loft void (e.g. Lean-to scullery)"},
     {"row": 122, "key": "u_ceil_sloping_insulated", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Insulated Sloping Rafters (50-100mm PIR / Woodfibre)", "default": 0.35, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Sloping cathedral ceiling retrofitted with rigid PIR or breathable woodfibre board between rafters"},
     {"row": 123, "key": "u_ceil_flatroof_modern", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Modern Insulated Warm Flat Roof Extension", "default": 0.18, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Flat timber deck roof with 120-150mm rigid PIR insulation above deck (Building Regs compliant)"},
-    {"row": 124, "key": "u_ceil_roof_lantern", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Glazed Roof Lantern / Sloping Skylight (Orangery)", "default": 1.50, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Extensive sloping double glazed roof lantern over Orangery or garden room"}
+    {"row": 124, "key": "u_ceil_roof_lantern", "section": "10. Ceiling & Roof Thermal Transmittance (U-Values)", "label": "Glazed Roof Lantern / Sloping Skylight (Orangery)", "default": 1.50, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Extensive sloping double glazed roof lantern over Orangery or garden room"},
+
+    # Section 11: Wall Construction U-Value Specifications (BS EN 12831-1 & CIBSE Guide A Table 3.3)
+    {"row": 129, "key": "u_wall_brick_9in", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Solid Brick: 9\" / 225mm (Uninsulated)", "default": 2.10, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "CIBSE Guide A Table 3.3: 1-brick thick solid wall with interior plaster (e.g. uninsulated lean-to/scullery)"},
+    {"row": 130, "key": "u_wall_brick_13in", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Solid Brick: 13.5\" / 330mm (Uninsulated)", "default": 1.70, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "1.5-brick thick traditional solid masonry wall with plaster"},
+    {"row": 131, "key": "u_wall_brick_18in", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Solid Brick: 18\" / 450mm (Georgian Facade)", "default": 1.40, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "2-brick thick substantial Georgian external facade with internal lath and plaster finish"},
+    {"row": 132, "key": "u_wall_stone_rubble", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Solid Stone: 450-500mm Sandstone / Limestone", "default": 1.80, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Historic England / CIBSE Guide A: Solid dressed or rubble stone wall (e.g. thatched gable wing)"},
+    {"row": 133, "key": "u_wall_stone_granite", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Solid Stone: 500-600mm Dense Granite / Whinstone", "default": 2.20, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Dense crystalline igneous or metamorphic stone without cavity"},
+    {"row": 134, "key": "u_wall_timber_frame", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Historic Timber Frame (Wattle & Daub / Nogging)", "default": 1.80, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Traditional exposed timber box-frame with wattle/daub or brick nogging infill"},
+    {"row": 135, "key": "u_wall_cob", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Cob / Earth Construction (500mm+)", "default": 0.90, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Traditional thick monolithic chalk/clay/straw cob wall with breathable lime render"},
+    {"row": 136, "key": "u_wall_cavity_uninsulated", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Uninsulated Cavity Wall (Pre-1976)", "default": 1.50, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Early cavity construction (brick/block or brick/brick) with uninsulated 50mm air gap"},
+    {"row": 137, "key": "u_wall_cavity_retrofill", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Retrofilled Cavity Wall (Blown Mineral / Bead)", "default": 0.50, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Existing masonry cavity injected with bonded EPS beads or blown mineral fibre"},
+    {"row": 138, "key": "u_wall_cavity_partial", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Partial-Fill Cavity Wall (1980s-1990s)", "default": 0.45, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "25-50mm partial-fill insulation board retained against inner leaf"},
+    {"row": 139, "key": "u_wall_cavity_regs", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Modern Building Regs Cavity (100mm PIR / Full Fill)", "default": 0.18, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Current Building Regulations Part L new build standard (e.g. New Build wing)"},
+    {"row": 140, "key": "u_wall_cavity_passiv", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "High-Performance New Build (150mm+ PIR / Passivhaus)", "default": 0.12, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Ultra-low-energy extension specification with thick high-performance insulation"},
+    {"row": 141, "key": "u_wall_iwi_50mm", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Solid Wall + 50mm Breathable Woodfibre IWI", "default": 0.55, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Historic England recommended internal breathable woodfibre / cork lime retrofit"},
+    {"row": 142, "key": "u_wall_iwi_100mm", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Solid Wall + 100mm Woodfibre / PIR IWI", "default": 0.28, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Deep internal wall insulation with intelligent vapour control membrane"},
+    {"row": 143, "key": "u_wall_ewi_100mm", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Solid Wall + 100mm External Wall Insulation (EWI)", "default": 0.25, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "External insulation with breathable render finish on non-heritage elevations"},
+    {"row": 144, "key": "u_wall_party", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Party Wall / Heated Boundary (No Heat Loss)", "default": 0.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Internal partition or party wall adjoining heated space; zero envelope transmission loss"}
 ]
 
 SECTION_HEADERS = [
@@ -144,7 +162,8 @@ SECTION_HEADERS = [
     {"row": 63, "title": "7. CAPITAL EQUIPMENT COST RATES & CARBON FACTORS"},
     {"row": 74, "title": "8. INFILTRATION QUESTIONNAIRE SCORING & AIR CHANGE RATE (ACH) PENALTIES"},
     {"row": 96, "title": "9. WINDOW & GLAZING THERMAL TRANSMITTANCE (U-VALUES)"},
-    {"row": 111, "title": "10. CEILING & ROOF THERMAL TRANSMITTANCE (U-VALUES)"}
+    {"row": 111, "title": "10. CEILING & ROOF THERMAL TRANSMITTANCE (U-VALUES)"},
+    {"row": 127, "title": "11. WALL CONSTRUCTION THERMAL TRANSMITTANCE (U-VALUES)"}
 ]
 
 class InputsManager:
@@ -203,12 +222,12 @@ class InputsManager:
         """
         try:
             ws = self.ss.worksheet("1_Inputs")
-            if ws.row_count < 140:
-                ws.resize(rows=140, cols=max(ws.col_count, 6))
+            if ws.row_count < 155:
+                ws.resize(rows=155, cols=max(ws.col_count, 6))
         except gspread.WorksheetNotFound:
-            ws = self.ss.add_worksheet(title="1_Inputs", rows=140, cols=6)
+            ws = self.ss.add_worksheet(title="1_Inputs", rows=155, cols=6)
 
-        total_rows = 128
+        total_rows = 146
         grid: List[List[str]] = [["" for _ in range(5)] for _ in range(total_rows)]
 
         # Banner & Column Headers

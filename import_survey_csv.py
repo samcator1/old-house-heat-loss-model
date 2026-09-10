@@ -49,11 +49,11 @@ def main():
     f_g_data = []
     i_data = []
     k_l_data = []
-    n_data = []
     o_data = []
-    r_s_data = []
-    u_data = []
+    p_data = []
+    s_t_data = []
     v_data = []
+    w_data = []
     q_dropdown_data = []
     notes_data = []
 
@@ -64,7 +64,19 @@ def main():
             r_wid = row.get("Width (m)", "")
             r_ht = row.get("Height (m)", "")
             ext_wall = row.get("Ext Wall (m)", "")
-            u_wall = row.get("U-Wall", "")
+            wall_spec = row.get("Wall Specification", "")
+            if not wall_spec:
+                u_wall_str = row.get("U-Wall", "")
+                if u_wall_str:
+                    try:
+                        u_flt = float(u_wall_str)
+                        from heat_loss_model.tabs.room_tab import map_u_to_wall_spec
+                        wall_spec = map_u_to_wall_spec(u_flt)
+                    except Exception:
+                        wall_spec = 'Solid Brick: 18" / 450mm (Georgian Facade)'
+                else:
+                    wall_spec = 'Solid Brick: 18" / 450mm (Georgian Facade)'
+
             win_area = row.get("Window Area (m2)", "")
             win_spec = row.get("Window Specification", "")
             if not win_spec:
@@ -92,12 +104,12 @@ def main():
 
             f_g_data.append([r_len, r_wid])
             i_data.append([r_ht])
-            k_l_data.append([ext_wall, u_wall])
-            n_data.append([win_area])
-            o_data.append([win_spec])
-            r_s_data.append([fl_area, u_fl])
-            u_data.append([roof_area])
-            v_data.append([ceil_spec])
+            k_l_data.append([ext_wall, wall_spec])
+            o_data.append([win_area])
+            p_data.append([win_spec])
+            s_t_data.append([fl_area, u_fl])
+            v_data.append([roof_area])
+            w_data.append([ceil_spec])
             if q_base:
                 q_dropdown_data.append([q_base, q_chimney, q_win, q_floor, q_ceil])
             notes_data.append([combined_notes])
@@ -112,15 +124,15 @@ def main():
         {"range": f"F5:G{end_row}", "values": f_g_data},
         {"range": f"I5:I{end_row}", "values": i_data},
         {"range": f"K5:L{end_row}", "values": k_l_data},
-        {"range": f"N5:N{end_row}", "values": n_data},
         {"range": f"O5:O{end_row}", "values": o_data},
-        {"range": f"R5:S{end_row}", "values": r_s_data},
-        {"range": f"U5:U{end_row}", "values": u_data},
+        {"range": f"P5:P{end_row}", "values": p_data},
+        {"range": f"S5:T{end_row}", "values": s_t_data},
         {"range": f"V5:V{end_row}", "values": v_data},
-        {"range": f"AK5:AK{end_row}", "values": notes_data}
+        {"range": f"W5:W{end_row}", "values": w_data},
+        {"range": f"AL5:AL{end_row}", "values": notes_data}
     ]
     if len(q_dropdown_data) == num_rooms:
-        batch_updates.append({"range": f"Y5:AC{end_row}", "values": q_dropdown_data})
+        batch_updates.append({"range": f"Z5:AD{end_row}", "values": q_dropdown_data})
 
     ws.batch_update(batch_updates)
     console.print(f"[bold green]✓ Successfully updated {num_rooms} rooms in {tab_name} via batch API![/bold green]")

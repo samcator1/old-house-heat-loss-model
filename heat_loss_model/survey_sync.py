@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 import gspread
-from .tabs.room_tab import extract_existing_rooms, WINDOW_SPECIFICATIONS, CEILING_SPECIFICATIONS
+from .tabs.room_tab import extract_existing_rooms, WINDOW_SPECIFICATIONS, CEILING_SPECIFICATIONS, WALL_SPECIFICATIONS
 
 CSV_HEADERS = [
     "Room Code",
@@ -28,6 +28,7 @@ CSV_HEADERS = [
     "Width (m)",
     "Height (m)",
     "Ext Wall (m)",
+    "Wall Specification",
     "U-Wall",
     "Window Area (m2)",
     "Window Specification",
@@ -47,6 +48,12 @@ CSV_HEADERS = [
     "Pipework",
     "Notes"
 ]
+
+def get_wall_u(spec: str) -> float:
+    for item in WALL_SPECIFICATIONS:
+        if item["label"] == spec:
+            return item.get("u_value", 1.40)
+    return 1.40
 
 def get_window_u(spec: str) -> float:
     for item in WINDOW_SPECIFICATIONS:
@@ -102,6 +109,7 @@ def export_rooms_to_csv(rooms: List[Dict[str, Any]], csv_path: Path) -> None:
         writer.writerow(CSV_HEADERS)
         for rm in rooms:
             parsed = parse_room_notes(rm.get("notes", ""))
+            wall_spec = rm.get("wall_spec", 'Solid Brick: 18" / 450mm (Georgian Facade)')
             row = [
                 rm.get("code", ""),
                 rm.get("name", ""),
@@ -112,7 +120,8 @@ def export_rooms_to_csv(rooms: List[Dict[str, Any]], csv_path: Path) -> None:
                 rm.get("wid", 0.0),
                 rm.get("ht", 2.6),
                 rm.get("ext_wall", 0.0),
-                rm.get("u_wall", 1.4),
+                wall_spec,
+                rm.get("u_wall", get_wall_u(wall_spec)),
                 rm.get("win_area", 0.0),
                 rm.get("win_spec", "Single Glazed (Historic Timber Sash / Casement)"),
                 rm.get("fl_area", 0.0),
@@ -138,6 +147,7 @@ def update_html_rooms(rooms: List[Dict[str, Any]], html_paths: List[Path]) -> No
     js_objects = []
     for rm in rooms:
         parsed = parse_room_notes(rm.get("notes", ""))
+        wall_spec = rm.get("wall_spec", 'Solid Brick: 18" / 450mm (Georgian Facade)')
         win_spec = rm.get("win_spec", "Single Glazed (Historic Timber Sash / Casement)")
         ceil_spec = rm.get("ceil_spec", "Intermediate Floor (Heated Space Above)")
         
@@ -151,7 +161,8 @@ def update_html_rooms(rooms: List[Dict[str, Any]], html_paths: List[Path]) -> No
             "wid": rm.get("wid", 0.0),
             "ht": rm.get("ht", 2.6),
             "extWall": rm.get("ext_wall", 0.0),
-            "uWall": rm.get("u_wall", 1.4),
+            "wallSpec": wall_spec,
+            "uWall": get_wall_u(wall_spec),
             "winArea": rm.get("win_area", 0.0),
             "winSpec": win_spec,
             "uWin": get_window_u(win_spec),
