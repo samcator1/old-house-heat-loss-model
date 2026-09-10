@@ -383,5 +383,80 @@ WALL_SPECIFICATIONS = [
     }
 ]
 
+# Ground & Floor Construction U-Value Specifications (BS EN 12831-1 & CIBSE Guide A Table 3.23 / 3.24)
+FLOOR_SPECIFICATIONS = [
+    {
+        "label": "Intermediate Floor (Heated Space Below)",
+        "u_value": 0.00,
+        "notes": "Internal intermediate floor with actively heated space beneath; zero envelope transmission loss"
+    },
+    {
+        "label": "Modern Building Regs Insulated Slab (100mm PIR / Full Fill)",
+        "u_value": 0.15,
+        "notes": "Current Building Regulations Part L ground-bearing concrete slab with 100-120mm continuous PIR"
+    },
+    {
+        "label": "High-Performance Insulated Slab (150mm+ PIR / Passivhaus)",
+        "u_value": 0.10,
+        "notes": "Fully wrapped raft or slab with 150-200mm high-density insulation achieving near-zero ground heat loss"
+    },
+    {
+        "label": "Suspended Timber: Insulated (100-150mm PIR between Joists)",
+        "u_value": 0.18,
+        "notes": "Retrofitted timber floor with 100-150mm rigid PIR or dense woodfibre supported on breathable membrane"
+    },
+    {
+        "label": "Suspended Timber: Insulated (50mm Quilt / Board)",
+        "u_value": 0.35,
+        "notes": "Partial retrofit with 50mm insulation batts between joists over crawlspace void"
+    },
+    {
+        "label": "Solid Concrete: Moderate Insulation (50mm PIR / 1990s)",
+        "u_value": 0.35,
+        "notes": "1990s to early 2000s standard slab with 50mm insulation beneath concrete or screed"
+    },
+    {
+        "label": "Solid Concrete: Perimeter Insulation (1980s Standard)",
+        "u_value": 0.45,
+        "notes": "1980s standard ground slab with vertical perimeter edge insulation only"
+    },
+    {
+        "label": "Suspended Timber: Carpet & Underlay over Uninsulated Void",
+        "u_value": 0.60,
+        "notes": "Historic suspended timber joists with tongue-and-groove boards, heavy underlay and fitted carpet"
+    },
+    {
+        "label": "Suspended Timber: Bare Boards over Cold Uninsulated Void",
+        "u_value": 0.80,
+        "notes": "CIBSE Guide A Table 3.24: Uninsulated suspended timber floorboards over ventilated sub-floor void"
+    },
+    {
+        "label": "Solid Concrete Ground Slab (Uninsulated Pre-1976)",
+        "u_value": 0.80,
+        "notes": "Traditional uninsulated solid concrete ground slab cast directly on hardcore/blinding"
+    },
+    {
+        "label": "Solid Ground Floor: Uninsulated Quarry Tiles / Stone / Earth",
+        "u_value": 1.10,
+        "notes": "Historic uninsulated flagstones, brick pavers, or quarry tiles bedded directly on ground / lime bed"
+    },
+    {
+        "label": "Exposed Floor over Cold Undercroft / Garage (Uninsulated)",
+        "u_value": 1.20,
+        "notes": "First floor cantilever or room over open driveway, unheated garage, or unheated archway without insulation"
+    },
+    {
+        "label": "Exposed Floor over Cold Undercroft / Garage (100mm PIR Insulated)",
+        "u_value": 0.20,
+        "notes": "Cantilevered exposed floor retrofitted with 100mm rigid insulation board and soffit board"
+    },
+    {
+        "label": "Unheated Adjoining Boundary (Zero Transmission Loss)",
+        "u_value": 0.00,
+        "notes": "Floor separating heated space from fully conditioned adjoining residential unit"
+    }
+]
+
+
 
 

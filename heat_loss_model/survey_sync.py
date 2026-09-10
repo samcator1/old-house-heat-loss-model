@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 import gspread
-from .tabs.room_tab import extract_existing_rooms, WINDOW_SPECIFICATIONS, CEILING_SPECIFICATIONS, WALL_SPECIFICATIONS
+from .tabs.room_tab import extract_existing_rooms, WINDOW_SPECIFICATIONS, CEILING_SPECIFICATIONS, WALL_SPECIFICATIONS, FLOOR_SPECIFICATIONS
 
 CSV_HEADERS = [
     "Room Code",
@@ -33,6 +33,7 @@ CSV_HEADERS = [
     "Window Area (m2)",
     "Window Specification",
     "Floor Area (m2)",
+    "Floor Specification",
     "U-Floor",
     "Ceiling Area (m2)",
     "Ceiling Specification",
@@ -60,6 +61,12 @@ def get_window_u(spec: str) -> float:
         if item["label"] == spec:
             return item.get("u_value", item.get("u_val", 4.80))
     return 4.80
+
+def get_floor_u(spec: str) -> float:
+    for item in FLOOR_SPECIFICATIONS:
+        if item["label"] == spec:
+            return item.get("u_value", item.get("u_val", 0.80))
+    return 0.80
 
 def get_ceiling_u(spec: str) -> float:
     for item in CEILING_SPECIFICATIONS:
@@ -110,6 +117,7 @@ def export_rooms_to_csv(rooms: List[Dict[str, Any]], csv_path: Path) -> None:
         for rm in rooms:
             parsed = parse_room_notes(rm.get("notes", ""))
             wall_spec = rm.get("wall_spec", 'Solid Brick: 18" / 450mm (Georgian Facade)')
+            floor_spec = rm.get("floor_spec", "Suspended Timber: Bare Boards Over Void")
             row = [
                 rm.get("code", ""),
                 rm.get("name", ""),
@@ -125,7 +133,8 @@ def export_rooms_to_csv(rooms: List[Dict[str, Any]], csv_path: Path) -> None:
                 rm.get("win_area", 0.0),
                 rm.get("win_spec", "Single Glazed (Historic Timber Sash / Casement)"),
                 rm.get("fl_area", 0.0),
-                rm.get("u_fl", 0.8),
+                floor_spec,
+                rm.get("u_fl", get_floor_u(floor_spec)),
                 rm.get("roof_area", 0.0),
                 rm.get("ceil_spec", "Intermediate Floor (Heated Space Above)"),
                 rm.get("q_base", "Standard Historic (Solid Masonry)"),
@@ -148,6 +157,7 @@ def update_html_rooms(rooms: List[Dict[str, Any]], html_paths: List[Path]) -> No
     for rm in rooms:
         parsed = parse_room_notes(rm.get("notes", ""))
         wall_spec = rm.get("wall_spec", 'Solid Brick: 18" / 450mm (Georgian Facade)')
+        floor_spec = rm.get("floor_spec", "Suspended Timber: Bare Boards Over Void")
         win_spec = rm.get("win_spec", "Single Glazed (Historic Timber Sash / Casement)")
         ceil_spec = rm.get("ceil_spec", "Intermediate Floor (Heated Space Above)")
         
@@ -167,7 +177,8 @@ def update_html_rooms(rooms: List[Dict[str, Any]], html_paths: List[Path]) -> No
             "winSpec": win_spec,
             "uWin": get_window_u(win_spec),
             "flArea": rm.get("fl_area", 0.0),
-            "uFl": rm.get("u_fl", 0.8),
+            "floorSpec": floor_spec,
+            "uFl": rm.get("u_fl", get_floor_u(floor_spec)),
             "roofArea": rm.get("roof_area", 0.0),
             "ceilSpec": ceil_spec,
             "uRoof": get_ceiling_u(ceil_spec),

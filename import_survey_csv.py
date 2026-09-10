@@ -52,8 +52,8 @@ def main():
     o_data = []
     p_data = []
     s_t_data = []
-    v_data = []
     w_data = []
+    x_data = []
     q_dropdown_data = []
     notes_data = []
 
@@ -82,7 +82,21 @@ def main():
             if not win_spec:
                 win_spec = "Single Glazed (Historic Timber Sash / Casement)"
             fl_area = row.get("Floor Area (m2)", "")
-            u_fl = row.get("U-Floor", "")
+            floor_spec = row.get("Floor Specification", "")
+            if not floor_spec:
+                u_fl_str = row.get("U-Floor", "")
+                floor_lvl = row.get("Floor Level", row.get("Floor", ""))
+                zone_name = row.get("Zone / Wing", row.get("Zone", ""))
+                if u_fl_str:
+                    try:
+                        u_flt = float(u_fl_str)
+                        from heat_loss_model.tabs.room_tab import map_u_to_floor_spec
+                        floor_spec = map_u_to_floor_spec(u_flt, floor_lvl, zone_name)
+                    except Exception:
+                        floor_spec = "Suspended Timber: Bare Boards Over Void"
+                else:
+                    floor_spec = "Suspended Timber: Bare Boards Over Void"
+
             roof_area = row.get("Ceiling Area (m2)", "")
             ceil_spec = row.get("Ceiling Specification", "")
             if not ceil_spec:
@@ -107,9 +121,9 @@ def main():
             k_l_data.append([ext_wall, wall_spec])
             o_data.append([win_area])
             p_data.append([win_spec])
-            s_t_data.append([fl_area, u_fl])
-            v_data.append([roof_area])
-            w_data.append([ceil_spec])
+            s_t_data.append([fl_area, floor_spec])
+            w_data.append([roof_area])
+            x_data.append([ceil_spec])
             if q_base:
                 q_dropdown_data.append([q_base, q_chimney, q_win, q_floor, q_ceil])
             notes_data.append([combined_notes])
@@ -127,12 +141,12 @@ def main():
         {"range": f"O5:O{end_row}", "values": o_data},
         {"range": f"P5:P{end_row}", "values": p_data},
         {"range": f"S5:T{end_row}", "values": s_t_data},
-        {"range": f"V5:V{end_row}", "values": v_data},
         {"range": f"W5:W{end_row}", "values": w_data},
-        {"range": f"AL5:AL{end_row}", "values": notes_data}
+        {"range": f"X5:X{end_row}", "values": x_data},
+        {"range": f"AM5:AM{end_row}", "values": notes_data}
     ]
     if len(q_dropdown_data) == num_rooms:
-        batch_updates.append({"range": f"Z5:AD{end_row}", "values": q_dropdown_data})
+        batch_updates.append({"range": f"AA5:AE{end_row}", "values": q_dropdown_data})
 
     ws.batch_update(batch_updates)
     console.print(f"[bold green]✓ Successfully updated {num_rooms} rooms in {tab_name} via batch API![/bold green]")

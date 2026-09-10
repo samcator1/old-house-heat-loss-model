@@ -149,7 +149,23 @@ INPUT_DEFINITIONS: List[Dict[str, Any]] = [
     {"row": 141, "key": "u_wall_iwi_50mm", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Solid Wall + 50mm Breathable Woodfibre IWI", "default": 0.55, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Historic England recommended internal breathable woodfibre / cork lime retrofit"},
     {"row": 142, "key": "u_wall_iwi_100mm", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Solid Wall + 100mm Woodfibre / PIR IWI", "default": 0.28, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Deep internal wall insulation with intelligent vapour control membrane"},
     {"row": 143, "key": "u_wall_ewi_100mm", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Solid Wall + 100mm External Wall Insulation (EWI)", "default": 0.25, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "External insulation with breathable render finish on non-heritage elevations"},
-    {"row": 144, "key": "u_wall_party", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Party Wall / Heated Boundary (No Heat Loss)", "default": 0.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Internal partition or party wall adjoining heated space; zero envelope transmission loss"}
+    {"row": 144, "key": "u_wall_party", "section": "11. Wall Construction Thermal Transmittance (U-Values)", "label": "Party Wall / Heated Boundary (No Heat Loss)", "default": 0.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Internal partition or party wall adjoining heated space; zero envelope transmission loss"},
+
+    # Section 12: Ground & Floor Construction U-Value Specifications (BS EN 12831-1 & CIBSE Guide A Table 3.23 / 3.24)
+    {"row": 148, "key": "u_floor_intermediate", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Intermediate Floor (Heated Space Below)", "default": 0.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Internal intermediate floor with actively heated space beneath; zero envelope transmission loss"},
+    {"row": 149, "key": "u_floor_modern_regs", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Modern Building Regs Insulated Slab (100mm PIR / Full Fill)", "default": 0.15, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Current Building Regulations Part L ground-bearing concrete slab with 100-120mm continuous PIR"},
+    {"row": 150, "key": "u_floor_passivhaus", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "High-Performance Insulated Slab (150mm+ PIR / Passivhaus)", "default": 0.10, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Fully wrapped raft or slab with 150-200mm high-density insulation achieving near-zero ground heat loss"},
+    {"row": 151, "key": "u_floor_timber_100mm", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Suspended Timber: Insulated (100-150mm PIR between Joists)", "default": 0.18, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Retrofitted timber floor with 100-150mm rigid PIR or dense woodfibre supported on breathable membrane"},
+    {"row": 152, "key": "u_floor_timber_50mm", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Suspended Timber: Insulated (50mm Quilt / Board)", "default": 0.35, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Partial retrofit with 50mm insulation batts between joists over crawlspace void"},
+    {"row": 153, "key": "u_floor_conc_50mm", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Solid Concrete: Moderate Insulation (50mm PIR / 1990s)", "default": 0.35, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "1990s to early 2000s standard slab with 50mm insulation beneath concrete or screed"},
+    {"row": 154, "key": "u_floor_conc_perimeter", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Solid Concrete: Perimeter Insulation (1980s Standard)", "default": 0.45, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "1980s standard ground slab with vertical perimeter edge insulation only"},
+    {"row": 155, "key": "u_floor_timber_carpet", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Suspended Timber: Carpet & Underlay over Uninsulated Void", "default": 0.60, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Historic suspended timber joists with tongue-and-groove boards, heavy underlay and fitted carpet"},
+    {"row": 156, "key": "u_floor_timber_bare", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Suspended Timber: Bare Boards over Cold Uninsulated Void", "default": 0.80, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "CIBSE Guide A Table 3.24: Uninsulated suspended timber floorboards over ventilated sub-floor void"},
+    {"row": 157, "key": "u_floor_conc_pre1976", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Solid Concrete Ground Slab (Uninsulated Pre-1976)", "default": 0.80, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Traditional uninsulated solid concrete ground slab cast directly on hardcore/blinding"},
+    {"row": 158, "key": "u_floor_solid_flags", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Solid Ground Floor: Uninsulated Quarry Tiles / Stone / Earth", "default": 1.10, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Historic uninsulated flagstones, brick pavers, or quarry tiles bedded directly on ground / lime bed"},
+    {"row": 159, "key": "u_floor_exposed_uninsulated", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Exposed Floor over Cold Undercroft / Garage (Uninsulated)", "default": 1.20, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "First floor cantilever or room over open driveway, unheated garage, or unheated archway without insulation"},
+    {"row": 160, "key": "u_floor_exposed_insulated", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Exposed Floor over Cold Undercroft / Garage (100mm PIR Insulated)", "default": 0.20, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Cantilevered exposed floor retrofitted with 100mm rigid insulation board and soffit board"},
+    {"row": 161, "key": "u_floor_party", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Unheated Adjoining Boundary (Zero Transmission Loss)", "default": 0.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Floor separating heated space from fully conditioned adjoining residential unit"}
 ]
 
 SECTION_HEADERS = [
@@ -163,7 +179,8 @@ SECTION_HEADERS = [
     {"row": 74, "title": "8. INFILTRATION QUESTIONNAIRE SCORING & AIR CHANGE RATE (ACH) PENALTIES"},
     {"row": 96, "title": "9. WINDOW & GLAZING THERMAL TRANSMITTANCE (U-VALUES)"},
     {"row": 111, "title": "10. CEILING & ROOF THERMAL TRANSMITTANCE (U-VALUES)"},
-    {"row": 127, "title": "11. WALL CONSTRUCTION THERMAL TRANSMITTANCE (U-VALUES)"}
+    {"row": 127, "title": "11. WALL CONSTRUCTION THERMAL TRANSMITTANCE (U-VALUES)"},
+    {"row": 146, "title": "12. GROUND & FLOOR CONSTRUCTION THERMAL TRANSMITTANCE (U-VALUES)"}
 ]
 
 class InputsManager:
@@ -222,12 +239,12 @@ class InputsManager:
         """
         try:
             ws = self.ss.worksheet("1_Inputs")
-            if ws.row_count < 155:
-                ws.resize(rows=155, cols=max(ws.col_count, 6))
+            if ws.row_count < 175:
+                ws.resize(rows=175, cols=max(ws.col_count, 6))
         except gspread.WorksheetNotFound:
-            ws = self.ss.add_worksheet(title="1_Inputs", rows=155, cols=6)
+            ws = self.ss.add_worksheet(title="1_Inputs", rows=175, cols=6)
 
-        total_rows = 146
+        total_rows = 165
         grid: List[List[str]] = [["" for _ in range(5)] for _ in range(total_rows)]
 
         # Banner & Column Headers
