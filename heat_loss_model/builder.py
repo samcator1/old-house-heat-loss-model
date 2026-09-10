@@ -89,10 +89,10 @@ class HeatLossModelBuilder:
 
         # Step 3: Render Tabs in dependency order
         ws_inputs, fmt_inputs = inputs_mgr.render_inputs_tab(merged_inputs)
-        ws_room, fmt_room = build_room_tab(ss)
+        ws_room, fmt_room, num_rooms, room_total_row = build_room_tab(ss)
         ws_dhw, fmt_dhw = build_dhw_pool_tab(ss)
-        ws_systems, fmt_systems = build_systems_tab(ss)
-        ws_dashboard, fmt_dashboard = build_dashboard_tab(ss)
+        ws_systems, fmt_systems = build_systems_tab(ss, room_total_row=room_total_row, num_rooms=num_rooms)
+        ws_dashboard, fmt_dashboard = build_dashboard_tab(ss, num_rooms=num_rooms, room_total_row=room_total_row)
         ws_archive_wing, fmt_archive_wing = build_fabric_tab(ss)
 
         active_worksheets = [ws_dashboard, ws_inputs, ws_room, ws_dhw, ws_systems, ws_archive_wing]
@@ -172,5 +172,7 @@ class HeatLossModelBuilder:
         return {
             "spreadsheet_title": ss.title,
             "spreadsheet_url": ss.url,
-            "inputs_preserved": preserve_inputs
+            "inputs_preserved": preserve_inputs,
+            "num_rooms": num_rooms,
+            "room_total_row": room_total_row
         }

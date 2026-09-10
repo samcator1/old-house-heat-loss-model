@@ -14,7 +14,7 @@ from ..formatting import (
     create_merge_cells_request
 )
 
-def build_dashboard_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dict[str, Any]]]:
+def build_dashboard_tab(ss: gspread.Spreadsheet, num_rooms: int = 24, room_total_row: int = 29) -> Tuple[gspread.Worksheet, List[Dict[str, Any]]]:
     """Builds and formats the 0_Executive_Dashboard worksheet."""
     tab_name = "0_Executive_Dashboard"
     try:
@@ -22,6 +22,7 @@ def build_dashboard_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, Lis
     except gspread.WorksheetNotFound:
         ws = ss.add_worksheet(title=tab_name, rows=55, cols=8)
 
+    last_room_row = 4 + num_rooms
     total_cols = 7
     total_rows = 50
     grid: List[List[str]] = [["" for _ in range(total_cols)] for _ in range(total_rows)]
@@ -33,8 +34,8 @@ def build_dashboard_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, Lis
     # Row 3-6: KPI Cards
     # Card 1: Peak Heat Loss (Cols A-B, Rows 4-6)
     grid[2][0] = "PEAK HEAT LOSS (-4°C)"
-    grid[3][0] = "='2_Room_Heat_Loss'!$AF$29/1000"
-    grid[4][0] = "=TEXT('2_Room_Heat_Loss'!$AG$29, \"0.0\") & \" W/m² whole-house average\""
+    grid[3][0] = f"='2_Room_Heat_Loss'!$AF${room_total_row}/1000"
+    grid[4][0] = f'=TEXT(\'2_Room_Heat_Loss\'!$AG${room_total_row}, "0.0") & " W/m² whole-house average"'
 
     # Card 2: Total Delivered Heat (Cols C-D, Rows 4-6)
     grid[2][2] = "ANNUAL DELIVERED HEAT"
@@ -91,7 +92,7 @@ def build_dashboard_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, Lis
             grid[r_num][c_i] = tr[c_i]
 
     # Row 22: Section 2 - Bottom-Up Architectural Wing & Room Breakdown
-    grid[21][0] = "BOTTOM-UP ARCHITECTURAL WING & ROOM HEAT LOSS BREAKDOWN (24 ROOMS)"
+    grid[21][0] = f"BOTTOM-UP ARCHITECTURAL WING & ROOM HEAT LOSS BREAKDOWN ({num_rooms} ROOMS)"
     headers_zone = [
         "Zone / Wing",
         "Room Count & Type",
@@ -118,21 +119,21 @@ def build_dashboard_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, Lis
         z_desc = zone_types.get(z_name, z.get("zone_type", "Standard"))
         dash_r = 23 + z_idx
         grid[dash_r][0] = z_name
-        grid[dash_r][1] = f'=COUNTIF(\'2_Room_Heat_Loss\'!$D$5:$D$28, A{dash_r+1}) & " rms (" & "{z_desc})"'
-        grid[dash_r][2] = f"=SUMIF('2_Room_Heat_Loss'!$D$5:$D$28, A{dash_r+1}, '2_Room_Heat_Loss'!$H$5:$H$28)"
+        grid[dash_r][1] = f'=COUNTIF(\'2_Room_Heat_Loss\'!$D$5:$D${last_room_row}, A{dash_r+1}) & " rms (" & "{z_desc})"'
+        grid[dash_r][2] = f"=SUMIF('2_Room_Heat_Loss'!$D$5:$D${last_room_row}, A{dash_r+1}, '2_Room_Heat_Loss'!$H$5:$H${last_room_row})"
         grid[dash_r][3] = f"=C{dash_r+1}/$C$30"
-        grid[dash_r][4] = f"=SUMIF('2_Room_Heat_Loss'!$D$5:$D$28, A{dash_r+1}, '2_Room_Heat_Loss'!$AF$5:$AF$28)/1000"
+        grid[dash_r][4] = f"=SUMIF('2_Room_Heat_Loss'!$D$5:$D${last_room_row}, A{dash_r+1}, '2_Room_Heat_Loss'!$AF$5:$AF${last_room_row})/1000"
         grid[dash_r][5] = f"=E{dash_r+1}/$E$30"
         grid[dash_r][6] = f"=(E{dash_r+1}*1000)/C{dash_r+1}"
 
     # Total Zone Row (Row 30)
     grid[29][0] = "Total Whole Building"
-    grid[29][1] = '="All " & COUNT(\'2_Room_Heat_Loss\'!$H$5:$H$28) & " Rooms"'
-    grid[29][2] = "='2_Room_Heat_Loss'!$H$29"
+    grid[29][1] = f'="All " & COUNT(\'2_Room_Heat_Loss\'!$H$5:$H${last_room_row}) & " Rooms"'
+    grid[29][2] = f"='2_Room_Heat_Loss'!$H${room_total_row}"
     grid[29][3] = "=SUM(D24:D29)"
-    grid[29][4] = "='2_Room_Heat_Loss'!$AF$29/1000"
+    grid[29][4] = f"='2_Room_Heat_Loss'!$AF${room_total_row}/1000"
     grid[29][5] = "=SUM(F24:F29)"
-    grid[29][6] = "='2_Room_Heat_Loss'!$AG$29"
+    grid[29][6] = f"='2_Room_Heat_Loss'!$AG${room_total_row}"
 
     # Row 33: Section 3 - Solar PV & Battery Self-Sufficiency Summary
     grid[32][0] = "SOLAR PV & BATTERY DISPATCH SUMMARY (GSHP SCENARIO)"

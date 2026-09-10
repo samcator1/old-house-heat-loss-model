@@ -14,7 +14,7 @@ from ..formatting import (
     create_merge_cells_request
 )
 
-def build_systems_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dict[str, Any]]]:
+def build_systems_tab(ss: gspread.Spreadsheet, room_total_row: int = 29, num_rooms: int = 24) -> Tuple[gspread.Worksheet, List[Dict[str, Any]]]:
     """Builds and formats the 4_Heating_and_Renewables worksheet."""
     tab_name = "4_Heating_and_Renewables"
     try:
@@ -40,10 +40,10 @@ def build_systems_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[
 
     grid[4] = [
         "Space heating annual demand",
-        "=(('2_Room_Heat_Loss'!$AF$29/('2_Room_Heat_Loss'!$E$29-'1_Inputs'!$C$5))*'1_Inputs'!$C$7*24/1000)*'1_Inputs'!$C$8",
+        f"=(('2_Room_Heat_Loss'!$AF${room_total_row}/('2_Room_Heat_Loss'!$E${room_total_row}-'1_Inputs'!$C$5))*'1_Inputs'!$C$7*24/1000)*'1_Inputs'!$C$8",
         "=B5/$B$8",
         "(HLC × HDD × 24 / 1000) × f_usage",
-        "Degree-day method using bottom-up 24-room schedule heat loss coefficient"
+        "Degree-day method using bottom-up room schedule heat loss coefficient"
     ]
     grid[5] = [
         "Domestic hot water (DHW) demand",
@@ -85,7 +85,7 @@ def build_systems_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[
 
     grid[12] = [
         "Ground Source Heat Pump (GSHP)",
-        "=(('2_Room_Heat_Loss'!$AF$29/1000)*(1+'1_Inputs'!$C$16))",
+        f"=(('2_Room_Heat_Loss'!$AF${room_total_row}/1000)*(1+'1_Inputs'!$C$16))",
         "kW heat",
         "='1_Inputs'!$C$64",
         "=B13*D13",
@@ -93,7 +93,7 @@ def build_systems_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[
     ]
     grid[13] = [
         "Air Source Heat Pump (ASHP)",
-        "=(('2_Room_Heat_Loss'!$AF$29/1000)*(1+'1_Inputs'!$C$16))",
+        f"=(('2_Room_Heat_Loss'!$AF${room_total_row}/1000)*(1+'1_Inputs'!$C$16))",
         "kW heat",
         "='1_Inputs'!$C$65",
         "=B14*D14",
@@ -101,7 +101,7 @@ def build_systems_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[
     ]
     grid[14] = [
         "Commercial Oil Boiler",
-        "=(('2_Room_Heat_Loss'!$AF$29/1000)*(1+'1_Inputs'!$C$17))",
+        f"=(('2_Room_Heat_Loss'!$AF${room_total_row}/1000)*(1+'1_Inputs'!$C$17))",
         "kW heat",
         "='1_Inputs'!$C$66",
         "=B15*D15",

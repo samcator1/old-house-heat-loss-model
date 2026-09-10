@@ -239,23 +239,149 @@ DEFAULT_ROOMS = [
         "notes": "22°C bathroom comfort criteria. Compact high-efficiency emitter."
     }
 ]
-def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dict[str, Any]]]:
-    """Builds and formats the 2_Room_Heat_Loss master schedule worksheet."""
+
+def safe_float(val: Any, default: float = 0.0) -> float:
+    """Safely converts unformatted cell values to float."""
+    if val is None or val == "":
+        return default
+    if isinstance(val, (int, float)):
+        return float(val)
+    s = str(val).replace("°C", "").replace("m²", "").replace("m³", "").replace("m", "").replace(",", "").strip()
+    try:
+        return float(s)
+    except (ValueError, TypeError):
+        return default
+
+def safe_str(val: Any, default: str = "") -> str:
+    """Safely converts cell values to non-empty string."""
+    if val is None:
+        return default
+    s = str(val).strip()
+    return s if s != "" else default
+
+def extract_existing_rooms(ws: gspread.Worksheet) -> List[Dict[str, Any]]:
+    """
+    Reads existing user inputs from 2_Room_Heat_Loss worksheet non-destructively.
+    Uses unformatted values to prevent truncation/rounding of dimensions and U-values.
+    """
+    try:
+        raw_values = ws.get_all_values(value_render_option="UNFORMATTED_VALUE")
+    except Exception:
+        return []
+
+    if len(raw_values) < 5:
+        return []
+
+    rooms = []
+    # Room data rows start at row index 4 (Row 5 in spreadsheet)
+    for row in raw_values[4:]:
+        if not row:
+            continue
+        first_col = str(row[0]).strip() if len(row) > 0 else ""
+        second_col = str(row[1]).strip() if len(row) > 1 else ""
+
+        # Stop when encountering the Total row or a completely blank row
+        if first_col.lower().startswith("total") or "whole house" in first_col.lower():
+            break
+        if first_col == "" and second_col == "":
+            break
+
+        room = {
+            "code": first_col,
+            "name": safe_str(row[1] if len(row) > 1 else "", "Room"),
+            "floor": safe_str(row[2] if len(row) > 2 else "", "Ground Floor"),
+            "zone": safe_str(row[3] if len(row) > 3 else "", "Old House"),
+            "temp": safe_float(row[4] if len(row) > 4 else 20.0, 20.0),
+            "len": safe_float(row[5] if len(row) > 5 else 0.0, 0.0),
+            "wid": safe_float(row[6] if len(row) > 6 else 0.0, 0.0),
+            "ht": safe_float(row[8] if len(row) > 8 else 2.6, 2.6),
+            "ext_wall": safe_float(row[10] if len(row) > 10 else 0.0, 0.0),
+            "u_wall": safe_float(row[11] if len(row) > 11 else 1.4, 1.4),
+            "win_area": safe_float(row[13] if len(row) > 13 else 0.0, 0.0),
+            "win_spec": safe_str(row[14] if len(row) > 14 else "", "Single Glazed (Historic Timber Sash / Casement)"),
+            "fl_area": safe_float(row[17] if len(row) > 17 else 0.0, 0.0),
+            "u_fl": safe_float(row[18] if len(row) > 18 else 0.8, 0.8),
+            "roof_area": safe_float(row[20] if len(row) > 20 else 0.0, 0.0),
+            "ceil_spec": safe_str(row[21] if len(row) > 21 else "", "Intermediate Floor (Heated Space Above)"),
+            "q_base": safe_str(row[24] if len(row) > 24 else "", "Standard Historic (Solid Masonry)"),
+            "q_chimney": safe_str(row[25] if len(row) > 25 else "", "No Chimney / Permanently Sealed"),
+            "q_win": safe_str(row[26] if len(row) > 26 else "", "Original Loose Sash / Casement (Undraughted)"),
+            "q_floor": safe_str(row[27] if len(row) > 27 else "", "Solid Concrete Slab / Insulated Floor"),
+            "q_ceil": safe_str(row[28] if len(row) > 28 else "", "Intermediate Floor (Heated Space Above)"),
+            "notes": safe_str(row[36] if len(row) > 36 else "", "")
+        }
+        rooms.append(room)
+
+    return rooms
+
+def update_named_ranges(ss: gspread.Spreadsheet, ws: gspread.Worksheet, total_row: int, num_rooms: int):
+    """Registers / updates Google Sheets Named Ranges for dynamic downstream linking."""
+    named_ranges_spec = {
+        "Room_Total_Loss_W": (total_row - 1, total_row, 31, 32),          # Col AF
+        "Room_Total_Area_m2": (total_row - 1, total_row, 7, 8),            # Col H
+        "Room_Average_Ti": (total_row - 1, total_row, 4, 5),               # Col E
+        "Room_Whole_House_Intensity": (total_row - 1, total_row, 32, 33),  # Col AG
+    }
+    try:
+        existing = {nr["name"]: nr for nr in ss.list_named_ranges()}
+        requests = []
+        for name in named_ranges_spec:
+            if name in existing:
+                requests.append({
+                    "deleteNamedRange": {
+                        "namedRangeId": existing[name]["namedRangeId"]
+                    }
+                })
+        for name, (sr, er, sc, ec) in named_ranges_spec.items():
+            requests.append({
+                "addNamedRange": {
+                    "namedRange": {
+                        "name": name,
+                        "range": {
+                            "sheetId": ws.id,
+                            "startRowIndex": sr,
+                            "endRowIndex": er,
+                            "startColumnIndex": sc,
+                            "endColumnIndex": ec
+                        }
+                    }
+                }
+            })
+        if requests:
+            ss.batch_update({"requests": requests})
+    except Exception as e:
+        print(f"Note on updating named ranges: {e}")
+
+def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dict[str, Any]], int, int]:
+    """
+    Builds and formats the 2_Room_Heat_Loss master schedule worksheet.
+    Preserves all user-edited non-formulaic cells from the live sheet before updating.
+    Returns (worksheet, formatting_requests, num_rooms, total_row).
+    """
     tab_name = "2_Room_Heat_Loss"
     try:
         ws = ss.worksheet(tab_name)
-        if ws.col_count < 37:
-            ws.resize(rows=max(ws.row_count, 40), cols=37)
     except gspread.WorksheetNotFound:
-        ws = ss.add_worksheet(title=tab_name, rows=40, cols=37)
+        ws = ss.add_worksheet(title=tab_name, rows=45, cols=37)
 
+    # Step 1: Read existing rooms from sheet to preserve all user edits
+    existing_rooms = extract_existing_rooms(ws)
+    active_rooms = existing_rooms if len(existing_rooms) > 0 else DEFAULT_ROOMS
+
+    num_rooms = len(active_rooms)
+    last_room_row = 4 + num_rooms
+    total_row = 5 + num_rooms  # 1-indexed row number of summary total row (e.g. 29 for 24 rooms)
+    total_rows = total_row + 2
     total_cols = 37
-    total_rows = 31
+
+    if ws.row_count < total_rows or ws.col_count < total_cols:
+        ws.resize(rows=max(ws.row_count, total_rows), cols=max(ws.col_count, total_cols))
+
     grid: List[List[str]] = [["" for _ in range(total_cols)] for _ in range(total_rows)]
 
     # Row 1 & 2: Banner
     grid[0][0] = "2_Room_Heat_Loss: Room-by-Room Heat Loss Assessment & Low-Flow Radiator Sizing"
-    grid[1][0] = "Master MCS / CIBSE BS EN 12831 Room Schedule: 11 Ground Floor & 13 First Floor Rooms with Dynamic Infiltration Questionnaire."
+    grid[1][0] = f"Master MCS / CIBSE BS EN 12831 Room Schedule: {num_rooms} Assessed Rooms with Dynamic Infiltration Questionnaire."
 
     # Row 3: Category Groups
     grid[2][0] = "ROOM IDENTIFICATION"                   # Cols A-D (0-3)
@@ -308,9 +434,9 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
     for c_i, h in enumerate(headers):
         grid[3][c_i] = h
 
-    # Populate 24 Rooms (Rows 5 to 28, indices 4 to 27)
-    for r_idx, rm in enumerate(DEFAULT_ROOMS):
-        r = 5 + r_idx  # 1-indexed row in spreadsheet (5 to 28)
+    # Populate active rooms with live formulas
+    for r_idx, rm in enumerate(active_rooms):
+        r = 5 + r_idx  # 1-indexed row in spreadsheet
         row_arr = [
             rm["code"],                                       # Col A (0)
             rm["name"],                                       # Col B (1)
@@ -352,43 +478,43 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
         ]
         grid[4 + r_idx] = row_arr
 
-    # Row 29: Total Building Schedule Row (index 28)
-    grid[28] = [
+    # Summary Total Row
+    grid[total_row - 1] = [
         "Total Whole House",
-        "24 Assessed Rooms",
+        f"{num_rooms} Assessed Rooms",
         "Ground & First",
         "All Wings",
-        "=SUMPRODUCT(E5:E28, H5:H28)/SUM(H5:H28)",
+        f"=SUMPRODUCT(E5:E{last_room_row}, H5:H{last_room_row})/SUM(H5:H{last_room_row})",
         "-",
         "-",
-        "=SUM(H5:H28)",
+        f"=SUM(H5:H{last_room_row})",
         "-",
-        "=SUM(J5:J28)",
-        "-",
-        "-",
-        "=SUM(M5:M28)",
-        "=SUM(N5:N28)",
+        f"=SUM(J5:J{last_room_row})",
         "-",
         "-",
-        "=SUM(Q5:Q28)",
-        "=SUM(R5:R28)",
-        "-",
-        "=SUM(T5:T28)",
-        "=SUM(U5:U28)",
+        f"=SUM(M5:M{last_room_row})",
+        f"=SUM(N5:N{last_room_row})",
         "-",
         "-",
-        "=SUM(X5:X28)",
+        f"=SUM(Q5:Q{last_room_row})",
+        f"=SUM(R5:R{last_room_row})",
+        "-",
+        f"=SUM(T5:T{last_room_row})",
+        f"=SUM(U5:U{last_room_row})",
         "-",
         "-",
+        f"=SUM(X5:X{last_room_row})",
         "-",
         "-",
         "-",
-        "=AVERAGE(AD5:AD28)",
-        "=SUM(AE5:AE28)",
-        "=SUM(AF5:AF28)",
-        "=AF29/H29",
-        "=SUM(AH5:AH28)",
-        "=SUM(AI5:AI28)",
+        "-",
+        "-",
+        f"=AVERAGE(AD5:AD{last_room_row})",
+        f"=SUM(AE5:AE{last_room_row})",
+        f"=SUM(AF5:AF{last_room_row})",
+        f"=AF{total_row}/H{total_row}",
+        f"=SUM(AH5:AH{last_room_row})",
+        f"=SUM(AI5:AI{last_room_row})",
         "Whole House Emitters",
         "Survey Complete"
     ]
@@ -483,8 +609,8 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
         wrap_strategy="WRAP"
     ))
 
-    # Data Rows (Rows 5 to 28)
-    for r_i in range(4, 28):
+    # Data Rows (Rows 5 to last_room_row)
+    for r_i in range(4, last_room_row):
         bg = THEME["ZEBRA_BG"] if r_i % 2 == 1 else {"red": 1.0, "green": 1.0, "blue": 1.0}
         fmt_reqs.append(create_repeat_cell_request(
             ws.id, r_i, r_i + 1, 0, total_cols,
@@ -555,53 +681,53 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
         ))
 
     # Number formats
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 4, 5, number_format=FORMATS["TEMP_C"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 5, 9, number_format=FORMATS["DECIMAL_1"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 9, 10, number_format=FORMATS["INTEGER"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 10, 11, number_format=FORMATS["DECIMAL_1"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 11, 12, number_format=FORMATS["DECIMAL_2"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 12, 13, number_format=FORMATS["INTEGER"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 13, 14, number_format=FORMATS["DECIMAL_1"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 15, 16, number_format=FORMATS["DECIMAL_2"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 16, 17, number_format=FORMATS["INTEGER"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 17, 18, number_format=FORMATS["DECIMAL_1"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 18, 19, number_format=FORMATS["DECIMAL_2"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 19, 20, number_format=FORMATS["INTEGER"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 20, 21, number_format=FORMATS["DECIMAL_1"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 22, 23, number_format=FORMATS["DECIMAL_2"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 23, 24, number_format=FORMATS["INTEGER"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 29, 30, number_format=FORMATS["DECIMAL_2"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 30, 32, number_format=FORMATS["INTEGER"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 32, 33, number_format=FORMATS["DECIMAL_1"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, 28, 33, 35, number_format=FORMATS["INTEGER"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 4, 5, number_format=FORMATS["TEMP_C"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 5, 9, number_format=FORMATS["DECIMAL_1"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 9, 10, number_format=FORMATS["INTEGER"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 10, 11, number_format=FORMATS["DECIMAL_1"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 11, 12, number_format=FORMATS["DECIMAL_2"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 12, 13, number_format=FORMATS["INTEGER"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 13, 14, number_format=FORMATS["DECIMAL_1"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 15, 16, number_format=FORMATS["DECIMAL_2"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 16, 17, number_format=FORMATS["INTEGER"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 17, 18, number_format=FORMATS["DECIMAL_1"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 18, 19, number_format=FORMATS["DECIMAL_2"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 19, 20, number_format=FORMATS["INTEGER"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 20, 21, number_format=FORMATS["DECIMAL_1"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 22, 23, number_format=FORMATS["DECIMAL_2"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 23, 24, number_format=FORMATS["INTEGER"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 29, 30, number_format=FORMATS["DECIMAL_2"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 30, 32, number_format=FORMATS["INTEGER"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 32, 33, number_format=FORMATS["DECIMAL_1"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, 4, last_room_row, 33, 35, number_format=FORMATS["INTEGER"]))
 
-    # Total Row (Row 29, index 28)
+    # Total Row (Row total_row, index total_row - 1 = last_room_row)
     fmt_reqs.append(create_repeat_cell_request(
-        ws.id, 28, 29, 0, total_cols,
+        ws.id, last_room_row, total_row, 0, total_cols,
         bg_color=THEME["TOTAL_BG"],
         font_color=THEME["DARK_TEXT"],
         bold=True,
         font_size=10,
         align="RIGHT"
     ))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 28, 29, 0, 4, align="LEFT"))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 28, 29, 7, 8, number_format=FORMATS["DECIMAL_1"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 28, 29, 9, 10, number_format=FORMATS["INTEGER"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 28, 29, 12, 13, number_format=FORMATS["INTEGER"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 28, 29, 13, 14, number_format=FORMATS["DECIMAL_1"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 28, 29, 16, 17, number_format=FORMATS["INTEGER"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 28, 29, 17, 18, number_format=FORMATS["DECIMAL_1"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 28, 29, 19, 20, number_format=FORMATS["INTEGER"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 28, 29, 20, 21, number_format=FORMATS["DECIMAL_1"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 28, 29, 23, 24, number_format=FORMATS["INTEGER"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 28, 29, 29, 30, number_format=FORMATS["DECIMAL_2"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 28, 29, 30, 32, number_format=FORMATS["INTEGER"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 28, 29, 32, 33, number_format=FORMATS["DECIMAL_1"]))
-    fmt_reqs.append(create_repeat_cell_request(ws.id, 28, 29, 33, 35, number_format=FORMATS["INTEGER"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, last_room_row, total_row, 0, 4, align="LEFT"))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, last_room_row, total_row, 7, 8, number_format=FORMATS["DECIMAL_1"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, last_room_row, total_row, 9, 10, number_format=FORMATS["INTEGER"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, last_room_row, total_row, 12, 13, number_format=FORMATS["INTEGER"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, last_room_row, total_row, 13, 14, number_format=FORMATS["DECIMAL_1"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, last_room_row, total_row, 16, 17, number_format=FORMATS["INTEGER"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, last_room_row, total_row, 17, 18, number_format=FORMATS["DECIMAL_1"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, last_room_row, total_row, 19, 20, number_format=FORMATS["INTEGER"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, last_room_row, total_row, 20, 21, number_format=FORMATS["DECIMAL_1"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, last_room_row, total_row, 23, 24, number_format=FORMATS["INTEGER"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, last_room_row, total_row, 29, 30, number_format=FORMATS["DECIMAL_2"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, last_room_row, total_row, 30, 32, number_format=FORMATS["INTEGER"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, last_room_row, total_row, 32, 33, number_format=FORMATS["DECIMAL_1"]))
+    fmt_reqs.append(create_repeat_cell_request(ws.id, last_room_row, total_row, 33, 35, number_format=FORMATS["INTEGER"]))
 
     # Accent on Total Room Heat Loss (Col AF / 31)
     fmt_reqs.append(create_repeat_cell_request(
-        ws.id, 28, 29, 31, 32,
+        ws.id, last_room_row, total_row, 31, 32,
         bg_color=THEME["ACCENT_BG"],
         font_color={"red": 0.70, "green": 0.20, "blue": 0.05},
         bold=True,
@@ -614,7 +740,7 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
     fmt_reqs.append(create_data_validation_request(
         sheet_id=ws.id,
         start_row=4,
-        end_row=28,
+        end_row=last_room_row,
         start_col=14,
         end_col=15,
         options=[opt["label"] for opt in WINDOW_SPECIFICATIONS],
@@ -626,7 +752,7 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
     fmt_reqs.append(create_data_validation_request(
         sheet_id=ws.id,
         start_row=4,
-        end_row=28,
+        end_row=last_room_row,
         start_col=21,
         end_col=22,
         options=[opt["label"] for opt in CEILING_SPECIFICATIONS],
@@ -646,7 +772,7 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
         fmt_reqs.append(create_data_validation_request(
             sheet_id=ws.id,
             start_row=4,
-            end_row=28,
+            end_row=last_room_row,
             start_col=col_idx,
             end_col=col_idx + 1,
             options=options,
@@ -654,4 +780,7 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
             strict=False
         ))
 
-    return ws, fmt_reqs
+    # Update Named Ranges so downstream tabs and formulas are completely dynamic
+    update_named_ranges(ss, ws, total_row, num_rooms)
+
+    return ws, fmt_reqs, num_rooms, total_row
