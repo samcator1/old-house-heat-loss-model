@@ -87,9 +87,9 @@ python sync_model.py
 Google Sheets is the single interactive front end and master database for the entire building model:
 1. **Interactive Room Schedule (`2_Room_Heat_Loss`)**:
    - Edit room dimensions, ceiling heights, and external wall lengths directly in the sheet.
-   - Select wall, window, floor, and ceiling constructions from dropdown menus linked to live U-values on `1_Inputs`.
-   - Complete BS EN 12831 survey questionnaire columns to catalog base construction, chimney status, and boundaries.
-   - Automatically size low-temperature 45°C radiators per room.
+   - Select wall, window, floor, and ceiling constructions from dropdown menus linked to live U-values and infiltration adders on `1_Inputs`.
+   - Select chimney / fireplace status from the single ventilation dropdown (air infiltration for fabric elements is automatically looked up from their respective specification tables on `1_Inputs`).
+   - Automatically size low-temperature 45°C radiators and design flow rates (l/h) per room.
 2. **Offline Backup & CSV Utilities**:
    - To create a local snapshot of your room data at any time, run:
      ```bash

@@ -143,317 +143,366 @@ DEFAULT_ZONES = [
     }
 ]
 
-# Room Infiltration Questionnaire Calibration (CIBSE Guide A & BS EN 12831)
+# Chimney & Flue Ventilation Allowances (BS EN 12831 & CIBSE Guide A)
+CHIMNEY_SPECIFICATIONS = [
+    {
+        "label": "No Chimney / Permanently Sealed",
+        "ach": 0.00,
+        "notes": "No open flue or chimney has been permanently capped/sealed"
+    },
+    {
+        "label": "Room-Sealed Stove with Ext Air",
+        "ach": 0.05,
+        "notes": "Closed woodburner with dedicated direct external combustion air duct"
+    },
+    {
+        "label": "Flue Damper / Chimney Balloon Fitted",
+        "ach": 0.15,
+        "notes": "Open chimney fitted with inflatable throat balloon or mechanical damper"
+    },
+    {
+        "label": "Open Fireplace (Unsealed Flue)",
+        "ach": 0.60,
+        "notes": "Unrestricted open chimney flue driving continuous warm air stack extraction"
+    }
+]
+
+# Backwards compatibility alias
 INFILTRATION_QUESTIONNAIRE = {
-    "base_construction": [
-        {"label": "New Build (Cavity / Insulated)", "ach": 0.30},
-        {"label": "Renovated Historic (Draught-proofed)", "ach": 0.60},
-        {"label": "Standard Historic (Solid Masonry)", "ach": 0.80},
-        {"label": "Exposed Historic (High Wind / Exposed Site)", "ach": 1.00}
-    ],
-    "chimney_flue": [
-        {"label": "No Chimney / Permanently Sealed", "ach": 0.00},
-        {"label": "Room-Sealed Stove with Ext Air", "ach": 0.05},
-        {"label": "Flue Damper / Chimney Balloon Fitted", "ach": 0.15},
-        {"label": "Open Fireplace (Unsealed Flue)", "ach": 0.60}
-    ],
-    "windows_doors": [
-        {"label": "Modern High-Performance (Compression Gaskets)", "ach": 0.00},
-        {"label": "Secondary Glazing Fitted", "ach": 0.10},
-        {"label": "Retrofitted Brush / Pile Draught Seals", "ach": 0.15},
-        {"label": "Original Loose Sash / Casement (Undraughted)", "ach": 0.40}
-    ],
-    "floor_construction": [
-        {"label": "Solid Concrete Slab / Insulated Floor", "ach": 0.00},
-        {"label": "Suspended Timber (Sealed / Carpet & Underlay)", "ach": 0.10},
-        {"label": "Suspended Timber (Unsealed Boards over Cold Void)", "ach": 0.35}
-    ],
-    "ceiling_boundary": [
-        {"label": "Intermediate Floor (Heated Space Above)", "ach": 0.00},
-        {"label": "Insulated Loft (Sealed Plaster & Sealed Hatch)", "ach": 0.05},
-        {"label": "Attic Downlights / Unsealed Loft Hatch", "ach": 0.20},
-        {"label": "Sloping Roof / Exposed Eaves / Thatched Ridge", "ach": 0.30}
-    ]
+    "chimney_flue": CHIMNEY_SPECIFICATIONS
 }
 
 # Window & Glazing U-Value Specifications (CIBSE Guide A Table 3.29 & Historic England)
 WINDOW_SPECIFICATIONS = [
     {
-        "label": "Single Glazed (Historic Timber Sash / Casement)",
+        "label": 'Single Glazed (Historic Timber Sash / Casement)',
         "u_value": 4.80,
-        "notes": "Uninsulated traditional timber sash, 3-4mm float glass (CIBSE Guide A Table 3.29)"
+        "ach": 0.40,
+        "notes": 'Uninsulated traditional timber sash, 3-4mm float glass (CIBSE Guide A Table 3.29)'
     },
     {
-        "label": "Single Glazed (Metal / Crittall / Stone Mullion)",
+        "label": 'Single Glazed (Metal / Crittall / Stone Mullion)',
         "u_value": 5.60,
-        "notes": "Single glazed in uninsulated steel frame or direct to stone mullion"
+        "ach": 0.40,
+        "notes": 'Single glazed in uninsulated steel frame or direct to stone mullion'
     },
     {
-        "label": "Single Glazed + Heavy Thermal Curtains / Working Shutters",
+        "label": 'Single Glazed + Heavy Thermal Curtains / Working Shutters',
         "u_value": 3.00,
-        "notes": "Traditional solid interior wooden shutters closed or heavy thermal interlined curtains"
+        "ach": 0.25,
+        "notes": 'Traditional solid interior wooden shutters closed or heavy thermal interlined curtains'
     },
     {
-        "label": "Single Glazed + Standard Secondary Glazing",
+        "label": 'Single Glazed + Standard Secondary Glazing',
         "u_value": 2.60,
-        "notes": "Internal secondary glazing pane with >20mm sealed cavity, clear float glass"
+        "ach": 0.10,
+        "notes": 'Internal secondary glazing pane with >20mm sealed cavity, clear float glass'
     },
     {
-        "label": "Single Glazed + Low-E Secondary Glazing",
+        "label": 'Single Glazed + Low-E Secondary Glazing',
         "u_value": 1.80,
-        "notes": "Secondary glazing pane with pyrolytic Low-E coating, draught-sealed perimeter"
+        "ach": 0.10,
+        "notes": 'Secondary glazing pane with pyrolytic Low-E coating, draught-sealed perimeter'
     },
     {
-        "label": "Heritage Slimline Double Glazing (Timber Frame)",
+        "label": 'Heritage Slimline Double Glazing (Timber Frame)',
         "u_value": 1.90,
-        "notes": "Ultra-slim vacuum or Krypton units (6-8mm) fitting traditional historic glazing rebates"
+        "ach": 0.15,
+        "notes": 'Ultra-slim vacuum or Krypton units (6-8mm) fitting traditional historic glazing rebates'
     },
     {
-        "label": "Early Standard Double Glazing (Pre-2002, Air Gap)",
+        "label": 'Early Standard Double Glazing (Pre-2002, Air Gap)',
         "u_value": 2.80,
-        "notes": "1st-generation aluminium spacer double glazing without Low-E coating"
+        "ach": 0.10,
+        "notes": '1st-generation aluminium spacer double glazing without Low-E coating'
     },
     {
-        "label": "Modern Double Glazing (Argon, Low-E, Warm Edge)",
+        "label": 'Modern Double Glazing (Argon, Low-E, Warm Edge)',
         "u_value": 1.40,
-        "notes": "Current UK Building Regulations Part L standard domestic double glazing"
+        "ach": 0.00,
+        "notes": 'Current UK Building Regulations Part L standard domestic double glazing'
     },
     {
-        "label": "Modern High-Performance Triple Glazing",
+        "label": 'Modern High-Performance Triple Glazing',
         "u_value": 0.80,
-        "notes": "Passivhaus standard triple glazing with two Low-E coats and warm edge spacer"
+        "ach": 0.00,
+        "notes": 'Passivhaus standard triple glazing with two Low-E coats and warm edge spacer'
     },
     {
-        "label": "Glazed Roof Lantern / Sloping Skylight",
+        "label": 'Glazed Roof Lantern / Sloping Skylight',
         "u_value": 1.80,
-        "notes": "Sloping or horizontal glazed orientation with increased internal convective transfer"
+        "ach": 0.15,
+        "notes": 'Sloping or horizontal glazed orientation with increased internal convective transfer'
     },
     {
-        "label": "No External Glazing (Enclosed / Blind Room)",
+        "label": 'No External Glazing (Enclosed / Blind Room)',
         "u_value": 0.00,
-        "notes": "Internal corridors, enclosed cloakrooms, or windowless plantrooms"
+        "ach": 0.00,
+        "notes": 'Internal corridors, enclosed cloakrooms, or windowless plantrooms'
     }
 ]
 
 # Ceiling & Roof U-Value Specifications (CIBSE Guide A Table 3.19/3.20 & Historic England)
 CEILING_SPECIFICATIONS = [
     {
-        "label": "Intermediate Floor (Heated Space Above)",
+        "label": 'Intermediate Floor (Heated Space Above)',
         "u_value": 0.00,
-        "notes": "Internal ceiling below heated room on upper floor; zero envelope transmission loss"
+        "ach": 0.00,
+        "notes": 'Internal ceiling below heated room on upper floor; zero envelope transmission loss'
     },
     {
-        "label": "Uninsulated Loft (Bare Joists, No Quilt)",
+        "label": 'Uninsulated Loft (Bare Joists, No Quilt)',
         "u_value": 2.30,
-        "notes": "CIBSE Guide A Table 3.19: lath/plaster ceiling below cold ventilated attic without insulation"
+        "ach": 0.20,
+        "notes": 'CIBSE Guide A Table 3.19: lath/plaster ceiling below cold ventilated attic without insulation'
     },
     {
-        "label": "Historic Thatched Roof (Straw / Reed Thatch)",
+        "label": 'Historic Thatched Roof (Straw / Reed Thatch)',
         "u_value": 0.30,
-        "notes": "Traditional 300-450mm straw/water reed thatch naturally provides continuous thermal insulation"
+        "ach": 0.30,
+        "notes": 'Traditional 300-450mm straw/water reed thatch naturally provides continuous thermal insulation'
     },
     {
-        "label": "Older Loft Insulation: 50mm (Pre-1980 Quilt)",
+        "label": 'Older Loft Insulation: 50mm (Pre-1980 Quilt)',
         "u_value": 0.80,
-        "notes": "Thin historic mineral wool between ceiling joists, often degraded or compressed"
+        "ach": 0.15,
+        "notes": 'Thin historic mineral wool between ceiling joists, often degraded or compressed'
     },
     {
-        "label": "Older Loft Insulation: 100mm (1980s-1990s Standard)",
+        "label": 'Older Loft Insulation: 100mm (1980s-1990s Standard)',
         "u_value": 0.40,
-        "notes": "Single layer mineral wool quilt filling joist depth only"
+        "ach": 0.10,
+        "notes": 'Single layer mineral wool quilt filling joist depth only'
     },
     {
-        "label": "Moderate Loft Insulation: 150-200mm (Pre-2002 Standard)",
+        "label": 'Moderate Loft Insulation: 150-200mm (Pre-2002 Standard)',
         "u_value": 0.22,
-        "notes": "Joists filled plus partial top-up layer, typical existing retrofitted loft"
+        "ach": 0.05,
+        "notes": 'Joists filled plus partial top-up layer, typical existing retrofitted loft'
     },
     {
-        "label": "Modern Building Regs Loft: 270-300mm (Mineral Wool)",
+        "label": 'Modern Building Regs Loft: 270-300mm (Mineral Wool)',
         "u_value": 0.16,
-        "notes": "Current Building Regulations Part L: 100mm between joists + 170mm cross-laid quilt"
+        "ach": 0.05,
+        "notes": 'Current Building Regulations Part L: 100mm between joists + 170mm cross-laid quilt'
     },
     {
-        "label": "High-Performance Deep Loft: 350-400mm (Quilt / Cellulose)",
+        "label": 'High-Performance Deep Loft: 350-400mm (Quilt / Cellulose)',
         "u_value": 0.11,
-        "notes": "Deep quilt or blown cellulose insulation achieving near-Passivhaus thermal resistance"
+        "ach": 0.03,
+        "notes": 'Deep quilt or blown cellulose insulation achieving near-Passivhaus thermal resistance'
     },
     {
-        "label": "Uninsulated Sloping Roof / Lean-to (Lath & Plaster to Rafters)",
+        "label": 'Uninsulated Sloping Roof / Lean-to (Lath & Plaster to Rafters)',
         "u_value": 2.00,
-        "notes": "Sloping roof with lath & plaster directly under slate/tile rafters, no loft void (e.g. Lean-to scullery)"
+        "ach": 0.30,
+        "notes": 'Sloping roof with lath & plaster directly under slate/tile rafters, no loft void (e.g. Lean-to scullery)'
     },
     {
-        "label": "Insulated Sloping Rafters (50-100mm PIR / Woodfibre)",
+        "label": 'Insulated Sloping Rafters (50-100mm PIR / Woodfibre)',
         "u_value": 0.35,
-        "notes": "Sloping cathedral ceiling retrofitted with rigid PIR or breathable woodfibre board between rafters"
+        "ach": 0.10,
+        "notes": 'Sloping cathedral ceiling retrofitted with rigid PIR or breathable woodfibre board between rafters'
     },
     {
-        "label": "Modern Insulated Warm Flat Roof Extension",
+        "label": 'Modern Insulated Warm Flat Roof Extension',
         "u_value": 0.18,
-        "notes": "Flat timber deck roof with 120-150mm rigid PIR insulation above deck (Building Regs compliant)"
+        "ach": 0.05,
+        "notes": 'Flat timber deck roof with 120-150mm rigid PIR insulation above deck (Building Regs compliant)'
     },
     {
-        "label": "Glazed Roof Lantern / Sloping Skylight (Orangery)",
+        "label": 'Glazed Roof Lantern / Sloping Skylight (Orangery)',
         "u_value": 1.50,
-        "notes": "Extensive sloping double glazed roof lantern over Orangery or garden room"
+        "ach": 0.15,
+        "notes": 'Extensive sloping double glazed roof lantern over Orangery or garden room'
     }
 ]
 
 # Wall Construction U-Value Specifications (BS EN 12831-1 & CIBSE Guide A Table 3.3)
 WALL_SPECIFICATIONS = [
     {
-        "label": "Solid Brick: 9\" / 225mm (Uninsulated)",
+        "label": 'Solid Brick: 9" / 225mm (Uninsulated)',
         "u_value": 2.10,
-        "notes": "CIBSE Guide A Table 3.3: 1-brick thick solid wall with interior plaster (e.g. uninsulated lean-to/scullery)"
+        "ach": 0.80,
+        "notes": 'CIBSE Guide A Table 3.3: 1-brick thick solid wall with interior plaster (e.g. uninsulated lean-to/scullery)'
     },
     {
-        "label": "Solid Brick: 13.5\" / 330mm (Uninsulated)",
+        "label": 'Solid Brick: 13.5" / 330mm (Uninsulated)',
         "u_value": 1.70,
-        "notes": "1.5-brick thick traditional solid masonry wall with plaster"
+        "ach": 0.80,
+        "notes": '1.5-brick thick traditional solid masonry wall with plaster'
     },
     {
-        "label": "Solid Brick: 18\" / 450mm (Georgian Facade)",
+        "label": 'Solid Brick: 18" / 450mm (Georgian Facade)',
         "u_value": 1.40,
-        "notes": "2-brick thick substantial Georgian external facade with internal lath and plaster finish"
+        "ach": 0.80,
+        "notes": '2-brick thick substantial Georgian external facade with internal lath and plaster finish'
     },
     {
-        "label": "Solid Stone: 450-500mm Sandstone / Limestone",
+        "label": 'Solid Stone: 450-500mm Sandstone / Limestone',
         "u_value": 1.80,
-        "notes": "Historic England / CIBSE Guide A: Solid dressed or rubble stone wall (e.g. thatched gable wing)"
+        "ach": 0.80,
+        "notes": 'Historic England / CIBSE Guide A: Solid dressed or rubble stone wall (e.g. thatched gable wing)'
     },
     {
-        "label": "Solid Stone: 500-600mm Dense Granite / Whinstone",
+        "label": 'Solid Stone: 500-600mm Dense Granite / Whinstone',
         "u_value": 2.20,
-        "notes": "Dense crystalline igneous or metamorphic stone without cavity"
+        "ach": 0.80,
+        "notes": 'Dense crystalline igneous or metamorphic stone without cavity'
     },
     {
-        "label": "Historic Timber Frame (Wattle & Daub / Nogging)",
+        "label": 'Historic Timber Frame (Wattle & Daub / Nogging)',
         "u_value": 1.80,
-        "notes": "Traditional exposed timber box-frame with wattle/daub or brick nogging infill"
+        "ach": 0.80,
+        "notes": 'Traditional exposed timber box-frame with wattle/daub or brick nogging infill'
     },
     {
-        "label": "Cob / Earth Construction (500mm+)",
+        "label": 'Cob / Earth Construction (500mm+)',
         "u_value": 0.90,
-        "notes": "Traditional thick monolithic chalk/clay/straw cob wall with breathable lime render"
+        "ach": 0.80,
+        "notes": 'Traditional thick monolithic chalk/clay/straw cob wall with breathable lime render'
     },
     {
-        "label": "Uninsulated Cavity Wall (Pre-1976)",
+        "label": 'Uninsulated Cavity Wall (Pre-1976)',
         "u_value": 1.50,
-        "notes": "Early cavity construction (brick/block or brick/brick) with uninsulated 50mm air gap"
+        "ach": 0.50,
+        "notes": 'Early cavity construction (brick/block or brick/brick) with uninsulated 50mm air gap'
     },
     {
-        "label": "Retrofilled Cavity Wall (Blown Mineral / Bead)",
+        "label": 'Retrofilled Cavity Wall (Blown Mineral / Bead)',
         "u_value": 0.50,
-        "notes": "Existing masonry cavity injected with bonded EPS beads or blown mineral fibre"
+        "ach": 0.40,
+        "notes": 'Existing masonry cavity injected with bonded EPS beads or blown mineral fibre'
     },
     {
-        "label": "Partial-Fill Cavity Wall (1980s-1990s)",
+        "label": 'Partial-Fill Cavity Wall (1980s-1990s)',
         "u_value": 0.45,
-        "notes": "25-50mm partial-fill insulation board retained against inner leaf"
+        "ach": 0.35,
+        "notes": '25-50mm partial-fill insulation board retained against inner leaf'
     },
     {
-        "label": "Modern Building Regs Cavity (100mm PIR / Full Fill)",
+        "label": 'Modern Building Regs Cavity (100mm PIR / Full Fill)',
         "u_value": 0.18,
-        "notes": "Current Building Regulations Part L new build standard (e.g. New Build wing)"
+        "ach": 0.30,
+        "notes": 'Current Building Regulations Part L new build standard (e.g. New Build wing)'
     },
     {
-        "label": "High-Performance New Build (150mm+ PIR / Passivhaus)",
+        "label": 'High-Performance New Build (150mm+ PIR / Passivhaus)',
         "u_value": 0.12,
-        "notes": "Ultra-low-energy extension specification with thick high-performance insulation"
+        "ach": 0.15,
+        "notes": 'Ultra-low-energy extension specification with thick high-performance insulation'
     },
     {
-        "label": "Solid Wall + 50mm Breathable Woodfibre IWI",
+        "label": 'Solid Wall + 50mm Breathable Woodfibre IWI',
         "u_value": 0.55,
-        "notes": "Historic England recommended internal breathable woodfibre / cork lime retrofit"
+        "ach": 0.50,
+        "notes": 'Historic England recommended internal breathable woodfibre / cork lime retrofit'
     },
     {
-        "label": "Solid Wall + 100mm Woodfibre / PIR IWI",
+        "label": 'Solid Wall + 100mm Woodfibre / PIR IWI',
         "u_value": 0.28,
-        "notes": "Deep internal wall insulation with intelligent vapour control membrane"
+        "ach": 0.40,
+        "notes": 'Deep internal wall insulation with intelligent vapour control membrane'
     },
     {
-        "label": "Solid Wall + 100mm External Wall Insulation (EWI)",
+        "label": 'Solid Wall + 100mm External Wall Insulation (EWI)',
         "u_value": 0.25,
-        "notes": "External insulation with breathable render finish on non-heritage elevations"
+        "ach": 0.35,
+        "notes": 'External insulation with breathable render finish on non-heritage elevations'
     },
     {
-        "label": "Party Wall / Heated Boundary (No Heat Loss)",
+        "label": 'Party Wall / Heated Boundary (No Heat Loss)',
         "u_value": 0.00,
-        "notes": "Internal partition or party wall adjoining heated space; zero envelope transmission loss"
+        "ach": 0.00,
+        "notes": 'Internal partition or party wall adjoining heated space; zero envelope transmission loss'
     }
 ]
 
 # Ground & Floor Construction U-Value Specifications (BS EN 12831-1 & CIBSE Guide A Table 3.23 / 3.24)
 FLOOR_SPECIFICATIONS = [
     {
-        "label": "Intermediate Floor (Heated Space Below)",
+        "label": 'Intermediate Floor (Heated Space Below)',
         "u_value": 0.00,
-        "notes": "Internal intermediate floor with actively heated space beneath; zero envelope transmission loss"
+        "ach": 0.00,
+        "notes": 'Internal intermediate floor with actively heated space beneath; zero envelope transmission loss'
     },
     {
-        "label": "Modern Building Regs Insulated Slab (100mm PIR / Full Fill)",
+        "label": 'Modern Building Regs Insulated Slab (100mm PIR / Full Fill)',
         "u_value": 0.15,
-        "notes": "Current Building Regulations Part L ground-bearing concrete slab with 100-120mm continuous PIR"
+        "ach": 0.00,
+        "notes": 'Current Building Regulations Part L ground-bearing concrete slab with 100-120mm continuous PIR'
     },
     {
-        "label": "High-Performance Insulated Slab (150mm+ PIR / Passivhaus)",
+        "label": 'High-Performance Insulated Slab (150mm+ PIR / Passivhaus)',
         "u_value": 0.10,
-        "notes": "Fully wrapped raft or slab with 150-200mm high-density insulation achieving near-zero ground heat loss"
+        "ach": 0.00,
+        "notes": 'Fully wrapped raft or slab with 150-200mm high-density insulation achieving near-zero ground heat loss'
     },
     {
-        "label": "Suspended Timber: Insulated (100-150mm PIR between Joists)",
+        "label": 'Suspended Timber: Insulated (100-150mm PIR between Joists)',
         "u_value": 0.18,
-        "notes": "Retrofitted timber floor with 100-150mm rigid PIR or dense woodfibre supported on breathable membrane"
+        "ach": 0.05,
+        "notes": 'Retrofitted timber floor with 100-150mm rigid PIR or dense woodfibre supported on breathable membrane'
     },
     {
-        "label": "Suspended Timber: Insulated (50mm Quilt / Board)",
+        "label": 'Suspended Timber: Insulated (50mm Quilt / Board)',
         "u_value": 0.35,
-        "notes": "Partial retrofit with 50mm insulation batts between joists over crawlspace void"
+        "ach": 0.10,
+        "notes": 'Partial retrofit with 50mm insulation batts between joists over crawlspace void'
     },
     {
-        "label": "Solid Concrete: Moderate Insulation (50mm PIR / 1990s)",
+        "label": 'Solid Concrete: Moderate Insulation (50mm PIR / 1990s)',
         "u_value": 0.35,
-        "notes": "1990s to early 2000s standard slab with 50mm insulation beneath concrete or screed"
+        "ach": 0.00,
+        "notes": '1990s to early 2000s standard slab with 50mm insulation beneath concrete or screed'
     },
     {
-        "label": "Solid Concrete: Perimeter Insulation (1980s Standard)",
+        "label": 'Solid Concrete: Perimeter Insulation (1980s Standard)',
         "u_value": 0.45,
-        "notes": "1980s standard ground slab with vertical perimeter edge insulation only"
+        "ach": 0.00,
+        "notes": '1980s standard ground slab with vertical perimeter edge insulation only'
     },
     {
-        "label": "Suspended Timber: Carpet & Underlay over Uninsulated Void",
+        "label": 'Suspended Timber: Carpet & Underlay over Uninsulated Void',
         "u_value": 0.60,
-        "notes": "Historic suspended timber joists with tongue-and-groove boards, heavy underlay and fitted carpet"
+        "ach": 0.10,
+        "notes": 'Historic suspended timber joists with tongue-and-groove boards, heavy underlay and fitted carpet'
     },
     {
-        "label": "Suspended Timber: Bare Boards over Cold Uninsulated Void",
+        "label": 'Suspended Timber: Bare Boards over Cold Uninsulated Void',
         "u_value": 0.80,
-        "notes": "CIBSE Guide A Table 3.24: Uninsulated suspended timber floorboards over ventilated sub-floor void"
+        "ach": 0.35,
+        "notes": 'CIBSE Guide A Table 3.24: Uninsulated suspended timber floorboards over ventilated sub-floor void'
     },
     {
-        "label": "Solid Concrete Ground Slab (Uninsulated Pre-1976)",
+        "label": 'Solid Concrete Ground Slab (Uninsulated Pre-1976)',
         "u_value": 0.80,
-        "notes": "Traditional uninsulated solid concrete ground slab cast directly on hardcore/blinding"
+        "ach": 0.00,
+        "notes": 'Traditional uninsulated solid concrete ground slab cast directly on hardcore/blinding'
     },
     {
-        "label": "Solid Ground Floor: Uninsulated Quarry Tiles / Stone / Earth",
+        "label": 'Solid Ground Floor: Uninsulated Quarry Tiles / Stone / Earth',
         "u_value": 1.10,
-        "notes": "Historic uninsulated flagstones, brick pavers, or quarry tiles bedded directly on ground / lime bed"
+        "ach": 0.00,
+        "notes": 'Historic uninsulated flagstones, brick pavers, or quarry tiles bedded directly on ground / lime bed'
     },
     {
-        "label": "Exposed Floor over Cold Undercroft / Garage (Uninsulated)",
+        "label": 'Exposed Floor over Cold Undercroft / Garage (Uninsulated)',
         "u_value": 1.20,
-        "notes": "First floor cantilever or room over open driveway, unheated garage, or unheated archway without insulation"
+        "ach": 0.15,
+        "notes": 'First floor cantilever or room over open driveway, unheated garage, or unheated archway without insulation'
     },
     {
-        "label": "Exposed Floor over Cold Undercroft / Garage (100mm PIR Insulated)",
+        "label": 'Exposed Floor over Cold Undercroft / Garage (100mm PIR Insulated)',
         "u_value": 0.20,
-        "notes": "Cantilevered exposed floor retrofitted with 100mm rigid insulation board and soffit board"
+        "ach": 0.05,
+        "notes": 'Cantilevered exposed floor retrofitted with 100mm rigid insulation board and soffit board'
     },
     {
-        "label": "Unheated Adjoining Boundary (Zero Transmission Loss)",
+        "label": 'Unheated Adjoining Boundary (Zero Transmission Loss)',
         "u_value": 0.00,
-        "notes": "Floor separating heated space from fully conditioned adjoining residential unit"
+        "ach": 0.00,
+        "notes": 'Floor separating heated space from fully conditioned adjoining residential unit'
     }
 ]
 

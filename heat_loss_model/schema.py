@@ -47,11 +47,7 @@ COLUMN_DEFINITIONS: List[Tuple[str, str, int, str]] = [
     ("U_CEIL", "U Ceiling (W/m²K)", 115, "FABRIC"),
     ("CEIL_LOSS", "Ceiling Loss (W)", 110, "FABRIC"),
     ("TB_LOSS", "Thermal Bridge Loss (W)", 125, "FABRIC"),
-    ("Q_BASE", "Base Construction", 185, "VENTILATION"),
-    ("Q_CHIMNEY", "Chimney Flue", 180, "VENTILATION"),
-    ("Q_WIN", "Windows Doors", 180, "VENTILATION"),
-    ("Q_FLOOR", "Floor Boundary", 180, "VENTILATION"),
-    ("Q_CEIL", "Ceiling Boundary", 180, "VENTILATION"),
+    ("CHIMNEY", "Chimney / Fireplace", 200, "VENTILATION"),
     ("ACH", "Calculated ACH", 105, "VENTILATION"),
     ("VENT_LOSS", "Vent Loss (W)", 105, "VENTILATION"),
     ("TOTAL_LOSS", "Room Heat Loss (W)", 135, "TOTALS"),
@@ -83,6 +79,12 @@ class _RoomColumnRegistry:
             setattr(self, f"{key}_LETTER", letter)
             setattr(self, key, letter)
 
+            # Backwards compatibility alias for Q_CHIMNEY
+            if key == "CHIMNEY":
+                setattr(self, "Q_CHIMNEY_IDX", idx)
+                setattr(self, "Q_CHIMNEY_LETTER", letter)
+                setattr(self, "Q_CHIMNEY", letter)
+
     @property
     def total_cols(self) -> int:
         return len(self._defs)
@@ -107,7 +109,7 @@ class _RoomColumnRegistry:
 
     @property
     def vent_span(self) -> Tuple[int, int]:
-        return (self.idx("Q_BASE"), self.idx("VENT_LOSS") + 1)
+        return (self.idx("CHIMNEY"), self.idx("VENT_LOSS") + 1)
 
     @property
     def totals_span(self) -> Tuple[int, int]:

@@ -55,7 +55,7 @@ def main():
     door_data = []
     floor_spec_data = []
     ceil_spec_data = []
-    q_dropdown_data = []
+    chimney_data = []
     notes_data = []
 
     with open(csv_file, "r", encoding="utf-8") as f:
@@ -108,11 +108,7 @@ def main():
             if not door_spec:
                 door_spec = "No External Door (Internal Boundary Only)"
 
-            q_base = row.get("Base Construction", "")
-            q_chimney = row.get("Chimney Flue", "")
-            q_win = row.get("Windows Doors", "")
-            q_floor = row.get("Floor Boundary", "")
-            q_ceil = row.get("Ceiling Boundary", "")
+            chimney = row.get("Chimney / Fireplace", row.get("Chimney Flue", "No Chimney / Permanently Sealed"))
 
             notes = row.get("Notes", "")
             wall_type = row.get("Wall Type", "")
@@ -130,8 +126,7 @@ def main():
             door_data.append([door_area, door_spec])
             floor_spec_data.append([floor_spec])
             ceil_spec_data.append([ceil_spec])
-            if q_base:
-                q_dropdown_data.append([q_base, q_chimney, q_win, q_floor, q_ceil])
+            chimney_data.append([chimney])
             notes_data.append([combined_notes])
 
     num_rooms = len(f_g_data)
@@ -149,10 +144,9 @@ def main():
         {"range": f"{RoomCol.DOOR_AREA}5:{RoomCol.DOOR_SPEC}{end_row}", "values": door_data},
         {"range": f"{RoomCol.FLOOR_SPEC}5:{RoomCol.FLOOR_SPEC}{end_row}", "values": floor_spec_data},
         {"range": f"{RoomCol.CEIL_SPEC}5:{RoomCol.CEIL_SPEC}{end_row}", "values": ceil_spec_data},
+        {"range": f"{RoomCol.CHIMNEY}5:{RoomCol.CHIMNEY}{end_row}", "values": chimney_data},
         {"range": f"{RoomCol.NOTES}5:{RoomCol.NOTES}{end_row}", "values": notes_data}
     ]
-    if len(q_dropdown_data) == num_rooms:
-        batch_updates.append({"range": f"{RoomCol.Q_BASE}5:{RoomCol.Q_CEIL}{end_row}", "values": q_dropdown_data})
 
     ws.batch_update(batch_updates)
     console.print(f"[bold green]✓ Successfully updated {num_rooms} rooms in {tab_name} via batch API![/bold green]")

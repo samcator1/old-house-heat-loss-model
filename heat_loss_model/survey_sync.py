@@ -44,11 +44,7 @@ CSV_HEADERS = [
     "U-Floor",
     "Ceiling Area (m2)",
     "Ceiling Specification",
-    "Base Construction",
-    "Chimney Flue",
-    "Windows Doors",
-    "Floor Boundary",
-    "Ceiling Boundary",
+    "Chimney / Fireplace",
     "Wall Type",
     "Floor Type",
     "Radiator Type",
@@ -118,7 +114,8 @@ def parse_room_notes(raw_notes: str) -> Dict[str, str]:
             else:
                 result["rad_type"] = rad_part
         else:
-            clean_parts.append(part)
+            if part not in clean_parts:
+                clean_parts.append(part)
     result["clean_notes"] = " | ".join(clean_parts) if clean_parts else raw_notes
     return result
 
@@ -153,11 +150,7 @@ def export_rooms_to_csv(rooms: List[Dict[str, Any]], csv_path: Path) -> None:
                 rm.get("u_fl", get_floor_u(floor_spec)),
                 rm.get("roof_area", 0.0),
                 rm.get("ceil_spec", "Intermediate Floor (Heated Space Above)"),
-                rm.get("q_base", "Standard Historic (Solid Masonry)"),
-                rm.get("q_chimney", "No Chimney / Permanently Sealed"),
-                rm.get("q_win", "Original Loose Sash / Casement (Undraughted)"),
-                rm.get("q_floor", "Solid Concrete Slab / Insulated Floor"),
-                rm.get("q_ceil", "Intermediate Floor (Heated Space Above)"),
+                rm.get("chimney", rm.get("q_chimney", "No Chimney / Permanently Sealed")),
                 rm.get("wall_type", parsed["wall_type"] or "Solid Masonry"),
                 rm.get("floor_type", parsed["floor_type"] or "Standard"),
                 rm.get("rad_type", parsed["rad_type"] or "Type 22"),

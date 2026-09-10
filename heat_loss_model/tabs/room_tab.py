@@ -16,7 +16,7 @@ import gspread
 from ..config import (
     THEME,
     FORMATS,
-    INFILTRATION_QUESTIONNAIRE,
+    CHIMNEY_SPECIFICATIONS,
     WINDOW_SPECIFICATIONS,
     CEILING_SPECIFICATIONS,
     WALL_SPECIFICATIONS,
@@ -32,11 +32,7 @@ from ..formatting import (
     create_data_validation_request
 )
 
-VALID_BASE = {opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["base_construction"]}
-VALID_CHIMNEY = {opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["chimney_flue"]}
-VALID_WIN = {opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["windows_doors"]}
-VALID_FLOOR = {opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["floor_construction"]}
-VALID_CEIL = {opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["ceiling_boundary"]}
+VALID_CHIMNEY = {opt["label"] for opt in CHIMNEY_SPECIFICATIONS}
 
 DEFAULT_ROOMS = [
     # Ground Floor (10 rooms)
@@ -48,9 +44,7 @@ DEFAULT_ROOMS = [
         "door_area": 2.0, "door_spec": "Solid Timber Door (Uninsulated / Historic Plank)", "u_door": 3.00,
         "fl_area": 28.1, "floor_spec": "Suspended Timber: Bare Boards over Cold Uninsulated Void", "u_fl": 0.80,
         "roof_area": 0.0, "ceil_spec": "Intermediate Floor (Heated Space Above)", "u_roof": 0.18,
-        "q_base": "Standard Historic (Solid Masonry)", "q_chimney": "No Chimney / Permanently Sealed",
-        "q_win": "Original Loose Sash / Casement (Undraughted)", "q_floor": "Suspended Timber (Unsealed Boards over Cold Void)",
-        "q_ceil": "Intermediate Floor (Heated Space Above)",
+        "chimney": "No Chimney / Permanently Sealed",
         "notes": "Double-height open stair volume connecting GF to FF. Front entrance door."
     },
     {
@@ -61,9 +55,7 @@ DEFAULT_ROOMS = [
         "door_area": 0.0, "door_spec": "No External Door (Internal Boundary Only)", "u_door": 0.00,
         "fl_area": 53.1, "floor_spec": "Suspended Timber: Bare Boards over Cold Uninsulated Void", "u_fl": 0.80,
         "roof_area": 0.0, "ceil_spec": "Intermediate Floor (Heated Space Above)", "u_roof": 0.18,
-        "q_base": "Standard Historic (Solid Masonry)", "q_chimney": "Open Fireplace (Unsealed Flue)",
-        "q_win": "Original Loose Sash / Casement (Undraughted)", "q_floor": "Suspended Timber (Unsealed Boards over Cold Void)",
-        "q_ceil": "Intermediate Floor (Heated Space Above)",
+        "chimney": "Open Fireplace (Unsealed Flue)",
         "notes": "Solid Georgian brick wall. Open fireplace needs chimney balloon or flue damper to cut 0.6 ACH."
     },
     {
@@ -74,9 +66,7 @@ DEFAULT_ROOMS = [
         "door_area": 0.0, "door_spec": "No External Door (Internal Boundary Only)", "u_door": 0.00,
         "fl_area": 33.0, "floor_spec": "Suspended Timber: Carpet & Underlay over Uninsulated Void", "u_fl": 0.60,
         "roof_area": 0.0, "ceil_spec": "Intermediate Floor (Heated Space Above)", "u_roof": 0.30,
-        "q_base": "Standard Historic (Solid Masonry)", "q_chimney": "No Chimney / Permanently Sealed",
-        "q_win": "Original Loose Sash / Casement (Undraughted)", "q_floor": "Suspended Timber (Unsealed Boards over Cold Void)",
-        "q_ceil": "Intermediate Floor (Heated Space Above)",
+        "chimney": "No Chimney / Permanently Sealed",
         "notes": "Check floor void beneath timber boards. Good candidate for underfloor insulation."
     },
     {
@@ -87,9 +77,7 @@ DEFAULT_ROOMS = [
         "door_area": 2.0, "door_spec": "Modern High-Performance / Composite Insulated Door", "u_door": 1.20,
         "fl_area": 48.8, "floor_spec": "Modern Building Regs Insulated Slab (100mm PIR / Full Fill)", "u_fl": 0.15,
         "roof_area": 0.0, "ceil_spec": "Intermediate Floor (Heated Space Above)", "u_roof": 0.15,
-        "q_base": "New Build (Cavity / Insulated)", "q_chimney": "No Chimney / Permanently Sealed",
-        "q_win": "Modern High-Performance (Compression Gaskets)", "q_floor": "Solid Concrete Slab / Insulated Floor",
-        "q_ceil": "Intermediate Floor (Heated Space Above)",
+        "chimney": "No Chimney / Permanently Sealed",
         "notes": "New insulated cavity wall & insulated slab. High thermal and airtight performance."
     },
     {
@@ -100,9 +88,7 @@ DEFAULT_ROOMS = [
         "door_area": 1.8, "door_spec": "Modern High-Performance / Composite Insulated Door", "u_door": 1.20,
         "fl_area": 14.0, "floor_spec": "Modern Building Regs Insulated Slab (100mm PIR / Full Fill)", "u_fl": 0.15,
         "roof_area": 0.0, "ceil_spec": "Intermediate Floor (Heated Space Above)", "u_roof": 0.15,
-        "q_base": "New Build (Cavity / Insulated)", "q_chimney": "No Chimney / Permanently Sealed",
-        "q_win": "Modern High-Performance (Compression Gaskets)", "q_floor": "Solid Concrete Slab / Insulated Floor",
-        "q_ceil": "Intermediate Floor (Heated Space Above)",
+        "chimney": "No Chimney / Permanently Sealed",
         "notes": "Secondary entrance door. External boot wash access."
     },
     {
@@ -113,9 +99,7 @@ DEFAULT_ROOMS = [
         "door_area": 0.0, "door_spec": "No External Door (Internal Boundary Only)", "u_door": 0.00,
         "fl_area": 22.5, "floor_spec": "Suspended Timber: Carpet & Underlay over Uninsulated Void", "u_fl": 0.60,
         "roof_area": 0.0, "ceil_spec": "Intermediate Floor (Heated Space Above)", "u_roof": 0.30,
-        "q_base": "Standard Historic (Solid Masonry)", "q_chimney": "Room-Sealed Stove with Ext Air",
-        "q_win": "Retrofitted Brush / Pile Draught Seals", "q_floor": "Suspended Timber (Sealed / Carpet & Underlay)",
-        "q_ceil": "Intermediate Floor (Heated Space Above)",
+        "chimney": "Room-Sealed Stove with Ext Air",
         "notes": "Woodburner installed with external air supply (minimal infiltration penalty)."
     },
     {
@@ -126,9 +110,7 @@ DEFAULT_ROOMS = [
         "door_area": 0.0, "door_spec": "No External Door (Internal Boundary Only)", "u_door": 0.00,
         "fl_area": 18.0, "floor_spec": "Suspended Timber: Bare Boards over Cold Uninsulated Void", "u_fl": 0.80,
         "roof_area": 0.0, "ceil_spec": "Intermediate Floor (Heated Space Above)", "u_roof": 0.18,
-        "q_base": "Standard Historic (Solid Masonry)", "q_chimney": "No Chimney / Permanently Sealed",
-        "q_win": "Original Loose Sash / Casement (Undraughted)", "q_floor": "Suspended Timber (Unsealed Boards over Cold Void)",
-        "q_ceil": "Intermediate Floor (Heated Space Above)",
+        "chimney": "No Chimney / Permanently Sealed",
         "notes": "Working from home occupancy. High priority for daytime heating comfort."
     },
     {
@@ -139,9 +121,7 @@ DEFAULT_ROOMS = [
         "door_area": 3.6, "door_spec": "Modern French / Bi-fold Glazed Doors (Low-E Double)", "u_door": 1.40,
         "fl_area": 29.3, "floor_spec": "Solid Concrete: Moderate Insulation (50mm PIR / 1990s)", "u_fl": 0.35,
         "roof_area": 15.0, "ceil_spec": "Glazed Roof Lantern / Sloping Skylight (Orangery)", "u_roof": 1.50,
-        "q_base": "Standard Historic (Solid Masonry)", "q_chimney": "No Chimney / Permanently Sealed",
-        "q_win": "Modern High-Performance (Compression Gaskets)", "q_floor": "Solid Concrete Slab / Insulated Floor",
-        "q_ceil": "Sloping Roof / Exposed Eaves / Thatched Ridge",
+        "chimney": "No Chimney / Permanently Sealed",
         "notes": "Large glazed perimeter & roof lantern. Consider underfloor heating or trench heaters."
     },
     {
@@ -152,9 +132,7 @@ DEFAULT_ROOMS = [
         "door_area": 0.0, "door_spec": "No External Door (Internal Boundary Only)", "u_door": 0.00,
         "fl_area": 4.5, "floor_spec": "Suspended Timber: Carpet & Underlay over Uninsulated Void", "u_fl": 0.60,
         "roof_area": 0.0, "ceil_spec": "Intermediate Floor (Heated Space Above)", "u_roof": 0.18,
-        "q_base": "Standard Historic (Solid Masonry)", "q_chimney": "No Chimney / Permanently Sealed",
-        "q_win": "Original Loose Sash / Casement (Undraughted)", "q_floor": "Suspended Timber (Sealed / Carpet & Underlay)",
-        "q_ceil": "Intermediate Floor (Heated Space Above)",
+        "chimney": "No Chimney / Permanently Sealed",
         "notes": "Compact room. Small single panel radiator adequate."
     },
     {
@@ -165,9 +143,7 @@ DEFAULT_ROOMS = [
         "door_area": 1.8, "door_spec": "Part-Glazed External Door (Single Glazed)", "u_door": 3.60,
         "fl_area": 4.0, "floor_spec": "Solid Ground Floor: Uninsulated Quarry Tiles / Stone / Earth", "u_fl": 1.10,
         "roof_area": 4.0, "ceil_spec": "Uninsulated Sloping Roof / Lean-to (Lath & Plaster to Rafters)", "u_roof": 2.00,
-        "q_base": "Standard Historic (Solid Masonry)", "q_chimney": "No Chimney / Permanently Sealed",
-        "q_win": "Original Loose Sash / Casement (Undraughted)", "q_floor": "Suspended Timber (Unsealed Boards over Cold Void)",
-        "q_ceil": "Sloping Roof / Exposed Eaves / Thatched Ridge",
+        "chimney": "No Chimney / Permanently Sealed",
         "notes": "Side entrance lobby (2.0m x 2.0m). External door with single glazing / draught seals."
     }
 ]
@@ -345,38 +321,26 @@ def extract_existing_rooms(ws: gspread.Worksheet) -> List[Dict[str, Any]]:
             ceil_spec = safe_str(row[RoomCol.idx("CEIL_SPEC")] if len(row) > RoomCol.idx("CEIL_SPEC") else "", "")
             if not ceil_spec or ceil_spec.startswith("#") or ceil_spec.startswith("="):
                 ceil_spec = csv_r.get("Ceiling Specification", "") or ("Intermediate Floor (Heated Space Above)" if "ground" in floor_level.lower() else "Modern Building Regs Loft: 270-300mm (Mineral Wool)")
-            q_base = safe_str(row[RoomCol.idx("Q_BASE")] if len(row) > RoomCol.idx("Q_BASE") else "", "")
-            q_chimney = safe_str(row[RoomCol.idx("Q_CHIMNEY")] if len(row) > RoomCol.idx("Q_CHIMNEY") else "", "")
-            q_win = safe_str(row[RoomCol.idx("Q_WIN")] if len(row) > RoomCol.idx("Q_WIN") else "", "")
-            q_floor = safe_str(row[RoomCol.idx("Q_FLOOR")] if len(row) > RoomCol.idx("Q_FLOOR") else "", "")
-            q_ceil = safe_str(row[RoomCol.idx("Q_CEIL")] if len(row) > RoomCol.idx("Q_CEIL") else "", "")
+            # Check if row has chimney at RoomCol.idx("CHIMNEY") (31) or legacy col (32)
+            chimney = ""
+            if len(row) > RoomCol.idx("CHIMNEY") and safe_str(row[RoomCol.idx("CHIMNEY")], "") in VALID_CHIMNEY:
+                chimney = safe_str(row[RoomCol.idx("CHIMNEY")], "")
+            elif len(row) > 32 and safe_str(row[32], "") in VALID_CHIMNEY:
+                chimney = safe_str(row[32], "")
+            elif len(row) > 30 and safe_str(row[30], "") in VALID_CHIMNEY:
+                chimney = safe_str(row[30], "")
+            else:
+                csv_ch = csv_r.get("Chimney / Fireplace", csv_r.get("Chimney Flue", ""))
+                chimney = csv_ch if csv_ch in VALID_CHIMNEY else "No Chimney / Permanently Sealed"
 
-            # Auto-healing: detect if columns were shifted by 1 from legacy layout
-            if q_chimney in VALID_WIN and q_win in VALID_FLOOR and q_floor in VALID_CEIL:
-                real_ceil = q_floor
-                real_floor = q_win
-                real_win = q_chimney
-                real_chimney = q_base if q_base in VALID_CHIMNEY else "No Chimney / Permanently Sealed"
-                real_base = "New Build (Cavity / Insulated)" if "new" in zone.lower() or "orangery" in zone.lower() else "Standard Historic (Solid Masonry)"
-                q_base, q_chimney, q_win, q_floor, q_ceil = real_base, real_chimney, real_win, real_floor, real_ceil
-
-            # Ensure every field is strictly valid against its questionnaire category (fallback to clean CSV or standard defaults)
-            if q_base not in VALID_BASE:
-                csv_b = csv_r.get("Base Construction", "")
-                q_base = csv_b if csv_b in VALID_BASE else ("New Build (Cavity / Insulated)" if "new" in zone.lower() or "orangery" in zone.lower() else "Standard Historic (Solid Masonry)")
-            if q_chimney not in VALID_CHIMNEY:
-                csv_ch = csv_r.get("Chimney Flue", "")
-                q_chimney = csv_ch if csv_ch in VALID_CHIMNEY else "No Chimney / Permanently Sealed"
-            if q_win not in VALID_WIN:
-                csv_w = csv_r.get("Windows Doors", "")
-                q_win = csv_w if csv_w in VALID_WIN else "Original Loose Sash / Casement (Undraughted)"
-            if q_floor not in VALID_FLOOR:
-                csv_fl = csv_r.get("Floor Boundary", "")
-                q_floor = csv_fl if csv_fl in VALID_FLOOR else "Solid Concrete Slab / Insulated Floor"
-            if q_ceil not in VALID_CEIL:
-                csv_ce = csv_r.get("Ceiling Boundary", "")
-                q_ceil = csv_ce if csv_ce in VALID_CEIL else ("Intermediate Floor (Heated Space Above)" if "ground" in floor_level.lower() else "Insulated Loft (Sealed Plaster & Sealed Hatch)")
-            notes = safe_str(row[RoomCol.idx("NOTES")] if len(row) > RoomCol.idx("NOTES") else "", "")
+            # Notes extraction (checking both 42-col and legacy 46-col layout)
+            raw_notes_42 = safe_str(row[RoomCol.idx("NOTES")] if len(row) > RoomCol.idx("NOTES") else "", "")
+            if len(row) > 42 and not safe_str(row[-1], "").startswith("="):
+                notes = safe_str(row[-1], "")
+            elif not raw_notes_42.startswith("=") and not raw_notes_42.isdigit():
+                notes = raw_notes_42
+            else:
+                notes = csv_r.get("Notes", "")
         elif has_floor_spec:
             # 39-column layout
             wall_spec = safe_str(row[11] if len(row) > 11 else "", "")
@@ -392,11 +356,7 @@ def extract_existing_rooms(ws: gspread.Worksheet) -> List[Dict[str, Any]]:
                 floor_spec = map_u_to_floor_spec(u_fl, floor_level, zone)
             roof_area = safe_float(row[22] if len(row) > 22 else 0.0, 0.0)
             ceil_spec = safe_str(row[23] if len(row) > 23 else "", "Intermediate Floor (Heated Space Above)")
-            q_base = safe_str(row[26] if len(row) > 26 else "", "Standard Historic (Solid Masonry)")
-            q_chimney = safe_str(row[27] if len(row) > 27 else "", "No Chimney / Permanently Sealed")
-            q_win = safe_str(row[28] if len(row) > 28 else "", "Original Loose Sash / Casement (Undraughted)")
-            q_floor = safe_str(row[29] if len(row) > 29 else "", "Solid Concrete Slab / Insulated Floor")
-            q_ceil = safe_str(row[30] if len(row) > 30 else "", "Intermediate Floor (Heated Space Above)")
+            chimney = safe_str(row[27] if len(row) > 27 and safe_str(row[27], "") in VALID_CHIMNEY else "No Chimney / Permanently Sealed", "No Chimney / Permanently Sealed")
             notes = safe_str(row[38] if len(row) > 38 else "", "")
 
             # Intelligent door defaults for known exterior entrances
@@ -439,11 +399,7 @@ def extract_existing_rooms(ws: gspread.Worksheet) -> List[Dict[str, Any]]:
             floor_spec = map_u_to_floor_spec(u_fl, floor_level, zone)
             roof_area = safe_float(row[21 if has_wall_spec else 20] if len(row) > 21 else 0.0, 0.0)
             ceil_spec = safe_str(row[22 if has_wall_spec else 21] if len(row) > 22 else "", "Intermediate Floor (Heated Space Above)")
-            q_base = "Standard Historic (Solid Masonry)"
-            q_chimney = "No Chimney / Permanently Sealed"
-            q_win = "Original Loose Sash / Casement (Undraughted)"
-            q_floor = "Solid Concrete Slab / Insulated Floor"
-            q_ceil = "Intermediate Floor (Heated Space Above)"
+            chimney = "No Chimney / Permanently Sealed"
             notes = safe_str(row[-1] if len(row) > 30 else "", "")
             door_area = 0.0
             door_spec = "No External Door (Internal Boundary Only)"
@@ -471,11 +427,8 @@ def extract_existing_rooms(ws: gspread.Worksheet) -> List[Dict[str, Any]]:
             "u_fl": u_fl,
             "roof_area": roof_area,
             "ceil_spec": ceil_spec,
-            "q_base": q_base,
-            "q_chimney": q_chimney,
-            "q_win": q_win,
-            "q_floor": q_floor,
-            "q_ceil": q_ceil,
+            "chimney": chimney,
+            "q_chimney": chimney,
             "notes": notes
         }
         rooms.append(room)
@@ -536,8 +489,8 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
     total_rows = total_row + 2
     total_cols = RoomCol.total_cols
 
-    if ws.row_count < total_rows or ws.col_count < total_cols:
-        ws.resize(rows=max(ws.row_count, total_rows), cols=max(ws.col_count, total_cols))
+    if ws.row_count != total_rows or ws.col_count != total_cols:
+        ws.resize(rows=total_rows, cols=total_cols)
 
     grid: List[List[str]] = [["" for _ in range(total_cols)] for _ in range(total_rows)]
 
@@ -556,8 +509,8 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
     grid[2][5] = "ROOM GEOMETRY & TI"
     grid[2][10] = "FABRIC TRANSMISSION LOSSES (W)"
     grid[2][31] = "INFILTRATION & VENTILATION (BS EN 12831)"
-    grid[2][38] = "MCS 45°C EMITTER SIZING & FLOW RATES"
-    grid[2][45] = "SURVEY NOTES"
+    grid[2][34] = "MCS 45°C EMITTER SIZING & FLOW RATES"
+    grid[2][41] = "SURVEY NOTES"
 
     # Row 4: Column Headers from canonical schema
     for c_i, h in enumerate(RoomCol.headers):
@@ -583,11 +536,11 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
             f"=H{r}*I{r}",                                    # Col J (9) (Volume)
             str(rm["ext_wall"]),                              # Col K (10)
             wall_spec,                                        # Col L (11) (Wall Specification Dropdown)
-            f"=VLOOKUP(L{r}, '1_Inputs'!$B$129:$C$144, 2, FALSE)", # Col M (12) (U Wall Formula)
+            f"=VLOOKUP(L{r}, '1_Inputs'!$B$129:$D$144, 2, FALSE)", # Col M (12) (U Wall Formula)
             f"=MAX(0, (K{r}*I{r}-O{r}-S{r})*M{r}*(E{r}-'1_Inputs'!$C$5))", # Col N (13) (Net Wall Loss W)
             str(rm["win_area"]),                              # Col O (14)
             rm["win_spec"],                                   # Col P (15) (Window Specification Dropdown)
-            f"=VLOOKUP(P{r}, '1_Inputs'!$B$98:$C$108, 2, FALSE)", # Col Q (16) (U Window Formula)
+            f"=VLOOKUP(P{r}, '1_Inputs'!$B$98:$D$108, 2, FALSE)", # Col Q (16) (U Window Formula)
             f"=O{r}*Q{r}*(E{r}-'1_Inputs'!$C$5)",             # Col R (17) (Window Loss W)
             str(rm.get("door_area", 0.0)),                    # Col S (18) (Door Area m²)
             door_spec,                                        # Col T (19) (Door Specification Dropdown)
@@ -595,28 +548,24 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
             f"=S{r}*U{r}*(E{r}-'1_Inputs'!$C$5)",             # Col V (21) (Door Loss W)
             f"=F{r}*G{r}",                                    # Col W (22) (Exposed Floor Area = Length * Width)
             floor_spec,                                       # Col X (23) (Floor Specification Dropdown)
-            f"=VLOOKUP(X{r}, '1_Inputs'!$B$148:$C$161, 2, FALSE)", # Col Y (24) (U Floor Formula)
+            f"=VLOOKUP(X{r}, '1_Inputs'!$B$148:$D$161, 2, FALSE)", # Col Y (24) (U Floor Formula)
             f"=W{r}*Y{r}*(E{r}-'1_Inputs'!$C$6)",             # Col Z (25) (Floor Loss with Ground Temp C6)
             f"=F{r}*G{r}",                                    # Col AA (26) (Ceiling Area = Length * Width)
             rm.get("ceil_spec", "Intermediate Floor (Heated Space Above)"), # Col AB (27)
-            f"=VLOOKUP(AB{r}, '1_Inputs'!$B$113:$C$124, 2, FALSE)", # Col AC (28) (U Ceiling Formula)
+            f"=VLOOKUP(AB{r}, '1_Inputs'!$B$113:$D$124, 2, FALSE)", # Col AC (28) (U Ceiling Formula)
             f"=AA{r}*AC{r}*(E{r}-'1_Inputs'!$C$5)",           # Col AD (29) (Ceiling Loss W)
             f"=(N{r}+R{r}+V{r}+Z{r}+AD{r})*'1_Inputs'!$C$178",# Col AE (30) (Thermal Bridging Loss W)
-            rm["q_base"],                                     # Col AF (31) - Dropdown Q1
-            rm["q_chimney"],                                  # Col AG (32) - Dropdown Q2
-            rm["q_win"],                                      # Col AH (33) - Dropdown Q3
-            rm["q_floor"],                                    # Col AI (34) - Dropdown Q4
-            rm["q_ceil"],                                     # Col AJ (35) - Dropdown Q5
-            f"=VLOOKUP(AF{r}, '1_Inputs'!$B$76:$C$94, 2, FALSE) + VLOOKUP(AG{r}, '1_Inputs'!$B$76:$C$94, 2, FALSE) + VLOOKUP(AH{r}, '1_Inputs'!$B$76:$C$94, 2, FALSE) + VLOOKUP(AI{r}, '1_Inputs'!$B$76:$C$94, 2, FALSE) + VLOOKUP(AJ{r}, '1_Inputs'!$B$76:$C$94, 2, FALSE)", # Col AK (36)
-            f"='1_Inputs'!$C$11*AK{r}*J{r}*(E{r}-'1_Inputs'!$C$5)", # Col AL (37) (Vent Loss W)
-            f"=SUM(N{r}, R{r}, V{r}, Z{r}, AD{r}, AE{r}, AL{r})",   # Col AM (38) (Total Room Loss W)
-            f"=AM{r}/H{r}",                                   # Col AN (39) (Intensity W/m²)
-            f"=AM{r}",                                        # Col AO (40) (Req Emitter Output at 45°C Flow W)
-            f"=ROUND(AM{r}/((MAX(5, (('1_Inputs'!$C$175+'1_Inputs'!$C$176)/2-E{r}))/50)^'1_Inputs'!$C$179), 0)", # Col AP (41) (Req Rad Catalogue at ΔT50 W)
-            f"=ROUND(AM{r}/(1.163*'1_Inputs'!$C$177), 1)",    # Col AQ (42) (Design Water Flow Rate l/h)
-            f'=IF(AQ{r}>450, "22mm copper", IF(AQ{r}>150, "15mm copper", "10mm or 15mm"))', # Col AR (43) (Min Pipe Size)
-            f'=IF(AM{r}>2000, "Type 33 (e.g. 600x1600) or 2x Type 22", IF(AM{r}>1200, "Type 22 (e.g. 600x1200)", IF(AM{r}>600, "Type 22 (e.g. 600x800)", "Type 21 / Type 11 (e.g. 500x600)")))', # Col AS (44) (Recommended New Emitter)
-            rm["notes"]                                       # Col AT (45) (Survey Observations)
+            rm.get("chimney", rm.get("q_chimney", "No Chimney / Permanently Sealed")), # Col AF (31) (Chimney Dropdown)
+            f"=VLOOKUP(L{r}, '1_Inputs'!$B$129:$D$144, 3, FALSE) + VLOOKUP(P{r}, '1_Inputs'!$B$98:$D$108, 3, FALSE) + VLOOKUP(X{r}, '1_Inputs'!$B$148:$D$161, 3, FALSE) + VLOOKUP(AB{r}, '1_Inputs'!$B$113:$D$124, 3, FALSE) + VLOOKUP(AF{r}, '1_Inputs'!$B$80:$C$83, 2, FALSE)", # Col AG (32) (Calculated ACH Formula)
+            f"='1_Inputs'!$C$11*AG{r}*J{r}*(E{r}-'1_Inputs'!$C$5)", # Col AH (33) (Vent Loss W)
+            f"=SUM(N{r}, R{r}, V{r}, Z{r}, AD{r}, AE{r}, AH{r})",   # Col AI (34) (Total Room Loss W)
+            f"=AI{r}/H{r}",                                   # Col AJ (35) (Intensity W/m²)
+            f"=AI{r}",                                        # Col AK (36) (Req Emitter Output at 45°C Flow W)
+            f"=ROUND(AI{r}/((MAX(5, (('1_Inputs'!$C$175+'1_Inputs'!$C$176)/2-E{r}))/50)^'1_Inputs'!$C$179), 0)", # Col AL (37) (Req Rad Catalogue at ΔT50 W)
+            f"=ROUND(AI{r}/(1.163*'1_Inputs'!$C$177), 1)",    # Col AM (38) (Design Water Flow Rate l/h)
+            f'=IF(AM{r}>450, "22mm copper", IF(AM{r}>150, "15mm copper", "10mm or 15mm"))', # Col AN (39) (Min Pipe Size)
+            f'=IF(AI{r}>2000, "Type 33 (e.g. 600x1600) or 2x Type 22", IF(AI{r}>1200, "Type 22 (e.g. 600x1200)", IF(AI{r}>600, "Type 22 (e.g. 600x800)", "Type 21 / Type 11 (e.g. 500x600)")))', # Col AO (40) (Recommended New Emitter)
+            rm["notes"]                                       # Col AP (41) (Survey Observations)
         ]
         grid[4 + r_idx] = row_arr
 
@@ -654,17 +603,13 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
         f"=SUM(AD5:AD{last_room_row})",
         f"=SUM(AE5:AE{last_room_row})",
         "-",
-        "-",
-        "-",
-        "-",
-        "-",
-        f"=AVERAGE(AK5:AK{last_room_row})",
+        f"=AVERAGE(AG5:AG{last_room_row})",
+        f"=SUM(AH5:AH{last_room_row})",
+        f"=SUM(AI5:AI{last_room_row})",
+        f"=AI{total_row}/H{total_row}",
+        f"=SUM(AK5:AK{last_room_row})",
         f"=SUM(AL5:AL{last_room_row})",
         f"=SUM(AM5:AM{last_room_row})",
-        f"=AM{total_row}/H{total_row}",
-        f"=SUM(AO5:AO{last_room_row})",
-        f"=SUM(AP5:AP{last_room_row})",
-        f"=SUM(AQ5:AQ{last_room_row})",
         "Distribution Header",
         "Whole House New Emitters",
         "Survey & Sizing Complete"
@@ -677,7 +622,7 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
         pass
 
     # Write values into worksheet
-    ws.update(values=grid, range_name=f"A1:AT{total_rows}", value_input_option="USER_ENTERED")
+    ws.update(values=grid, range_name=f"A1:AP{total_rows}", value_input_option="USER_ENTERED")
 
     # Formatting requests
     fmt_reqs: List[Dict[str, Any]] = []
@@ -723,8 +668,8 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
     group_spans = [
         (0, RoomCol.idx("LENGTH"), THEME["SECONDARY_HEADER_BG"]),
         (RoomCol.idx("LENGTH"), RoomCol.idx("EXT_WALL_L"), THEME["SECTION_HEADER_BG"]),
-        (RoomCol.idx("EXT_WALL_L"), RoomCol.idx("Q_BASE"), {"red": 0.15, "green": 0.35, "blue": 0.45}),
-        (RoomCol.idx("Q_BASE"), RoomCol.idx("TOTAL_LOSS"), {"red": 0.10, "green": 0.32, "blue": 0.42}),
+        (RoomCol.idx("EXT_WALL_L"), RoomCol.idx("CHIMNEY"), {"red": 0.15, "green": 0.35, "blue": 0.45}),
+        (RoomCol.idx("CHIMNEY"), RoomCol.idx("TOTAL_LOSS"), {"red": 0.10, "green": 0.32, "blue": 0.42}),
         (RoomCol.idx("TOTAL_LOSS"), RoomCol.idx("REC_EMITTER") + 1, THEME["PRIMARY_HEADER_BG"]),
         (RoomCol.idx("REC_EMITTER") + 1, RoomCol.total_cols, THEME["CARD_HEADER_BG"])
     ]
@@ -774,8 +719,8 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
         fmt_reqs.append(create_repeat_cell_request(ws.id, r_i, r_i + 1, RoomCol.idx("FLOOR_SPEC"), RoomCol.idx("FLOOR_SPEC") + 1, bg_color=THEME["INPUT_BG"], font_color={"red": 0.05, "green": 0.20, "blue": 0.45}, align="LEFT", font_size=9))
         # Ceiling Spec Dropdown
         fmt_reqs.append(create_repeat_cell_request(ws.id, r_i, r_i + 1, RoomCol.idx("CEIL_SPEC"), RoomCol.idx("CEIL_SPEC") + 1, bg_color=THEME["INPUT_BG"], font_color={"red": 0.05, "green": 0.20, "blue": 0.45}, align="LEFT", font_size=9))
-        # Questionnaire Dropdowns (Q1 to Q5)
-        fmt_reqs.append(create_repeat_cell_request(ws.id, r_i, r_i + 1, RoomCol.idx("Q_BASE"), RoomCol.idx("Q_CEIL") + 1, bg_color=THEME["INPUT_BG"], font_color={"red": 0.05, "green": 0.20, "blue": 0.45}, align="LEFT", font_size=9))
+        # Chimney Dropdown
+        fmt_reqs.append(create_repeat_cell_request(ws.id, r_i, r_i + 1, RoomCol.idx("CHIMNEY"), RoomCol.idx("CHIMNEY") + 1, bg_color=THEME["INPUT_BG"], font_color={"red": 0.05, "green": 0.20, "blue": 0.45}, align="LEFT", font_size=9))
 
         # Calculated ACH
         fmt_reqs.append(create_repeat_cell_request(ws.id, r_i, r_i + 1, RoomCol.idx("ACH"), RoomCol.idx("ACH") + 1, bg_color=THEME["CALC_BG"], bold=True, align="RIGHT", font_size=10, number_format=FORMATS["DECIMAL_2"]))
@@ -867,12 +812,8 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
     fmt_reqs.append(create_data_validation_request(ws.id, 4, last_room_row, RoomCol.idx("FLOOR_SPEC"), RoomCol.idx("FLOOR_SPEC") + 1, floor_labels))
     fmt_reqs.append(create_data_validation_request(ws.id, 4, last_room_row, RoomCol.idx("CEIL_SPEC"), RoomCol.idx("CEIL_SPEC") + 1, ceil_labels))
 
-    # Questionnaire validations
-    fmt_reqs.append(create_data_validation_request(ws.id, 4, last_room_row, RoomCol.idx("Q_BASE"), RoomCol.idx("Q_BASE") + 1, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["base_construction"]]))
-    fmt_reqs.append(create_data_validation_request(ws.id, 4, last_room_row, RoomCol.idx("Q_CHIMNEY"), RoomCol.idx("Q_CHIMNEY") + 1, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["chimney_flue"]]))
-    fmt_reqs.append(create_data_validation_request(ws.id, 4, last_room_row, RoomCol.idx("Q_WIN"), RoomCol.idx("Q_WIN") + 1, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["windows_doors"]]))
-    fmt_reqs.append(create_data_validation_request(ws.id, 4, last_room_row, RoomCol.idx("Q_FLOOR"), RoomCol.idx("Q_FLOOR") + 1, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["floor_construction"]]))
-    fmt_reqs.append(create_data_validation_request(ws.id, 4, last_room_row, RoomCol.idx("Q_CEIL"), RoomCol.idx("Q_CEIL") + 1, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["ceiling_boundary"]]))
+    # Chimney / Fireplace validation
+    fmt_reqs.append(create_data_validation_request(ws.id, 4, last_room_row, RoomCol.idx("CHIMNEY"), RoomCol.idx("CHIMNEY") + 1, [opt["label"] for opt in CHIMNEY_SPECIFICATIONS]))
 
     # Register Named Ranges
     update_named_ranges(ss, ws, total_row, num_rooms)
