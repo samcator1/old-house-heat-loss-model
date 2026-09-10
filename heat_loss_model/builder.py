@@ -100,9 +100,9 @@ class HeatLossModelBuilder:
         # Step 4: Clear leftover formatting and unmerge on active tabs
         all_formatting_requests: List[Dict[str, Any]] = []
         for ws in active_worksheets:
-            all_formatting_requests.append(create_unmerge_cells_request(ws.id, max_rows=150, max_cols=45))
-            all_formatting_requests.append(create_clear_formatting_request(ws.id, max_rows=150, max_cols=45))
-            all_formatting_requests.append(create_clear_data_validation_request(ws.id, max_rows=150, max_cols=45))
+            all_formatting_requests.append(create_unmerge_cells_request(ws.id, max_rows=250, max_cols=50))
+            all_formatting_requests.append(create_clear_formatting_request(ws.id, max_rows=250, max_cols=50))
+            all_formatting_requests.append(create_clear_data_validation_request(ws.id, max_rows=250, max_cols=50))
 
         # Step 5: Add targeted theme formatting
         all_formatting_requests.extend(fmt_dashboard)

@@ -52,9 +52,9 @@ def main():
     k_l_data = []
     o_data = []
     p_data = []
-    s_t_data = []
-    w_data = []
-    x_data = []
+    door_data = []
+    floor_spec_data = []
+    ceil_spec_data = []
     q_dropdown_data = []
     notes_data = []
 
@@ -103,6 +103,11 @@ def main():
             if not ceil_spec:
                 ceil_spec = "Intermediate Floor (Heated Space Above)"
             
+            door_area = row.get("Door Area (m2)", "")
+            door_spec = row.get("Door Specification", "")
+            if not door_spec:
+                door_spec = "No External Door (Internal Boundary Only)"
+
             q_base = row.get("Base Construction", "")
             q_chimney = row.get("Chimney Flue", "")
             q_win = row.get("Windows Doors", "")
@@ -122,9 +127,9 @@ def main():
             k_l_data.append([ext_wall, wall_spec])
             o_data.append([win_area])
             p_data.append([win_spec])
-            s_t_data.append([fl_area, floor_spec])
-            w_data.append([roof_area])
-            x_data.append([ceil_spec])
+            door_data.append([door_area, door_spec])
+            floor_spec_data.append([floor_spec])
+            ceil_spec_data.append([ceil_spec])
             if q_base:
                 q_dropdown_data.append([q_base, q_chimney, q_win, q_floor, q_ceil])
             notes_data.append([combined_notes])
@@ -141,9 +146,9 @@ def main():
         {"range": f"{RoomCol.EXT_WALL_L}5:{RoomCol.WALL_SPEC}{end_row}", "values": k_l_data},
         {"range": f"{RoomCol.WIN_AREA}5:{RoomCol.WIN_AREA}{end_row}", "values": o_data},
         {"range": f"{RoomCol.WIN_SPEC}5:{RoomCol.WIN_SPEC}{end_row}", "values": p_data},
-        {"range": f"{RoomCol.FL_AREA}5:{RoomCol.FLOOR_SPEC}{end_row}", "values": s_t_data},
-        {"range": f"{RoomCol.ROOF_AREA}5:{RoomCol.ROOF_AREA}{end_row}", "values": w_data},
-        {"range": f"{RoomCol.CEIL_SPEC}5:{RoomCol.CEIL_SPEC}{end_row}", "values": x_data},
+        {"range": f"{RoomCol.DOOR_AREA}5:{RoomCol.DOOR_SPEC}{end_row}", "values": door_data},
+        {"range": f"{RoomCol.FLOOR_SPEC}5:{RoomCol.FLOOR_SPEC}{end_row}", "values": floor_spec_data},
+        {"range": f"{RoomCol.CEIL_SPEC}5:{RoomCol.CEIL_SPEC}{end_row}", "values": ceil_spec_data},
         {"range": f"{RoomCol.NOTES}5:{RoomCol.NOTES}{end_row}", "values": notes_data}
     ]
     if len(q_dropdown_data) == num_rooms:

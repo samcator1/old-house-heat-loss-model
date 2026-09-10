@@ -10,6 +10,8 @@ MCS MIS 3005-D / CIBSE DHDG / BS EN 12831-1:2017 compliant room-by-room schedule
 - Executive MCS Audit Header Block
 """
 from typing import Tuple, List, Dict, Any
+from pathlib import Path
+import csv
 import gspread
 from ..config import (
     THEME,
@@ -283,6 +285,19 @@ def extract_existing_rooms(ws: gspread.Worksheet) -> List[Dict[str, Any]]:
             if "wall spec" in h:
                 has_wall_spec = True
 
+    csv_fallback: Dict[str, Dict[str, str]] = {}
+    csv_path = Path(__file__).resolve().parent.parent.parent / "room_by_room_heat_loss_survey.csv"
+    if csv_path.exists():
+        try:
+            with open(csv_path, "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for r in reader:
+                    c = r.get("Room Code", "").strip()
+                    if c:
+                        csv_fallback[c] = r
+        except Exception:
+            pass
+
     rooms = []
     for row in raw_values[4:]:
         if not row:
@@ -295,33 +310,50 @@ def extract_existing_rooms(ws: gspread.Worksheet) -> List[Dict[str, Any]]:
         if first_col == "" and second_col == "":
             break
 
-        floor_level = safe_str(row[2] if len(row) > 2 else "", "Ground Floor")
-        zone = safe_str(row[3] if len(row) > 3 else "", "Old House")
-        name = safe_str(row[1] if len(row) > 1 else "", "Room")
+        csv_r = csv_fallback.get(first_col, {})
+        floor_level = safe_str(row[2] if len(row) > 2 else "", csv_r.get("Floor Level", "Ground Floor"))
+        zone = safe_str(row[3] if len(row) > 3 else "", csv_r.get("Zone / Wing", "Old House"))
+        name = safe_str(row[1] if len(row) > 1 else "", csv_r.get("Room Name", "Room"))
 
         if has_door_spec:
             # 46-column layout
             wall_spec = safe_str(row[RoomCol.idx("WALL_SPEC")] if len(row) > RoomCol.idx("WALL_SPEC") else "", "")
             u_wall = safe_float(row[RoomCol.idx("U_WALL")] if len(row) > RoomCol.idx("U_WALL") else 1.4, 1.4)
-            if not wall_spec:
-                wall_spec = map_u_to_wall_spec(u_wall, zone)
+            if not wall_spec or wall_spec.startswith("#") or wall_spec.startswith("="):
+                wall_spec = csv_r.get("Wall Specification", "") or map_u_to_wall_spec(u_wall, zone)
             win_area = safe_float(row[RoomCol.idx("WIN_AREA")] if len(row) > RoomCol.idx("WIN_AREA") else 0.0, 0.0)
-            win_spec = safe_str(row[RoomCol.idx("WIN_SPEC")] if len(row) > RoomCol.idx("WIN_SPEC") else "", "Single Glazed (Historic Timber Sash / Casement)")
+            win_spec = safe_str(row[RoomCol.idx("WIN_SPEC")] if len(row) > RoomCol.idx("WIN_SPEC") else "", "")
+            if not win_spec or win_spec.startswith("#") or win_spec.startswith("="):
+                win_spec = csv_r.get("Window Specification", "Single Glazed (Historic Timber Sash / Casement)")
             door_area = safe_float(row[RoomCol.idx("DOOR_AREA")] if len(row) > RoomCol.idx("DOOR_AREA") else 0.0, 0.0)
-            door_spec = safe_str(row[RoomCol.idx("DOOR_SPEC")] if len(row) > RoomCol.idx("DOOR_SPEC") else "", "No External Door (Internal Boundary Only)")
+            door_spec = safe_str(row[RoomCol.idx("DOOR_SPEC")] if len(row) > RoomCol.idx("DOOR_SPEC") else "", "")
+            if not door_spec or door_spec.startswith("#") or door_spec.startswith("="):
+                door_spec = csv_r.get("Door Specification", "No External Door (Internal Boundary Only)")
             u_door = safe_float(row[RoomCol.idx("U_DOOR")] if len(row) > RoomCol.idx("U_DOOR") else 0.0, 0.0)
             fl_area = safe_float(row[RoomCol.idx("FL_AREA")] if len(row) > RoomCol.idx("FL_AREA") else 0.0, 0.0)
             floor_spec = safe_str(row[RoomCol.idx("FLOOR_SPEC")] if len(row) > RoomCol.idx("FLOOR_SPEC") else "", "")
             u_fl = safe_float(row[RoomCol.idx("U_FLOOR")] if len(row) > RoomCol.idx("U_FLOOR") else 0.8, 0.8)
-            if not floor_spec:
-                floor_spec = map_u_to_floor_spec(u_fl, floor_level, zone)
+            if not floor_spec or floor_spec.startswith("#") or floor_spec.startswith("="):
+                floor_spec = csv_r.get("Floor Specification", "") or map_u_to_floor_spec(u_fl, floor_level, zone)
             roof_area = safe_float(row[RoomCol.idx("ROOF_AREA")] if len(row) > RoomCol.idx("ROOF_AREA") else 0.0, 0.0)
-            ceil_spec = safe_str(row[RoomCol.idx("CEIL_SPEC")] if len(row) > RoomCol.idx("CEIL_SPEC") else "", "Intermediate Floor (Heated Space Above)")
-            q_base = safe_str(row[RoomCol.idx("Q_BASE")] if len(row) > RoomCol.idx("Q_BASE") else "", "Standard Historic (Solid Masonry)")
-            q_chimney = safe_str(row[RoomCol.idx("Q_CHIMNEY")] if len(row) > RoomCol.idx("Q_CHIMNEY") else "", "No Chimney / Permanently Sealed")
-            q_win = safe_str(row[RoomCol.idx("Q_WIN")] if len(row) > RoomCol.idx("Q_WIN") else "", "Original Loose Sash / Casement (Undraughted)")
-            q_floor = safe_str(row[RoomCol.idx("Q_FLOOR")] if len(row) > RoomCol.idx("Q_FLOOR") else "", "Solid Concrete Slab / Insulated Floor")
-            q_ceil = safe_str(row[RoomCol.idx("Q_CEIL")] if len(row) > RoomCol.idx("Q_CEIL") else "", "Intermediate Floor (Heated Space Above)")
+            ceil_spec = safe_str(row[RoomCol.idx("CEIL_SPEC")] if len(row) > RoomCol.idx("CEIL_SPEC") else "", "")
+            if not ceil_spec or ceil_spec.startswith("#") or ceil_spec.startswith("="):
+                ceil_spec = csv_r.get("Ceiling Specification", "") or ("Intermediate Floor (Heated Space Above)" if "ground" in floor_level.lower() else "Modern Building Regs Loft: 270-300mm (Mineral Wool)")
+            q_base = safe_str(row[RoomCol.idx("Q_BASE")] if len(row) > RoomCol.idx("Q_BASE") else "", "")
+            if not q_base or q_base.startswith("#") or q_base.startswith("="):
+                q_base = csv_r.get("Base Construction", "Standard Historic (Solid Masonry)")
+            q_chimney = safe_str(row[RoomCol.idx("Q_CHIMNEY")] if len(row) > RoomCol.idx("Q_CHIMNEY") else "", "")
+            if not q_chimney or q_chimney.startswith("#") or q_chimney.startswith("="):
+                q_chimney = csv_r.get("Chimney Flue", "No Chimney / Permanently Sealed")
+            q_win = safe_str(row[RoomCol.idx("Q_WIN")] if len(row) > RoomCol.idx("Q_WIN") else "", "")
+            if not q_win or q_win.startswith("#") or q_win.startswith("="):
+                q_win = csv_r.get("Windows Doors", "Original Loose Sash / Casement (Undraughted)")
+            q_floor = safe_str(row[RoomCol.idx("Q_FLOOR")] if len(row) > RoomCol.idx("Q_FLOOR") else "", "")
+            if not q_floor or q_floor.startswith("#") or q_floor.startswith("="):
+                q_floor = csv_r.get("Floor Boundary", "Solid Concrete Slab / Insulated Floor")
+            q_ceil = safe_str(row[RoomCol.idx("Q_CEIL")] if len(row) > RoomCol.idx("Q_CEIL") else "", "")
+            if not q_ceil or q_ceil.startswith("#") or q_ceil.startswith("="):
+                q_ceil = csv_r.get("Ceiling Boundary", "Intermediate Floor (Heated Space Above)")
             notes = safe_str(row[RoomCol.idx("NOTES")] if len(row) > RoomCol.idx("NOTES") else "", "")
         elif has_floor_spec:
             # 39-column layout
@@ -539,11 +571,11 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
             door_spec,                                        # Col T (19) (Door Specification Dropdown)
             f"=VLOOKUP(T{r}, '1_Inputs'!$B$165:$C$171, 2, FALSE)", # Col U (20) (U Door Formula)
             f"=S{r}*U{r}*(E{r}-'1_Inputs'!$C$5)",             # Col V (21) (Door Loss W)
-            str(rm["fl_area"]),                               # Col W (22)
+            f"=F{r}*G{r}",                                    # Col W (22) (Exposed Floor Area = Length * Width)
             floor_spec,                                       # Col X (23) (Floor Specification Dropdown)
             f"=VLOOKUP(X{r}, '1_Inputs'!$B$148:$C$161, 2, FALSE)", # Col Y (24) (U Floor Formula)
             f"=W{r}*Y{r}*(E{r}-'1_Inputs'!$C$6)",             # Col Z (25) (Floor Loss with Ground Temp C6)
-            str(rm["roof_area"]),                             # Col AA (26)
+            f"=F{r}*G{r}",                                    # Col AA (26) (Ceiling Area = Length * Width)
             rm.get("ceil_spec", "Intermediate Floor (Heated Space Above)"), # Col AB (27)
             f"=VLOOKUP(AB{r}, '1_Inputs'!$B$113:$C$124, 2, FALSE)", # Col AC (28) (U Ceiling Formula)
             f"=AA{r}*AC{r}*(E{r}-'1_Inputs'!$C$5)",           # Col AD (29) (Ceiling Loss W)
