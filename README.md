@@ -32,9 +32,10 @@ The original sheet is safely preserved as `_Legacy_Heating` for historical refer
 |---|---|---|
 | **`0_Executive_Dashboard`** | Formula View | KPI cards (Peak kW, Annual kWh, Running Cost £/yr, Grid Import/Export, CO2 reduction), tech options comparison matrix, zone breakdown & renewable balance. |
 | **`1_Inputs`** | User Control | Central assumptions and parameter control center. Blue cells are editable and preserved non-destructively on sync. |
-| **`2_Building_Heat_Loss`** | Dynamic Formula | Transparent zone-by-zone geometry, element fabric losses (Walls, Windows, Ground Floor, Roof), and infiltration losses. |
+| **`2_Room_Heat_Loss`** | Dynamic Formula | Master room-by-room schedule with live dropdowns for walls, windows, floors, ceilings, BS EN 12831 questionnaire, fabric & ventilation losses, and 45°C low-flow radiator sizing. |
 | **`3_DHW_and_Pool`** | Dynamic Formula | Domestic hot water volume, storage vessel reheat power, secondary loop loss, Legionella cycle, and seasonal swimming pool thermal requirements. |
 | **`4_Heating_and_Renewables`** | Dynamic Formula | Plant sizing, turnkey capital costs, seasonal SCOPs, annual fuel consumption, Solar PV + Battery load shifting, smart tariffs, and 10-year TCO. |
+| **`_Archive_Wing_Heat_Loss`** | Protected Archive | Preserved macro 6-zone approximation with corrected ground ΔT (superseded by room schedule). |
 | **`_Legacy_Heating`** | Protected Archive | The original sheet safely preserved with its original formulas and engineer comments. |
 
 ---
@@ -69,29 +70,30 @@ python sync_model.py
 
 | Flag | Description |
 |---|---|
-| `python sync_model.py` | Syncs the model and formulas, preserving all user edits on `1_Inputs`. |
+| `python sync_model.py` | Syncs the model and formulas, non-destructively preserving all user edits on `1_Inputs` and `2_Room_Heat_Loss`. |
 | `python sync_model.py --reset-inputs` | Resets all input values on `1_Inputs` back to baseline defaults. |
+| `python sync_model.py --export-csv` | Exports a backup CSV snapshot of all room data to `room_by_room_heat_loss_survey.csv`. |
 | `python sync_model.py --sheet-id <ID_OR_URL>` | Syncs to a specific Google Spreadsheet ID or URL. |
 
 ---
 
-## 📱 On-Site Room-by-Room Survey Companion (Mobile & Offline)
+## 📋 Google Sheets as the Master Database & Front End
 
-For walking through the house with your builders and insulation providers:
-
-- **Mobile Web App (Live on GitHub Pages)**: [https://samcator1.github.io/old-house-heat-loss-model/](https://samcator1.github.io/old-house-heat-loss-model/)
-- **Offline Local**: Double-click `index.html` or `room_survey_tool.html` on any laptop, tablet, or phone (works 100% offline).
-
-1. **Pre-Loaded Architecture**:
-   - Pre-loaded with all **24 rooms** (11 Ground Floor + 13 First Floor + Attic checklist).
-2. **Conduct the Assessment**:
-   - Verify room dimensions and ceiling heights.
-   - Note wall constructions, cavity widths, and insulation opportunities with the insulation provider.
-   - Inspect existing radiators, pipework diameters (10mm/15mm/22mm), and wall space with the builder.
-   - Instantly view real-time calculated room heat losses (Watts) and required 45°C low-flow radiator sizing.
-3. **Export & Sync to Google Sheets**:
-   - Click **Export CSV** in the tool.
-   - Run `python import_survey_csv.py` to push all verified on-site dimensions and notes directly into the **`2_Room_Heat_Loss`** tab in your Google Sheet!
+Google Sheets is the single interactive front end and master database for the entire building model:
+1. **Interactive Room Schedule (`2_Room_Heat_Loss`)**:
+   - Edit room dimensions, ceiling heights, and external wall lengths directly in the sheet.
+   - Select wall, window, floor, and ceiling constructions from dropdown menus linked to live U-values on `1_Inputs`.
+   - Complete BS EN 12831 survey questionnaire columns to catalog base construction, chimney status, and boundaries.
+   - Automatically size low-temperature 45°C radiators per room.
+2. **Offline Backup & CSV Utilities**:
+   - To create a local snapshot of your room data at any time, run:
+     ```bash
+     python sync_model.py --export-csv
+     ```
+   - To restore or import room survey data from a CSV file into `2_Room_Heat_Loss`:
+     ```bash
+     python import_survey_csv.py [path_to_csv]
+     ```
 
 ---
 

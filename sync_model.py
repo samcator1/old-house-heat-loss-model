@@ -50,14 +50,9 @@ def parse_args():
         help="Force reset all inputs on 1_Inputs to baseline defaults instead of preserving custom edits."
     )
     parser.add_argument(
-        "--push-pages",
+        "--export-csv",
         action="store_true",
-        help="Automatically commit and push updated room survey tool artifacts to GitHub Pages."
-    )
-    parser.add_argument(
-        "--skip-survey-sync",
-        action="store_true",
-        help="Skip updating room_by_room_heat_loss_survey.csv and web tool HTML files."
+        help="Export a room-by-room CSV snapshot of the model."
     )
     parser.add_argument(
         "--service-account",
@@ -113,14 +108,14 @@ def main():
             console.print(f"[bold red]Sync Error:[/bold red] {err_msg}")
             sys.exit(1)
 
-        if not args.skip_survey_sync:
-            task3 = progress.add_task("[cyan]Exporting survey CSV & updating mobile web tool...", total=None)
+        if args.export_csv:
+            task3 = progress.add_task("[cyan]Exporting survey CSV snapshot...", total=None)
             try:
                 repo_root = Path(__file__).resolve().parent
-                survey_res = sync_survey_artifacts(builder.ss, repo_root, push_pages=args.push_pages)
-                progress.update(task3, description="[green]Survey artifacts updated successfully!")
+                survey_res = sync_survey_artifacts(builder.ss, repo_root)
+                progress.update(task3, description="[green]CSV snapshot exported successfully!")
             except Exception as e:
-                console.print(f"[bold yellow]Survey Tool Sync Note:[/bold yellow] {e}")
+                console.print(f"[bold yellow]CSV Export Note:[/bold yellow] {e}")
 
     # Output Success Summary
     console.print(f"\n[bold green]✓ Successfully updated spreadsheet:[/bold green] [bold white]{result['spreadsheet_title']}[/bold white]")
@@ -147,11 +142,7 @@ def main():
     console.print(table)
 
     if survey_res and survey_res.get("status") == "success":
-        console.print(f"[bold green]✓ Mobile Survey Tool Sync:[/bold green] Exported {survey_res['num_rooms']} rooms to [cyan]room_by_room_heat_loss_survey.csv[/cyan] and updated [cyan]index.html[/cyan] / [cyan]room_survey_tool.html[/cyan].")
-        if survey_res.get("git_push") == "pushed":
-            console.print("[bold green]✓ GitHub Pages:[/bold green] Changes committed and pushed to [link=https://samcator1.github.io/old-house-heat-loss-model/]GitHub Pages[/link]!")
-        elif survey_res.get("git_push") == "no_changes":
-            console.print("[dim]GitHub Pages: Already up to date (no diff).[/dim]")
+        console.print(f"[bold green]✓ CSV Snapshot:[/bold green] Exported {survey_res['num_rooms']} rooms to [cyan]{survey_res['csv_path']}[/cyan].")
 
     console.print("\n[dim]All calculations are live Google Sheets formulas. You can edit any soft blue cell in '1_Inputs' or room dimensions/dropdowns in '2_Room_Heat_Loss' directly in Google Sheets without losing your data on future syncs.[/dim]\n")
 
