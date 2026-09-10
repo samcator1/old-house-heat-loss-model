@@ -34,6 +34,10 @@ COLUMN_DEFINITIONS: List[Tuple[str, str, int, str]] = [
     ("WIN_SPEC", "Window Specification", 260, "FABRIC"),
     ("U_WIN", "U Window (W/m²K)", 115, "FABRIC"),
     ("WIN_LOSS", "Window Loss (W)", 110, "FABRIC"),
+    ("DOOR_AREA", "Door Area (m²)", 105, "FABRIC"),
+    ("DOOR_SPEC", "Door Specification", 260, "FABRIC"),
+    ("U_DOOR", "U Door (W/m²K)", 110, "FABRIC"),
+    ("DOOR_LOSS", "Door Loss (W)", 105, "FABRIC"),
     ("FL_AREA", "Exposed Floor Area (m²)", 125, "FABRIC"),
     ("FLOOR_SPEC", "Floor Specification", 260, "FABRIC"),
     ("U_FLOOR", "U Floor (W/m²K)", 110, "FABRIC"),
@@ -42,6 +46,7 @@ COLUMN_DEFINITIONS: List[Tuple[str, str, int, str]] = [
     ("CEIL_SPEC", "Ceiling Specification", 260, "FABRIC"),
     ("U_CEIL", "U Ceiling (W/m²K)", 115, "FABRIC"),
     ("CEIL_LOSS", "Ceiling Loss (W)", 110, "FABRIC"),
+    ("TB_LOSS", "Thermal Bridge Loss (W)", 125, "FABRIC"),
     ("Q_BASE", "Base Construction", 185, "VENTILATION"),
     ("Q_CHIMNEY", "Chimney Flue", 180, "VENTILATION"),
     ("Q_WIN", "Windows Doors", 180, "VENTILATION"),
@@ -51,9 +56,11 @@ COLUMN_DEFINITIONS: List[Tuple[str, str, int, str]] = [
     ("VENT_LOSS", "Vent Loss (W)", 105, "VENTILATION"),
     ("TOTAL_LOSS", "Room Heat Loss (W)", 135, "TOTALS"),
     ("INTENSITY", "Heat Loss Intensity (W/m²)", 140, "TOTALS"),
-    ("RAD_45", "Req Rad (45°C Flow / ΔT30) (W)", 150, "TOTALS"),
-    ("RAD_BOILER", "Existing Boiler Rad (70°C / ΔT50) (W)", 165, "TOTALS"),
-    ("REC_EMITTER", "Recommended Emitter", 180, "TOTALS"),
+    ("RAD_45", "Req Emitter Output (45°C Flow) (W)", 165, "TOTALS"),
+    ("RAD_DT50", "Catalogue Rating Req (ΔT50) (W)", 165, "TOTALS"),
+    ("FLOW_RATE", "Design Flow Rate (l/h)", 125, "TOTALS"),
+    ("REC_PIPE", "Min Pipe Size", 130, "TOTALS"),
+    ("REC_EMITTER", "Recommended New Emitter", 180, "TOTALS"),
     ("NOTES", "Notes / Survey Observations", 260, "NOTES"),
 ]
 
@@ -96,7 +103,7 @@ class _RoomColumnRegistry:
 
     @property
     def fabric_span(self) -> Tuple[int, int]:
-        return (self.idx("EXT_WALL_L"), self.idx("CEIL_LOSS") + 1)
+        return (self.idx("EXT_WALL_L"), self.idx("TB_LOSS") + 1)
 
     @property
     def vent_span(self) -> Tuple[int, int]:

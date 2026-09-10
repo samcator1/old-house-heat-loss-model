@@ -457,6 +457,41 @@ FLOOR_SPECIFICATIONS = [
     }
 ]
 
-
-
-
+# External Door U-Value Specifications (BS EN 12831-1 & CIBSE Guide A Table 3.28)
+DOOR_SPECIFICATIONS = [
+    {
+        "label": "Solid Timber Door (Uninsulated / Historic Plank)",
+        "u_value": 3.00,
+        "notes": "Traditional solid oak/pine external door (25-45mm) without weather seals"
+    },
+    {
+        "label": "Solid Timber Door (Draught-Stripped / Heavy Ledge)",
+        "u_value": 2.40,
+        "notes": "Heavy historic plank door with compression draught-proofing seals"
+    },
+    {
+        "label": "Part-Glazed External Door (Single Glazed)",
+        "u_value": 3.60,
+        "notes": "Traditional timber entrance door with single-glazed upper lights"
+    },
+    {
+        "label": "Part-Glazed External Door (Double Glazed)",
+        "u_value": 2.00,
+        "notes": "Timber or aluminium framed door with 16mm argon double-glazed unit"
+    },
+    {
+        "label": "Modern High-Performance / Composite Insulated Door",
+        "u_value": 1.20,
+        "notes": "Part L compliant foam-filled composite or timber core door with thermal break"
+    },
+    {
+        "label": "Modern French / Bi-fold Glazed Doors (Low-E Double)",
+        "u_value": 1.40,
+        "notes": "Modern high-performance multi-pane patio doors with thermal breaks"
+    },
+    {
+        "label": "No External Door (Internal Boundary Only)",
+        "u_value": 0.00,
+        "notes": "Zero external door transmission loss (default for interior rooms)"
+    }
+]

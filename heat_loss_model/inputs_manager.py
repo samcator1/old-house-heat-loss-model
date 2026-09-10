@@ -165,7 +165,24 @@ INPUT_DEFINITIONS: List[Dict[str, Any]] = [
     {"row": 158, "key": "u_floor_solid_flags", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Solid Ground Floor: Uninsulated Quarry Tiles / Stone / Earth", "default": 1.10, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Historic uninsulated flagstones, brick pavers, or quarry tiles bedded directly on ground / lime bed"},
     {"row": 159, "key": "u_floor_exposed_uninsulated", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Exposed Floor over Cold Undercroft / Garage (Uninsulated)", "default": 1.20, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "First floor cantilever or room over open driveway, unheated garage, or unheated archway without insulation"},
     {"row": 160, "key": "u_floor_exposed_insulated", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Exposed Floor over Cold Undercroft / Garage (100mm PIR Insulated)", "default": 0.20, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Cantilevered exposed floor retrofitted with 100mm rigid insulation board and soffit board"},
-    {"row": 161, "key": "u_floor_party", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Unheated Adjoining Boundary (Zero Transmission Loss)", "default": 0.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Floor separating heated space from fully conditioned adjoining residential unit"}
+    {"row": 161, "key": "u_floor_party", "section": "12. Ground & Floor Construction Thermal Transmittance (U-Values)", "label": "Unheated Adjoining Boundary (Zero Transmission Loss)", "default": 0.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Floor separating heated space from fully conditioned adjoining residential unit"},
+
+    # Section 13: External Door Construction U-Value Specifications (BS EN 12831-1 & CIBSE Guide A Table 3.28)
+    {"row": 165, "key": "u_door_timber_uninsulated", "section": "13. External Door Construction Thermal Transmittance (U-Values)", "label": "Solid Timber Door (Uninsulated / Historic Plank)", "default": 3.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Traditional solid oak/pine external door (25-45mm) without weather seals"},
+    {"row": 166, "key": "u_door_timber_draughtproof", "section": "13. External Door Construction Thermal Transmittance (U-Values)", "label": "Solid Timber Door (Draught-Stripped / Heavy Ledge)", "default": 2.40, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Heavy historic plank door with compression draught-proofing seals"},
+    {"row": 167, "key": "u_door_glazed_single", "section": "13. External Door Construction Thermal Transmittance (U-Values)", "label": "Part-Glazed External Door (Single Glazed)", "default": 3.60, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Traditional timber entrance door with single-glazed upper lights"},
+    {"row": 168, "key": "u_door_glazed_double", "section": "13. External Door Construction Thermal Transmittance (U-Values)", "label": "Part-Glazed External Door (Double Glazed)", "default": 2.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Timber or aluminium framed door with 16mm argon double-glazed unit"},
+    {"row": 169, "key": "u_door_composite_modern", "section": "13. External Door Construction Thermal Transmittance (U-Values)", "label": "Modern High-Performance / Composite Insulated Door", "default": 1.20, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Part L compliant foam-filled composite or timber core door with thermal break"},
+    {"row": 170, "key": "u_door_french_bifold", "section": "13. External Door Construction Thermal Transmittance (U-Values)", "label": "Modern French / Bi-fold Glazed Doors (Low-E Double)", "default": 1.40, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Modern high-performance multi-pane patio doors with thermal breaks"},
+    {"row": 171, "key": "u_door_none", "section": "13. External Door Construction Thermal Transmittance (U-Values)", "label": "No External Door (Internal Boundary Only)", "default": 0.00, "unit": "W/m²K", "fmt": FORMATS["DECIMAL_2"], "notes": "Zero external door transmission loss (default for interior rooms)"},
+
+    # Section 14: MCS Heat Pump & Radiator Design Parameters (BS EN 12831-1 & MIS 3005-D)
+    {"row": 175, "key": "hp_design_flow_temp", "section": "14. MCS Heat Pump & Radiator Design Parameters", "label": "Heat Pump Design Flow Temperature", "default": 45.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "MCS MIS 3005-D low-flow design standard (35°C to 50°C)"},
+    {"row": 176, "key": "hp_design_return_temp", "section": "14. MCS Heat Pump & Radiator Design Parameters", "label": "Heat Pump Design Return Temperature", "default": 40.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "Return temperature at design heat load condition"},
+    {"row": 177, "key": "hp_system_delta_t", "section": "14. MCS Heat Pump & Radiator Design Parameters", "label": "System Design Temperature Drop (ΔT)", "default": 5.0, "unit": "K", "fmt": FORMATS["TEMP_C"], "notes": "Heat pump optimal emitter temperature drop (typically 5K)"},
+    {"row": 178, "key": "thermal_bridge_factor", "section": "14. MCS Heat Pump & Radiator Design Parameters", "label": "Thermal Bridging Allowance (f_tb)", "default": 0.10, "unit": "%", "fmt": FORMATS["PERCENT"], "notes": "MCS MIS 3005 default (+10% on fabric losses for existing buildings)"},
+    {"row": 179, "key": "rad_exponent_n", "section": "14. MCS Heat Pump & Radiator Design Parameters", "label": "Radiator Output Exponent (n)", "default": 1.30, "unit": "exponent", "fmt": FORMATS["DECIMAL_2"], "notes": "Standard BS EN 442 panel radiator exponent (typically 1.25 to 1.33)"},
+    {"row": 180, "key": "reheat_allowance_pct", "section": "14. MCS Heat Pump & Radiator Design Parameters", "label": "Intermittent Reheat Allowance (f_hu)", "default": 0.00, "unit": "%", "fmt": FORMATS["PERCENT"], "notes": "0% for continuous 24/7 heat pump weather-compensated operation"}
 ]
 
 SECTION_HEADERS = [
@@ -180,7 +197,9 @@ SECTION_HEADERS = [
     {"row": 96, "title": "9. WINDOW & GLAZING THERMAL TRANSMITTANCE (U-VALUES)"},
     {"row": 111, "title": "10. CEILING & ROOF THERMAL TRANSMITTANCE (U-VALUES)"},
     {"row": 127, "title": "11. WALL CONSTRUCTION THERMAL TRANSMITTANCE (U-VALUES)"},
-    {"row": 146, "title": "12. GROUND & FLOOR CONSTRUCTION THERMAL TRANSMITTANCE (U-VALUES)"}
+    {"row": 146, "title": "12. GROUND & FLOOR CONSTRUCTION THERMAL TRANSMITTANCE (U-VALUES)"},
+    {"row": 164, "title": "13. EXTERNAL DOOR CONSTRUCTION THERMAL TRANSMITTANCE (U-VALUES)"},
+    {"row": 174, "title": "14. MCS HEAT PUMP & RADIATOR DESIGN PARAMETERS"}
 ]
 
 class InputsManager:
@@ -237,14 +256,15 @@ class InputsManager:
         """
         Writes data into 1_Inputs and generates clean batch formatting requests.
         """
+        total_rows = max(max(item["row"] for item in INPUT_DEFINITIONS), max(sh["row"] for sh in SECTION_HEADERS)) + 1
+        target_ws_rows = max(total_rows + 5, 185)
         try:
             ws = self.ss.worksheet("1_Inputs")
-            if ws.row_count < 175:
-                ws.resize(rows=175, cols=max(ws.col_count, 6))
+            if ws.row_count < target_ws_rows:
+                ws.resize(rows=target_ws_rows, cols=max(ws.col_count, 6))
         except gspread.WorksheetNotFound:
-            ws = self.ss.add_worksheet(title="1_Inputs", rows=175, cols=6)
+            ws = self.ss.add_worksheet(title="1_Inputs", rows=target_ws_rows, cols=6)
 
-        total_rows = 165
         grid: List[List[str]] = [["" for _ in range(5)] for _ in range(total_rows)]
 
         # Banner & Column Headers

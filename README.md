@@ -16,9 +16,14 @@ The original sheet is safely preserved as `_Legacy_Heating` for historical refer
    - The `1_Inputs` tab formats all adjustable parameters (temperatures, infiltration rates, DHW volumes, fuel prices, tariffs, solar capacities) in soft-blue editable cells.
    - When you re-run `python sync_model.py`, it **reads and preserves all your custom input edits in Google Sheets**, only writing new template rows/defaults if a cell was blank.
    - You can also force-reset defaults anytime with `--reset-inputs`.
-4. **Physical & Engineering Rigor**:
+4. **Physical & Engineering Rigor & MCS Compliance**:
+   - **MCS MIS 3005-D & BS EN 12831 Compliance**: Built to meet UK heat pump installation standards and CIBSE Domestic Heating Design Guide (DHDG).
+   - **External Doors & Net Wall Deduction**: Dedicated door area, door construction dropdown (uninsulated timber, solid hardwood, composite, insulated doorset), door U-value, and automatic deduction from gross external wall area.
+   - **Thermal Bridging Allowance**: Default +10% thermal bridging factor applied to fabric transmission losses as recommended by MCS / BS EN 12831 for existing buildings (configurable in `1_Inputs!$C$178`).
+   - **Brand New Low-Temperature Emitter Schedule**: Calculates design heat loss at 45°C flow / 40°C return, and applies the BS EN 442 non-linear derating exponent ($n=1.30$) to output the standard **$\Delta T 50$ catalogue radiator rating** needed to order radiators.
+   - **Hydraulic Water Flow Rates & Pipe Sizing**: Computes design mass flow rate in litres/hour ($q = \Phi / (1.163 \times \Delta T)$ at $\Delta T = 5\,\text{K}$) and specifies minimum recommended copper pipe sizes (10mm, 15mm, or 22mm) per room for distribution balancing.
    - **Corrected Ground Floor $\Delta T$**: Sub-floor ground temperature is modeled at $\sim 10^\circ\text{C}$ ($\Delta T \approx 10\,\text{K}$) rather than $-4^\circ\text{C}$ outdoor air ($\Delta T = 24\,\text{K}$), eliminating artificial overestimation.
-   - **Disaggregated Fabric Losses**: Dedicated formula columns for External Walls, Glazing, Ground Floor, and Roof.
+   - **Disaggregated Fabric Losses**: Dedicated formula columns for External Walls, Windows, External Doors, Ground Floor, and Roof.
    - **Infiltration Differentiation**: Peak room ACH (for emitter/radiator sizing) vs. diversified building average ACH (for central heat pump plant sizing).
    - **Hot Water Storage & Standing Losses**: 800L vessel sizing, peak reheat capacity, secondary pumped circulation loop losses, and weekly Legionella pasteurization boost.
    - **Heating Plant Comparison**: Side-by-side comparison of Ground Source Heat Pump (GSHP), Air Source Heat Pump (ASHP), and Oil Boiler.
@@ -31,8 +36,8 @@ The original sheet is safely preserved as `_Legacy_Heating` for historical refer
 | Tab Name | Type | Description |
 |---|---|---|
 | **`0_Executive_Dashboard`** | Formula View | KPI cards (Peak kW, Annual kWh, Running Cost £/yr, Grid Import/Export, CO2 reduction), tech options comparison matrix, zone breakdown & renewable balance. |
-| **`1_Inputs`** | User Control | Central assumptions and parameter control center. Blue cells are editable and preserved non-destructively on sync. |
-| **`2_Room_Heat_Loss`** | Dynamic Formula | Master room-by-room schedule with live dropdowns for walls, windows, floors, ceilings, BS EN 12831 questionnaire, fabric & ventilation losses, and 45°C low-flow radiator sizing. |
+| **`1_Inputs`** | User Control | Central assumptions and parameter control center (rows 1–182). Configures design temperatures, fuel prices, heat pump SCOPs, U-values (walls, windows, doors, floors, roofs), and MCS heat pump & radiator parameters (45°C flow, 40°C return, 5K delta T, +10% thermal bridging). Blue cells are editable and preserved non-destructively on sync. |
+| **`2_Room_Heat_Loss`** | Dynamic Formula | Master 46-column room-by-room schedule compliant with MCS MIS 3005-D & BS EN 12831. Includes 5-badge compliance audit header, live dropdowns for walls/doors/windows/floors/ceilings, BS EN 12831 survey questionnaire, fabric, door & ventilation losses, +10% thermal bridging allowance, brand new low-temperature emitter sizing (BS EN 442 Delta T 50 catalogue rating), water flow rates (l/h), and recommended pipe sizes. |
 | **`3_DHW_and_Pool`** | Dynamic Formula | Domestic hot water volume, storage vessel reheat power, secondary loop loss, Legionella cycle, and seasonal swimming pool thermal requirements. |
 | **`4_Heating_and_Renewables`** | Dynamic Formula | Plant sizing, turnkey capital costs, seasonal SCOPs, annual fuel consumption, Solar PV + Battery load shifting, smart tariffs, and 10-year TCO. |
 | **`_Archive_Wing_Heat_Loss`** | Protected Archive | Preserved macro 6-zone approximation with corrected ground ΔT (superseded by room schedule). |

@@ -17,7 +17,8 @@ from .tabs.room_tab import (
     WINDOW_SPECIFICATIONS,
     CEILING_SPECIFICATIONS,
     WALL_SPECIFICATIONS,
-    FLOOR_SPECIFICATIONS
+    FLOOR_SPECIFICATIONS,
+    DOOR_SPECIFICATIONS
 )
 from .schema import RoomCol
 
@@ -35,6 +36,9 @@ CSV_HEADERS = [
     "U-Wall",
     "Window Area (m2)",
     "Window Specification",
+    "Door Area (m2)",
+    "Door Specification",
+    "U-Door",
     "Floor Area (m2)",
     "Floor Specification",
     "U-Floor",
@@ -64,6 +68,12 @@ def get_window_u(spec: str) -> float:
         if item["label"] == spec:
             return item.get("u_value", item.get("u_val", 4.80))
     return 4.80
+
+def get_door_u(spec: str) -> float:
+    for item in DOOR_SPECIFICATIONS:
+        if item["label"] == spec:
+            return item.get("u_value", item.get("u_val", 0.00))
+    return 0.00
 
 def get_floor_u(spec: str) -> float:
     for item in FLOOR_SPECIFICATIONS:
@@ -135,6 +145,9 @@ def export_rooms_to_csv(rooms: List[Dict[str, Any]], csv_path: Path) -> None:
                 rm.get("u_wall", get_wall_u(wall_spec)),
                 rm.get("win_area", 0.0),
                 rm.get("win_spec", "Single Glazed (Historic Timber Sash / Casement)"),
+                rm.get("door_area", 0.0),
+                rm.get("door_spec", "No External Door (Internal Boundary Only)"),
+                rm.get("u_door", get_door_u(rm.get("door_spec", ""))),
                 rm.get("fl_area", 0.0),
                 floor_spec,
                 rm.get("u_fl", get_floor_u(floor_spec)),
