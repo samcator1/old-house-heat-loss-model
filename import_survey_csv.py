@@ -24,6 +24,7 @@ from rich.panel import Panel
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from heat_loss_model.auth import get_gspread_client
+from heat_loss_model.schema import RoomCol
 
 console = Console(force_terminal=False, no_color=False)
 
@@ -135,18 +136,18 @@ def main():
 
     end_row = 4 + num_rooms
     batch_updates = [
-        {"range": f"F5:G{end_row}", "values": f_g_data},
-        {"range": f"I5:I{end_row}", "values": i_data},
-        {"range": f"K5:L{end_row}", "values": k_l_data},
-        {"range": f"O5:O{end_row}", "values": o_data},
-        {"range": f"P5:P{end_row}", "values": p_data},
-        {"range": f"S5:T{end_row}", "values": s_t_data},
-        {"range": f"W5:W{end_row}", "values": w_data},
-        {"range": f"X5:X{end_row}", "values": x_data},
-        {"range": f"AM5:AM{end_row}", "values": notes_data}
+        {"range": f"{RoomCol.LENGTH}5:{RoomCol.WIDTH}{end_row}", "values": f_g_data},
+        {"range": f"{RoomCol.HEIGHT}5:{RoomCol.HEIGHT}{end_row}", "values": i_data},
+        {"range": f"{RoomCol.EXT_WALL_L}5:{RoomCol.WALL_SPEC}{end_row}", "values": k_l_data},
+        {"range": f"{RoomCol.WIN_AREA}5:{RoomCol.WIN_AREA}{end_row}", "values": o_data},
+        {"range": f"{RoomCol.WIN_SPEC}5:{RoomCol.WIN_SPEC}{end_row}", "values": p_data},
+        {"range": f"{RoomCol.FL_AREA}5:{RoomCol.FLOOR_SPEC}{end_row}", "values": s_t_data},
+        {"range": f"{RoomCol.ROOF_AREA}5:{RoomCol.ROOF_AREA}{end_row}", "values": w_data},
+        {"range": f"{RoomCol.CEIL_SPEC}5:{RoomCol.CEIL_SPEC}{end_row}", "values": x_data},
+        {"range": f"{RoomCol.NOTES}5:{RoomCol.NOTES}{end_row}", "values": notes_data}
     ]
     if len(q_dropdown_data) == num_rooms:
-        batch_updates.append({"range": f"AA5:AE{end_row}", "values": q_dropdown_data})
+        batch_updates.append({"range": f"{RoomCol.Q_BASE}5:{RoomCol.Q_CEIL}{end_row}", "values": q_dropdown_data})
 
     ws.batch_update(batch_updates)
     console.print(f"[bold green]✓ Successfully updated {num_rooms} rooms in {tab_name} via batch API![/bold green]")

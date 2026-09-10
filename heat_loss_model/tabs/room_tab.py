@@ -9,6 +9,7 @@ Provides room-by-room Watts, W/m², low-flow 45°C radiator sizing, and builder 
 from typing import Tuple, List, Dict, Any
 import gspread
 from ..config import THEME, FORMATS, INFILTRATION_QUESTIONNAIRE, WINDOW_SPECIFICATIONS, CEILING_SPECIFICATIONS, WALL_SPECIFICATIONS, FLOOR_SPECIFICATIONS
+from ..schema import RoomCol
 from ..formatting import (
     create_repeat_cell_request,
     create_set_column_width_request,
@@ -527,10 +528,10 @@ def extract_existing_rooms(ws: gspread.Worksheet) -> List[Dict[str, Any]]:
 def update_named_ranges(ss: gspread.Spreadsheet, ws: gspread.Worksheet, total_row: int, num_rooms: int):
     """Registers / updates Google Sheets Named Ranges for dynamic downstream linking."""
     named_ranges_spec = {
-        "Room_Total_Loss_W": (total_row - 1, total_row, 33, 34),          # Col AH
-        "Room_Total_Area_m2": (total_row - 1, total_row, 7, 8),            # Col H
-        "Room_Average_Ti": (total_row - 1, total_row, 4, 5),               # Col E
-        "Room_Whole_House_Intensity": (total_row - 1, total_row, 34, 35),  # Col AI
+        "Room_Total_Loss_W": (total_row - 1, total_row, RoomCol.TOTAL_LOSS_IDX, RoomCol.TOTAL_LOSS_IDX + 1),
+        "Room_Total_Area_m2": (total_row - 1, total_row, RoomCol.AREA_IDX, RoomCol.AREA_IDX + 1),
+        "Room_Average_Ti": (total_row - 1, total_row, RoomCol.TI_IDX, RoomCol.TI_IDX + 1),
+        "Room_Whole_House_Intensity": (total_row - 1, total_row, RoomCol.INTENSITY_IDX, RoomCol.INTENSITY_IDX + 1),
     }
     try:
         existing = {nr["name"]: nr for nr in ss.list_named_ranges()}
@@ -601,49 +602,8 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
     grid[2][33] = "TOTAL HEAT LOSS & EMITTERS"          # Cols AH-AK (33-36)
     grid[2][37] = "SPECIFICATION & NOTES"               # Cols AL-AM (37-38)
 
-    # Row 4: Column Headers
-    headers = [
-        "Code",                           # Col A (0)
-        "Room Name",                      # Col B (1)
-        "Floor Level",                    # Col C (2)
-        "Zone / Wing",                    # Col D (3)
-        "Design Ti (°C)",                 # Col E (4)
-        "Length (m)",                     # Col F (5)
-        "Width (m)",                      # Col G (6)
-        "Area (m²)",                      # Col H (7)
-        "Height (m)",                     # Col I (8)
-        "Volume (m³)",                    # Col J (9)
-        "Ext Wall L (m)",                 # Col K (10)
-        "Wall Specification",             # Col L (11) - Dropdown Wall Archetype
-        "U Wall",                         # Col M (12) - Formula VLOOKUP
-        "Wall Loss (W)",                  # Col N (13) - Formula
-        "Window Area (m²)",               # Col O (14)
-        "Window Specification",           # Col P (15) - Dropdown Glazing
-        "U Window",                       # Col Q (16) - Formula VLOOKUP
-        "Window Loss (W)",                # Col R (17) - Formula
-        "Exp Floor (m²)",                 # Col S (18)
-        "Floor Specification",            # Col T (19) - Dropdown Floor Archetype
-        "U Floor",                        # Col U (20) - Formula VLOOKUP
-        "Floor Loss (W)",                 # Col V (21) - Formula
-        "Ceiling Area (m²)",              # Col W (22)
-        "Ceiling Specification",          # Col X (23) - Dropdown Ceiling
-        "U Ceiling",                      # Col Y (24) - Formula VLOOKUP
-        "Ceiling Loss (W)",               # Col Z (25) - Formula
-        "Base Construction",              # Col AA (26) - Dropdown Q1
-        "Chimney / Flue",                 # Col AB (27) - Dropdown Q2
-        "Windows & Doors",                # Col AC (28) - Dropdown Q3
-        "Floor Construction",             # Col AD (29) - Dropdown Q4
-        "Ceiling Boundary",               # Col AE (30) - Dropdown Q5
-        "Calculated ACH",                 # Col AF (31) - Formula
-        "Vent Loss (W)",                  # Col AG (32) - Formula
-        "Room Loss (W)",                  # Col AH (33) - Formula
-        "Intensity (W/m²)",               # Col AI (34) - Formula
-        "Rad 45°C (ΔT30 W)",              # Col AJ (35) - Formula
-        "Boiler Rad (ΔT50 W)",            # Col AK (36) - Formula
-        "Recommended Emitter",            # Col AL (37) - Formula
-        "On-Site Survey Notes"            # Col AM (38) - Text
-    ]
-    for c_i, h in enumerate(headers):
+    # Row 4: Column Headers from canonical schema
+    for c_i, h in enumerate(RoomCol.headers):
         grid[3][c_i] = h
 
     # Populate active rooms with live formulas
@@ -804,14 +764,14 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
         align="LEFT"
     ))
 
-    # Category Group Headers (Row 3)
+    # Category Group Headers (Row 3) dynamically derived from schema
     group_spans = [
-        (0, 4, THEME["SECONDARY_HEADER_BG"]),                    # Room ID (Cols A-D)
-        (4, 10, THEME["SECTION_HEADER_BG"]),                    # Geometry (Cols E-J)
-        (10, 26, {"red": 0.15, "green": 0.35, "blue": 0.45}),    # Fabric (Cols K-Z)
-        (26, 33, {"red": 0.10, "green": 0.32, "blue": 0.42}),   # Questionnaire & Vent (Cols AA-AG)
-        (33, 37, THEME["PRIMARY_HEADER_BG"]),                   # Totals & Emitters (Cols AH-AK)
-        (37, 39, THEME["CARD_HEADER_BG"])                      # Notes (Cols AL-AM)
+        (0, RoomCol.idx("LENGTH"), THEME["SECONDARY_HEADER_BG"]),
+        (RoomCol.idx("LENGTH"), RoomCol.idx("EXT_WALL_L"), THEME["SECTION_HEADER_BG"]),
+        (RoomCol.idx("EXT_WALL_L"), RoomCol.idx("Q_BASE"), {"red": 0.15, "green": 0.35, "blue": 0.45}),
+        (RoomCol.idx("Q_BASE"), RoomCol.idx("TOTAL_LOSS"), {"red": 0.10, "green": 0.32, "blue": 0.42}),
+        (RoomCol.idx("TOTAL_LOSS"), RoomCol.idx("REC_EMITTER") + 1, THEME["PRIMARY_HEADER_BG"]),
+        (RoomCol.idx("REC_EMITTER") + 1, RoomCol.total_cols, THEME["CARD_HEADER_BG"])
     ]
     for start_c, end_c, bg in group_spans:
         fmt_reqs.append(create_merge_cells_request(ws.id, 2, 3, start_c, end_c))
@@ -991,62 +951,62 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
         align="RIGHT"
     ))
 
-    # Add Native Google Sheets Dropdown Data Validations
-    # 1. Wall Specification (Col 11 / L)
+    # Add Native Google Sheets Dropdown Data Validations using RoomCol
+    # 1. Wall Specification
     fmt_reqs.append(create_data_validation_request(
         sheet_id=ws.id,
         start_row=4,
         end_row=last_room_row,
-        start_col=11,
-        end_col=12,
+        start_col=RoomCol.WALL_SPEC_IDX,
+        end_col=RoomCol.WALL_SPEC_IDX + 1,
         options=[opt["label"] for opt in WALL_SPECIFICATIONS],
         show_custom_ui=True,
         strict=False
     ))
 
-    # 2. Window Specification (Col 15 / P)
+    # 2. Window Specification
     fmt_reqs.append(create_data_validation_request(
         sheet_id=ws.id,
         start_row=4,
         end_row=last_room_row,
-        start_col=15,
-        end_col=16,
+        start_col=RoomCol.WIN_SPEC_IDX,
+        end_col=RoomCol.WIN_SPEC_IDX + 1,
         options=[opt["label"] for opt in WINDOW_SPECIFICATIONS],
         show_custom_ui=True,
         strict=False
     ))
 
-    # 3. Floor Specification (Col 19 / T)
+    # 3. Floor Specification
     fmt_reqs.append(create_data_validation_request(
         sheet_id=ws.id,
         start_row=4,
         end_row=last_room_row,
-        start_col=19,
-        end_col=20,
+        start_col=RoomCol.FLOOR_SPEC_IDX,
+        end_col=RoomCol.FLOOR_SPEC_IDX + 1,
         options=[opt["label"] for opt in FLOOR_SPECIFICATIONS],
         show_custom_ui=True,
         strict=False
     ))
 
-    # 4. Ceiling Specification (Col 23 / X)
+    # 4. Ceiling Specification
     fmt_reqs.append(create_data_validation_request(
         sheet_id=ws.id,
         start_row=4,
         end_row=last_room_row,
-        start_col=23,
-        end_col=24,
+        start_col=RoomCol.CEIL_SPEC_IDX,
+        end_col=RoomCol.CEIL_SPEC_IDX + 1,
         options=[opt["label"] for opt in CEILING_SPECIFICATIONS],
         show_custom_ui=True,
         strict=False
     ))
 
-    # 5. Infiltration Questionnaire Dropdowns (Cols 26 to 30 / AA to AE)
+    # 5. Infiltration Questionnaire Dropdowns
     q_categories = [
-        (26, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["base_construction"]]),
-        (27, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["chimney_flue"]]),
-        (28, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["windows_doors"]]),
-        (29, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["floor_construction"]]),
-        (30, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["ceiling_boundary"]]),
+        (RoomCol.Q_BASE_IDX, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["base_construction"]]),
+        (RoomCol.Q_CHIMNEY_IDX, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["chimney_flue"]]),
+        (RoomCol.Q_WIN_IDX, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["windows_doors"]]),
+        (RoomCol.Q_FLOOR_IDX, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["floor_construction"]]),
+        (RoomCol.Q_CEIL_IDX, [opt["label"] for opt in INFILTRATION_QUESTIONNAIRE["ceiling_boundary"]]),
     ]
     for col_idx, options in q_categories:
         fmt_reqs.append(create_data_validation_request(

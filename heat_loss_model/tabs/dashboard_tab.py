@@ -7,6 +7,7 @@ zone contribution breakdown, and renewable energy self-sufficiency balance.
 from typing import Tuple, List, Dict, Any
 import gspread
 from ..config import THEME, FORMATS, DEFAULT_ZONES
+from ..schema import RoomCol
 from ..formatting import (
     create_repeat_cell_request,
     create_set_column_width_request,
@@ -34,8 +35,8 @@ def build_dashboard_tab(ss: gspread.Spreadsheet, num_rooms: int = 24, room_total
     # Row 3-6: KPI Cards
     # Card 1: Peak Heat Loss (Cols A-B, Rows 4-6)
     grid[2][0] = "PEAK HEAT LOSS (-4°C)"
-    grid[3][0] = f"='2_Room_Heat_Loss'!$AH${room_total_row}/1000"
-    grid[4][0] = f'=TEXT(\'2_Room_Heat_Loss\'!$AI${room_total_row}, "0.0") & " W/m² whole-house average"'
+    grid[3][0] = f"='2_Room_Heat_Loss'!${RoomCol.TOTAL_LOSS}${room_total_row}/1000"
+    grid[4][0] = f'=TEXT(\'2_Room_Heat_Loss\'!${RoomCol.INTENSITY}${room_total_row}, "0.0") & " W/m² whole-house average"'
 
     # Card 2: Total Delivered Heat (Cols C-D, Rows 4-6)
     grid[2][2] = "ANNUAL DELIVERED HEAT"
@@ -122,7 +123,7 @@ def build_dashboard_tab(ss: gspread.Spreadsheet, num_rooms: int = 24, room_total
         grid[dash_r][1] = f'=COUNTIF(\'2_Room_Heat_Loss\'!$D$5:$D${last_room_row}, A{dash_r+1}) & " rms (" & "{z_desc})"'
         grid[dash_r][2] = f"=SUMIF('2_Room_Heat_Loss'!$D$5:$D${last_room_row}, A{dash_r+1}, '2_Room_Heat_Loss'!$H$5:$H${last_room_row})"
         grid[dash_r][3] = f"=C{dash_r+1}/$C$30"
-        grid[dash_r][4] = f"=SUMIF('2_Room_Heat_Loss'!$D$5:$D${last_room_row}, A{dash_r+1}, '2_Room_Heat_Loss'!$AH$5:$AH${last_room_row})/1000"
+        grid[dash_r][4] = f"=SUMIF('2_Room_Heat_Loss'!${RoomCol.ZONE}$5:${RoomCol.ZONE}${last_room_row}, A{dash_r+1}, '2_Room_Heat_Loss'!${RoomCol.TOTAL_LOSS}$5:${RoomCol.TOTAL_LOSS}${last_room_row})/1000"
         grid[dash_r][5] = f"=E{dash_r+1}/$E$30"
         grid[dash_r][6] = f"=(E{dash_r+1}*1000)/C{dash_r+1}"
 
@@ -131,9 +132,9 @@ def build_dashboard_tab(ss: gspread.Spreadsheet, num_rooms: int = 24, room_total
     grid[29][1] = f'="All " & COUNT(\'2_Room_Heat_Loss\'!$H$5:$H${last_room_row}) & " Rooms"'
     grid[29][2] = f"='2_Room_Heat_Loss'!$H${room_total_row}"
     grid[29][3] = "=SUM(D24:D29)"
-    grid[29][4] = f"='2_Room_Heat_Loss'!$AH${room_total_row}/1000"
+    grid[29][4] = f"='2_Room_Heat_Loss'!${RoomCol.TOTAL_LOSS}${room_total_row}/1000"
     grid[29][5] = "=SUM(F24:F29)"
-    grid[29][6] = f"='2_Room_Heat_Loss'!$AI${room_total_row}"
+    grid[29][6] = f"='2_Room_Heat_Loss'!${RoomCol.INTENSITY}${room_total_row}"
 
     # Row 33: Section 3 - Solar PV & Battery Self-Sufficiency Summary
     grid[32][0] = "SOLAR PV & BATTERY DISPATCH SUMMARY (GSHP SCENARIO)"

@@ -7,6 +7,7 @@ with Solar PV, Battery storage dispatch, and Smart Time-of-Use tariffs.
 from typing import Tuple, List, Dict, Any
 import gspread
 from ..config import THEME, FORMATS
+from ..schema import RoomCol
 from ..formatting import (
     create_repeat_cell_request,
     create_set_column_width_request,
@@ -40,7 +41,7 @@ def build_systems_tab(ss: gspread.Spreadsheet, room_total_row: int = 29, num_roo
 
     grid[4] = [
         "Space heating annual demand",
-        f"=(('2_Room_Heat_Loss'!$AH${room_total_row}/('2_Room_Heat_Loss'!$E${room_total_row}-'1_Inputs'!$C$5))*'1_Inputs'!$C$7*24/1000)*'1_Inputs'!$C$8",
+        f"=(('2_Room_Heat_Loss'!${RoomCol.TOTAL_LOSS}${room_total_row}/('2_Room_Heat_Loss'!${RoomCol.TI}${room_total_row}-'1_Inputs'!$C$5))*'1_Inputs'!$C$7*24/1000)*'1_Inputs'!$C$8",
         "=B5/$B$8",
         "(HLC × HDD × 24 / 1000) × f_usage",
         "Degree-day method using bottom-up room schedule heat loss coefficient"
@@ -85,7 +86,7 @@ def build_systems_tab(ss: gspread.Spreadsheet, room_total_row: int = 29, num_roo
 
     grid[12] = [
         "Ground Source Heat Pump (GSHP)",
-        f"=(('2_Room_Heat_Loss'!$AH${room_total_row}/1000)*(1+'1_Inputs'!$C$16))",
+        f"=(('2_Room_Heat_Loss'!${RoomCol.TOTAL_LOSS}${room_total_row}/1000)*(1+'1_Inputs'!$C$16))",
         "kW heat",
         "='1_Inputs'!$C$64",
         "=B13*D13",
@@ -93,7 +94,7 @@ def build_systems_tab(ss: gspread.Spreadsheet, room_total_row: int = 29, num_roo
     ]
     grid[13] = [
         "Air Source Heat Pump (ASHP)",
-        f"=(('2_Room_Heat_Loss'!$AH${room_total_row}/1000)*(1+'1_Inputs'!$C$16))",
+        f"=(('2_Room_Heat_Loss'!${RoomCol.TOTAL_LOSS}${room_total_row}/1000)*(1+'1_Inputs'!$C$16))",
         "kW heat",
         "='1_Inputs'!$C$65",
         "=B14*D14",
@@ -101,7 +102,7 @@ def build_systems_tab(ss: gspread.Spreadsheet, room_total_row: int = 29, num_roo
     ]
     grid[14] = [
         "Commercial Oil Boiler",
-        f"=(('2_Room_Heat_Loss'!$AH${room_total_row}/1000)*(1+'1_Inputs'!$C$17))",
+        f"=(('2_Room_Heat_Loss'!${RoomCol.TOTAL_LOSS}${room_total_row}/1000)*(1+'1_Inputs'!$C$17))",
         "kW heat",
         "='1_Inputs'!$C$66",
         "=B15*D15",
