@@ -12,14 +12,16 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 import gspread
-from .tabs.room_tab import (
-    extract_existing_rooms,
+from .config import (
     WINDOW_SPECIFICATIONS,
     CEILING_SPECIFICATIONS,
     WALL_SPECIFICATIONS,
     FLOOR_SPECIFICATIONS,
-    DOOR_SPECIFICATIONS
+    DOOR_SPECIFICATIONS,
+    MECHANICAL_VENTILATION_SPECIFICATIONS,
+    EMITTER_SPECIFICATIONS
 )
+from .tabs.room_tab import extract_existing_rooms
 from .schema import RoomCol
 
 CSV_HEADERS = [
@@ -45,6 +47,8 @@ CSV_HEADERS = [
     "Ceiling Area (m2)",
     "Ceiling Specification",
     "Chimney / Fireplace",
+    "Mechanical Ventilation",
+    "Planned Emitter Type",
     "Wall Type",
     "Floor Type",
     "Radiator Type",
@@ -151,6 +155,8 @@ def export_rooms_to_csv(rooms: List[Dict[str, Any]], csv_path: Path) -> None:
                 rm.get("roof_area", 0.0),
                 rm.get("ceil_spec", "Intermediate Floor (Heated Space Above)"),
                 rm.get("chimney", rm.get("q_chimney", "No Chimney / Permanently Sealed")),
+                rm.get("mech_vent", "None (Natural Infiltration Only)"),
+                rm.get("emitter_type", "Type 22 (Double Convector)"),
                 rm.get("wall_type", parsed["wall_type"] or "Solid Masonry"),
                 rm.get("floor_type", parsed["floor_type"] or "Standard"),
                 rm.get("rad_type", parsed["rad_type"] or "Type 22"),

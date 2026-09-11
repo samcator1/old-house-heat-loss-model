@@ -56,6 +56,8 @@ def main():
     floor_spec_data = []
     ceil_spec_data = []
     chimney_data = []
+    mech_vent_data = []
+    emitter_type_data = []
     notes_data = []
 
     with open(csv_file, "r", encoding="utf-8") as f:
@@ -109,6 +111,8 @@ def main():
                 door_spec = "No External Door (Internal Boundary Only)"
 
             chimney = row.get("Chimney / Fireplace", row.get("Chimney Flue", "No Chimney / Permanently Sealed"))
+            mech_vent = row.get("Mechanical Ventilation", "None (Natural Infiltration Only)")
+            emitter_type = row.get("Planned Emitter Type", "Type 22 (Double Convector)")
 
             notes = row.get("Notes", "")
             wall_type = row.get("Wall Type", "")
@@ -127,6 +131,8 @@ def main():
             floor_spec_data.append([floor_spec])
             ceil_spec_data.append([ceil_spec])
             chimney_data.append([chimney])
+            mech_vent_data.append([mech_vent])
+            emitter_type_data.append([emitter_type])
             notes_data.append([combined_notes])
 
     num_rooms = len(f_g_data)
@@ -145,6 +151,8 @@ def main():
         {"range": f"{RoomCol.FLOOR_SPEC}5:{RoomCol.FLOOR_SPEC}{end_row}", "values": floor_spec_data},
         {"range": f"{RoomCol.CEIL_SPEC}5:{RoomCol.CEIL_SPEC}{end_row}", "values": ceil_spec_data},
         {"range": f"{RoomCol.CHIMNEY}5:{RoomCol.CHIMNEY}{end_row}", "values": chimney_data},
+        {"range": f"{RoomCol.MECH_VENT}5:{RoomCol.MECH_VENT}{end_row}", "values": mech_vent_data},
+        {"range": f"{RoomCol.EMITTER_TYPE}5:{RoomCol.EMITTER_TYPE}{end_row}", "values": emitter_type_data},
         {"range": f"{RoomCol.NOTES}5:{RoomCol.NOTES}{end_row}", "values": notes_data}
     ]
 

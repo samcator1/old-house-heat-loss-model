@@ -167,6 +167,66 @@ CHIMNEY_SPECIFICATIONS = [
     }
 ]
 
+# Mechanical Extract & Ventilation Rates (BS EN 12831 & Building Regs Part F)
+MECHANICAL_VENTILATION_SPECIFICATIONS = [
+    {
+        "label": "None (Natural Infiltration Only)",
+        "ach": 0.00,
+        "notes": "No mechanical extract ventilation; room relies on natural envelope infiltration and stack effect"
+    },
+    {
+        "label": "Intermittent Extract Fan (Bathroom / WC - 15 l/s)",
+        "ach": 0.20,
+        "notes": "Building Regs Part F intermittent extract fan (15 l/s / 54 m³/h boost on occupancy/light switch)"
+    },
+    {
+        "label": "Intermittent Extract Fan (Kitchen / Utility - 30-60 l/s)",
+        "ach": 0.30,
+        "notes": "Part F intermittent extract cooker hood or utility fan (30-60 l/s boost)"
+    },
+    {
+        "label": "Continuous Mechanical Extract (dMEV / MEV)",
+        "ach": 0.30,
+        "notes": "Decentralized or central continuous mechanical extract running low-rate trickle extraction"
+    },
+    {
+        "label": "Mechanical Ventilation with Heat Recovery (MVHR - 85% Efficiency)",
+        "ach": 0.05,
+        "notes": "Continuous balanced supply and extract with 85%+ counter-flow heat exchanger (minimal net heat loss)"
+    }
+]
+
+# Planned Emitter Types for Heat Pump Sizing (BS EN 442 & MCS MIS 3005-D)
+EMITTER_SPECIFICATIONS = [
+    {
+        "label": "Type 22 Panel Radiator (Double Convector)",
+        "notes": "Standard double panel double convector radiator; ideal balance of output and wall projection (approx 100mm deep)"
+    },
+    {
+        "label": "Type 33 High-Output Radiator (Triple Convector)",
+        "notes": "Triple panel triple convector radiator for high heat loss rooms where wall length is constrained (approx 160mm deep)"
+    },
+    {
+        "label": "Type 21 Slimline Radiator (Double Panel Single Convector)",
+        "notes": "Slimline double panel radiator (approx 70mm deep) suitable for narrow corridors or behind doors"
+    },
+    {
+        "label": "Type 11 Single Panel Radiator",
+        "notes": "Single panel single convector for very low heat loss areas, small cloakrooms, or tight spaces"
+    },
+    {
+        "label": "Underfloor Heating (UFH - Screed / Low-Profile)",
+        "notes": "Low-temperature radiant floor heating operating at 35-40°C flow with high self-regulating thermal comfort"
+    },
+    {
+        "label": "Fan Coil / Trench Convector (Active Low-Water-Temp)",
+        "notes": "Fan-assisted hydronic convector providing high kW output at 35-45°C flow with forced convection"
+    }
+]
+
+# CIBSE Domestic Heating Design Guide (DHDG) Standard Room Design Temperatures
+CIBSE_DESIGN_TEMPS = [18.0, 20.0, 21.0, 22.0]
+
 # Backwards compatibility alias
 INFILTRATION_QUESTIONNAIRE = {
     "chimney_flue": CHIMNEY_SPECIFICATIONS
@@ -179,6 +239,12 @@ WINDOW_SPECIFICATIONS = [
         "u_value": 4.80,
         "ach": 0.40,
         "notes": 'Uninsulated traditional timber sash, 3-4mm float glass (CIBSE Guide A Table 3.29)'
+    },
+    {
+        "label": 'Single Glazed (Draught-Stripped / Weather-Sealed Timber Sash)',
+        "u_value": 4.40,
+        "ach": 0.15,
+        "notes": 'Historic England recommended timber sash retrofit with perimeter routed brush pile seals and compression beading'
     },
     {
         "label": 'Single Glazed (Metal / Crittall / Stone Mullion)',
@@ -415,6 +481,12 @@ WALL_SPECIFICATIONS = [
         "u_value": 0.00,
         "ach": 0.00,
         "notes": 'Internal partition or party wall adjoining heated space; zero envelope transmission loss'
+    },
+    {
+        "label": 'Internal Partition to Unheated Garage / Store / Cellar',
+        "u_value": 1.05,
+        "ach": 0.00,
+        "notes": 'BS EN 12831 unheated boundary: internal masonry/stud partition adjoining cold unconditioned space (bu = 0.50 applied to 2.1 W/m²K)'
     }
 ]
 
@@ -503,6 +575,18 @@ FLOOR_SPECIFICATIONS = [
         "u_value": 0.00,
         "ach": 0.00,
         "notes": 'Floor separating heated space from fully conditioned adjoining residential unit'
+    },
+    {
+        "label": 'Suspended Timber / Floor over Unheated Cellar Void',
+        "u_value": 0.50,
+        "ach": 0.15,
+        "notes": 'BS EN 12831: Floor above unheated cellar or semi-underground basement (bu = 0.60 applied to 0.80 W/m²K)'
+    },
+    {
+        "label": 'Historic Breathable Insulated Limecrete Floor (Foamed Glass / Cork Lime)',
+        "u_value": 0.22,
+        "ach": 0.00,
+        "notes": 'Historic England heritage specification: compacted foamed glass aggregate sub-base with breathable lime screed'
     }
 ]
 

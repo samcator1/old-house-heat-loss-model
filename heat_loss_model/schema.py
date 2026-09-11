@@ -48,6 +48,7 @@ COLUMN_DEFINITIONS: List[Tuple[str, str, int, str]] = [
     ("CEIL_LOSS", "Ceiling Loss (W)", 110, "FABRIC"),
     ("TB_LOSS", "Thermal Bridge Loss (W)", 125, "FABRIC"),
     ("CHIMNEY", "Chimney / Fireplace", 200, "VENTILATION"),
+    ("MECH_VENT", "Mechanical Ventilation", 220, "VENTILATION"),
     ("ACH", "Calculated ACH", 105, "VENTILATION"),
     ("VENT_LOSS", "Vent Loss (W)", 105, "VENTILATION"),
     ("TOTAL_LOSS", "Room Heat Loss (W)", 135, "TOTALS"),
@@ -56,7 +57,8 @@ COLUMN_DEFINITIONS: List[Tuple[str, str, int, str]] = [
     ("RAD_DT50", "Catalogue Rating Req (ΔT50) (W)", 165, "TOTALS"),
     ("FLOW_RATE", "Design Flow Rate (l/h)", 125, "TOTALS"),
     ("REC_PIPE", "Min Pipe Size", 130, "TOTALS"),
-    ("REC_EMITTER", "Recommended New Emitter", 180, "TOTALS"),
+    ("EMITTER_TYPE", "Planned Emitter Type", 210, "TOTALS"),
+    ("REC_EMITTER", "Recommended Sizing", 200, "TOTALS"),
     ("NOTES", "Notes / Survey Observations", 260, "NOTES"),
 ]
 
