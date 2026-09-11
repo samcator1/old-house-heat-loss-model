@@ -898,9 +898,7 @@ def build_room_tab(ss: gspread.Spreadsheet) -> Tuple[gspread.Worksheet, List[Dic
     chimney_labels = [opt["label"] for opt in CHIMNEY_SPECIFICATIONS]
     mech_labels = [opt["label"] for opt in MECHANICAL_VENTILATION_SPECIFICATIONS]
     emitter_labels = [opt["label"] for opt in EMITTER_SPECIFICATIONS]
-    temp_presets = [f"{t:.1f}" for t in CIBSE_DESIGN_TEMPS]
 
-    fmt_reqs.append(create_data_validation_request(ws.id, 4, last_room_row, RoomCol.idx("TI"), RoomCol.idx("TI") + 1, temp_presets))
     fmt_reqs.append(create_data_validation_request(ws.id, 4, last_room_row, RoomCol.idx("WALL_SPEC"), RoomCol.idx("WALL_SPEC") + 1, wall_labels))
     fmt_reqs.append(create_data_validation_request(ws.id, 4, last_room_row, RoomCol.idx("WIN_SPEC"), RoomCol.idx("WIN_SPEC") + 1, win_labels))
     fmt_reqs.append(create_data_validation_request(ws.id, 4, last_room_row, RoomCol.idx("DOOR_SPEC"), RoomCol.idx("DOOR_SPEC") + 1, door_labels))

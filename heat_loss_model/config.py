@@ -199,27 +199,27 @@ MECHANICAL_VENTILATION_SPECIFICATIONS = [
 # Planned Emitter Types for Heat Pump Sizing (BS EN 442 & MCS MIS 3005-D)
 EMITTER_SPECIFICATIONS = [
     {
-        "label": "Type 22 Panel Radiator (Double Convector)",
-        "notes": "Standard double panel double convector radiator; ideal balance of output and wall projection (approx 100mm deep)"
+        "label": "Type 22 (Double Convector)",
+        "notes": "Standard double panel double convector radiator; ideal balance of output and wall projection (~100mm deep)"
     },
     {
-        "label": "Type 33 High-Output Radiator (Triple Convector)",
-        "notes": "Triple panel triple convector radiator for high heat loss rooms where wall length is constrained (approx 160mm deep)"
+        "label": "Type 33 (Triple Convector)",
+        "notes": "Triple panel triple convector radiator for high heat loss rooms where wall length is constrained (~160mm deep)"
     },
     {
-        "label": "Type 21 Slimline Radiator (Double Panel Single Convector)",
-        "notes": "Slimline double panel radiator (approx 70mm deep) suitable for narrow corridors or behind doors"
+        "label": "Type 21 (Single Convector)",
+        "notes": "Slimline double panel single convector radiator (~70mm deep) suitable for narrow corridors or behind doors"
     },
     {
-        "label": "Type 11 Single Panel Radiator",
+        "label": "Type 11 (Single Panel)",
         "notes": "Single panel single convector for very low heat loss areas, small cloakrooms, or tight spaces"
     },
     {
-        "label": "Underfloor Heating (UFH - Screed / Low-Profile)",
+        "label": "Underfloor Heating (UFH)",
         "notes": "Low-temperature radiant floor heating operating at 35-40°C flow with high self-regulating thermal comfort"
     },
     {
-        "label": "Fan Coil / Trench Convector (Active Low-Water-Temp)",
+        "label": "Fan Convector (Low-Temp)",
         "notes": "Fan-assisted hydronic convector providing high kW output at 35-45°C flow with forced convection"
     }
 ]
