@@ -47,6 +47,7 @@ def main():
     tab_name = "2_Room_Heat_Loss" if "2_Room_Heat_Loss" in [w.title for w in ss.worksheets()] else "5_Room_Heat_Loss"
     ws = ss.worksheet(tab_name)
 
+    room_type_data = []
     f_g_data = []
     i_data = []
     k_l_data = []
@@ -122,6 +123,8 @@ def main():
             
             combined_notes = f"{notes} | Construction: {wall_type} | Rad: {rad_type} {rad_size} ({pipe_size})"
 
+            r_type = row.get("Room Type", "")
+            room_type_data.append([r_type])
             f_g_data.append([r_len, r_wid])
             i_data.append([r_ht])
             k_l_data.append([ext_wall, wall_spec])
@@ -141,7 +144,10 @@ def main():
         return
 
     end_row = 4 + num_rooms
-    batch_updates = [
+    batch_updates = []
+    if any(r[0] for r in room_type_data):
+        batch_updates.append({"range": f"{RoomCol.ROOM_TYPE}5:{RoomCol.ROOM_TYPE}{end_row}", "values": room_type_data})
+    batch_updates.extend([
         {"range": f"{RoomCol.LENGTH}5:{RoomCol.WIDTH}{end_row}", "values": f_g_data},
         {"range": f"{RoomCol.HEIGHT}5:{RoomCol.HEIGHT}{end_row}", "values": i_data},
         {"range": f"{RoomCol.EXT_WALL_L}5:{RoomCol.WALL_SPEC}{end_row}", "values": k_l_data},
@@ -154,7 +160,7 @@ def main():
         {"range": f"{RoomCol.MECH_VENT}5:{RoomCol.MECH_VENT}{end_row}", "values": mech_vent_data},
         {"range": f"{RoomCol.EMITTER_TYPE}5:{RoomCol.EMITTER_TYPE}{end_row}", "values": emitter_type_data},
         {"range": f"{RoomCol.NOTES}5:{RoomCol.NOTES}{end_row}", "values": notes_data}
-    ]
+    ])
 
     ws.batch_update(batch_updates)
     console.print(f"[bold green]✓ Successfully updated {num_rooms} rooms in {tab_name} via batch API![/bold green]")

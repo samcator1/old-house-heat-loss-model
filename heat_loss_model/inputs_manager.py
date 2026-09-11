@@ -176,7 +176,23 @@ INPUT_DEFINITIONS: List[Dict[str, Any]] = [
     {"row": 177, "key": "hp_system_delta_t", "section": "14. MCS Heat Pump & Radiator Design Parameters", "label": "System Design Temperature Drop (ΔT)", "default": 5.0, "unit": "K", "fmt": FORMATS["TEMP_C"], "notes": "Heat pump optimal emitter temperature drop (typically 5K)"},
     {"row": 178, "key": "thermal_bridge_factor", "section": "14. MCS Heat Pump & Radiator Design Parameters", "label": "Thermal Bridging Allowance (f_tb)", "default": 0.10, "unit": "%", "fmt": FORMATS["PERCENT"], "notes": "MCS MIS 3005 default (+10% on fabric losses for existing buildings)"},
     {"row": 179, "key": "rad_exponent_n", "section": "14. MCS Heat Pump & Radiator Design Parameters", "label": "Radiator Output Exponent (n)", "default": 1.30, "unit": "exponent", "fmt": FORMATS["DECIMAL_2"], "notes": "Standard BS EN 442 panel radiator exponent (typically 1.25 to 1.33)"},
-    {"row": 180, "key": "reheat_allowance_pct", "section": "14. MCS Heat Pump & Radiator Design Parameters", "label": "Intermittent Reheat Allowance (f_hu)", "default": 0.00, "unit": "%", "fmt": FORMATS["PERCENT"], "notes": "0% for continuous 24/7 heat pump weather-compensated operation"}
+    {"row": 180, "key": "reheat_allowance_pct", "section": "14. MCS Heat Pump & Radiator Design Parameters", "label": "Intermittent Reheat Allowance (f_hu)", "default": 0.00, "unit": "%", "fmt": FORMATS["PERCENT"], "notes": "0% for continuous 24/7 heat pump weather-compensated operation"},
+
+    # Section 15: CIBSE Domestic Room Types & Standard Design Temperatures (CIBSE Guide A Table 1.5 & DHDG)
+    {"row": 185, "key": "ti_room_living", "section": "15. CIBSE Room Types & Design Temperatures", "label": "Living Room / Sitting Room", "default": 21.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "CIBSE Guide A main comfort space benchmark (21°C)"},
+    {"row": 186, "key": "ti_room_dining", "section": "15. CIBSE Room Types & Design Temperatures", "label": "Dining Room", "default": 21.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "CIBSE Guide A formal dining comfort benchmark (21°C)"},
+    {"row": 187, "key": "ti_room_kitchen", "section": "15. CIBSE Room Types & Design Temperatures", "label": "Kitchen / Breakfast Room", "default": 18.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "CIBSE DHDG benchmark (18°C) accounting for internal cooking equipment heat gains"},
+    {"row": 188, "key": "ti_room_bedroom", "section": "15. CIBSE Room Types & Design Temperatures", "label": "Bedroom (General / Master)", "default": 18.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "CIBSE Guide A sleeping benchmark (18°C) for health and energy conservation"},
+    {"row": 189, "key": "ti_room_bathroom", "section": "15. CIBSE Room Types & Design Temperatures", "label": "Bathroom / Shower Room / En-suite", "default": 22.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "CIBSE Guide A high-comfort benchmark (22°C) for wet areas"},
+    {"row": 190, "key": "ti_room_cloakroom", "section": "15. CIBSE Room Types & Design Temperatures", "label": "Cloakroom / Downstairs WC", "default": 18.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "CIBSE Guide A short-stay ancillary room benchmark (18°C)"},
+    {"row": 191, "key": "ti_room_circulation", "section": "15. CIBSE Room Types & Design Temperatures", "label": "Hallway / Stairs / Circulation", "default": 18.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "CIBSE Guide A circulation benchmark (18°C)"},
+    {"row": 192, "key": "ti_room_study", "section": "15. CIBSE Room Types & Design Temperatures", "label": "Home Office / Study", "default": 21.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "CIBSE Guide A sedentary working comfort benchmark (21°C)"},
+    {"row": 193, "key": "ti_room_utility", "section": "15. CIBSE Room Types & Design Temperatures", "label": "Utility Room / Laundry", "default": 18.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "CIBSE Guide A utility and boot room benchmark (18°C)"},
+    {"row": 194, "key": "ti_room_porch", "section": "15. CIBSE Room Types & Design Temperatures", "label": "Side Entrance Lobby / Porch", "default": 16.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "CIBSE Guide A unconditioned/transitional entrance benchmark (16°C)"},
+    {"row": 195, "key": "ti_room_orangery", "section": "15. CIBSE Room Types & Design Temperatures", "label": "Orangery / Conservatory / Garden Room", "default": 21.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "Glazed living space comfort benchmark (21°C)"},
+    {"row": 196, "key": "ti_room_snug", "section": "15. CIBSE Room Types & Design Temperatures", "label": "Playroom / Family Snug", "default": 21.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "Secondary living / family room comfort benchmark (21°C)"},
+    {"row": 197, "key": "ti_room_dressing", "section": "15. CIBSE Room Types & Design Temperatures", "label": "Dressing Room / Walk-in Wardrobe", "default": 18.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "Bed ancillary dressing space benchmark (18°C)"},
+    {"row": 198, "key": "ti_room_unheated", "section": "15. CIBSE Room Types & Design Temperatures", "label": "Unheated Space / Plant Room / Store", "default": 10.0, "unit": "°C", "fmt": FORMATS["TEMP_C"], "notes": "Protected frost/equipment baseline (~10°C)"}
 ]
 
 SECTION_HEADERS = [
@@ -193,7 +209,8 @@ SECTION_HEADERS = [
     {"row": 127, "title": "11. WALL CONSTRUCTION THERMAL TRANSMITTANCE (U-VALUES)"},
     {"row": 146, "title": "12. GROUND & FLOOR CONSTRUCTION THERMAL TRANSMITTANCE (U-VALUES)"},
     {"row": 164, "title": "13. EXTERNAL DOOR CONSTRUCTION THERMAL TRANSMITTANCE (U-VALUES)"},
-    {"row": 174, "title": "14. MCS HEAT PUMP & RADIATOR DESIGN PARAMETERS"}
+    {"row": 174, "title": "14. MCS HEAT PUMP & RADIATOR DESIGN PARAMETERS"},
+    {"row": 183, "title": "15. CIBSE DOMESTIC ROOM TYPES & DESIGN TEMPERATURES"}
 ]
 
 class InputsManager:

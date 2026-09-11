@@ -224,8 +224,82 @@ EMITTER_SPECIFICATIONS = [
     }
 ]
 
+# CIBSE Domestic Room Types & Standard Design Temperatures (CIBSE Guide A Table 1.5 & DHDG)
+ROOM_TYPE_SPECIFICATIONS = [
+    {
+        "label": "Living Room / Sitting Room",
+        "design_temp": 21.0,
+        "notes": "CIBSE Guide A main comfort space benchmark (21°C)"
+    },
+    {
+        "label": "Dining Room",
+        "design_temp": 21.0,
+        "notes": "CIBSE Guide A formal dining comfort benchmark (21°C)"
+    },
+    {
+        "label": "Kitchen / Breakfast Room",
+        "design_temp": 18.0,
+        "notes": "CIBSE DHDG benchmark (18°C) accounting for internal cooking equipment heat gains"
+    },
+    {
+        "label": "Bedroom (General / Master)",
+        "design_temp": 18.0,
+        "notes": "CIBSE Guide A sleeping benchmark (18°C) for health and energy conservation"
+    },
+    {
+        "label": "Bathroom / Shower Room / En-suite",
+        "design_temp": 22.0,
+        "notes": "CIBSE Guide A high-comfort benchmark (22°C) for wet areas"
+    },
+    {
+        "label": "Cloakroom / Downstairs WC",
+        "design_temp": 18.0,
+        "notes": "CIBSE Guide A short-stay ancillary room benchmark (18°C)"
+    },
+    {
+        "label": "Hallway / Stairs / Circulation",
+        "design_temp": 18.0,
+        "notes": "CIBSE Guide A circulation benchmark (18°C)"
+    },
+    {
+        "label": "Home Office / Study",
+        "design_temp": 21.0,
+        "notes": "CIBSE Guide A sedentary working comfort benchmark (21°C)"
+    },
+    {
+        "label": "Utility Room / Laundry",
+        "design_temp": 18.0,
+        "notes": "CIBSE Guide A utility and boot room benchmark (18°C)"
+    },
+    {
+        "label": "Side Entrance Lobby / Porch",
+        "design_temp": 16.0,
+        "notes": "CIBSE Guide A unconditioned/transitional entrance benchmark (16°C)"
+    },
+    {
+        "label": "Orangery / Conservatory / Garden Room",
+        "design_temp": 21.0,
+        "notes": "Glazed living space comfort benchmark (21°C)"
+    },
+    {
+        "label": "Playroom / Family Snug",
+        "design_temp": 21.0,
+        "notes": "Secondary living / family room comfort benchmark (21°C)"
+    },
+    {
+        "label": "Dressing Room / Walk-in Wardrobe",
+        "design_temp": 18.0,
+        "notes": "Bed ancillary dressing space benchmark (18°C)"
+    },
+    {
+        "label": "Unheated Space / Plant Room / Store",
+        "design_temp": 10.0,
+        "notes": "Protected frost/equipment baseline (~10°C)"
+    }
+]
+
 # CIBSE Domestic Heating Design Guide (DHDG) Standard Room Design Temperatures
-CIBSE_DESIGN_TEMPS = [18.0, 20.0, 21.0, 22.0]
+CIBSE_DESIGN_TEMPS = [16.0, 18.0, 20.0, 21.0, 22.0]
 
 # Backwards compatibility alias
 INFILTRATION_QUESTIONNAIRE = {

@@ -120,8 +120,8 @@ def build_dashboard_tab(ss: gspread.Spreadsheet, num_rooms: int = 24, room_total
         z_desc = zone_types.get(z_name, z.get("zone_type", "Standard"))
         dash_r = 23 + z_idx
         grid[dash_r][0] = z_name
-        grid[dash_r][1] = f'=COUNTIF(\'2_Room_Heat_Loss\'!$D$5:$D${last_room_row}, A{dash_r+1}) & " rms (" & "{z_desc})"'
-        grid[dash_r][2] = f"=SUMIF('2_Room_Heat_Loss'!$D$5:$D${last_room_row}, A{dash_r+1}, '2_Room_Heat_Loss'!$H$5:$H${last_room_row})"
+        grid[dash_r][1] = f'=COUNTIF(\'2_Room_Heat_Loss\'!${RoomCol.ZONE}$5:${RoomCol.ZONE}${last_room_row}, A{dash_r+1}) & " rms (" & "{z_desc})"'
+        grid[dash_r][2] = f"=SUMIF('2_Room_Heat_Loss'!${RoomCol.ZONE}$5:${RoomCol.ZONE}${last_room_row}, A{dash_r+1}, '2_Room_Heat_Loss'!${RoomCol.AREA}$5:${RoomCol.AREA}${last_room_row})"
         grid[dash_r][3] = f"=C{dash_r+1}/$C$30"
         grid[dash_r][4] = f"=SUMIF('2_Room_Heat_Loss'!${RoomCol.ZONE}$5:${RoomCol.ZONE}${last_room_row}, A{dash_r+1}, '2_Room_Heat_Loss'!${RoomCol.TOTAL_LOSS}$5:${RoomCol.TOTAL_LOSS}${last_room_row})/1000"
         grid[dash_r][5] = f"=E{dash_r+1}/$E$30"
@@ -129,8 +129,8 @@ def build_dashboard_tab(ss: gspread.Spreadsheet, num_rooms: int = 24, room_total
 
     # Total Zone Row (Row 30)
     grid[29][0] = "Total Whole Building"
-    grid[29][1] = f'="All " & COUNT(\'2_Room_Heat_Loss\'!$H$5:$H${last_room_row}) & " Rooms"'
-    grid[29][2] = f"='2_Room_Heat_Loss'!$H${room_total_row}"
+    grid[29][1] = f'="All " & COUNT(\'2_Room_Heat_Loss\'!${RoomCol.AREA}$5:${RoomCol.AREA}${last_room_row}) & " Rooms"'
+    grid[29][2] = f"='2_Room_Heat_Loss'!${RoomCol.AREA}${room_total_row}"
     grid[29][3] = "=SUM(D24:D29)"
     grid[29][4] = f"='2_Room_Heat_Loss'!${RoomCol.TOTAL_LOSS}${room_total_row}/1000"
     grid[29][5] = "=SUM(F24:F29)"

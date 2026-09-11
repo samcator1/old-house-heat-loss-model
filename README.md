@@ -36,8 +36,8 @@ The original sheet is safely preserved as `_Legacy_Heating` for historical refer
 | Tab Name | Type | Description |
 |---|---|---|
 | **`0_Executive_Dashboard`** | Formula View | KPI cards (Peak kW, Annual kWh, Running Cost £/yr, Grid Import/Export, CO2 reduction), tech options comparison matrix, zone breakdown & renewable balance. |
-| **`1_Inputs`** | User Control | Central assumptions and parameter control center (rows 1–182). Configures design temperatures, fuel prices, heat pump SCOPs, U-values (walls, windows, doors, floors, roofs), and MCS heat pump & radiator parameters (45°C flow, 40°C return, 5K delta T, +10% thermal bridging). Blue cells are editable and preserved non-destructively on sync. |
-| **`2_Room_Heat_Loss`** | Dynamic Formula | Master 46-column room-by-room schedule compliant with MCS MIS 3005-D & BS EN 12831. Includes 5-badge compliance audit header, live dropdowns for walls/doors/windows/floors/ceilings, BS EN 12831 survey questionnaire, fabric, door & ventilation losses, +10% thermal bridging allowance, brand new low-temperature emitter sizing (BS EN 442 Delta T 50 catalogue rating), water flow rates (l/h), and recommended pipe sizes. |
+| **`1_Inputs`** | User Control | Central assumptions and parameter control center (rows 1–198). Configures design temperatures, fuel prices, heat pump SCOPs, U-values (walls, windows, doors, floors, roofs), MCS heat pump & radiator parameters (45°C flow, 40°C return, 5K delta T, +10% thermal bridging), and Section 15 CIBSE Guide A domestic room types & benchmarks. Blue cells are editable and preserved non-destructively on sync. |
+| **`2_Room_Heat_Loss`** | Dynamic Formula | Master 45-column room-by-room schedule compliant with MCS MIS 3005-D & BS EN 12831. Includes 5-badge compliance audit header, in-cell Room Type dropdown dynamically assigning CIBSE Design Ti, live dropdowns for walls/doors/windows/floors/ceilings, BS EN 12831 infiltration assessment, fabric, door & ventilation losses, +10% thermal bridging allowance, low-temperature emitter sizing (BS EN 442 Delta T 50 catalogue rating), water flow rates (l/h), and recommended pipe sizes. |
 | **`3_DHW_and_Pool`** | Dynamic Formula | Domestic hot water volume, storage vessel reheat power, secondary loop loss, Legionella cycle, and seasonal swimming pool thermal requirements. |
 | **`4_Heating_and_Renewables`** | Dynamic Formula | Plant sizing, turnkey capital costs, seasonal SCOPs, annual fuel consumption, Solar PV + Battery load shifting, smart tariffs, and 10-year TCO. |
 | **`_Archive_Wing_Heat_Loss`** | Protected Archive | Preserved macro 6-zone approximation with corrected ground ΔT (superseded by room schedule). |
@@ -86,9 +86,10 @@ python sync_model.py
 
 Google Sheets is the single interactive front end and master database for the entire building model:
 1. **Interactive Room Schedule (`2_Room_Heat_Loss`)**:
+   - Select the **Room Type** from the dropdown menu (Col E) to dynamically look up standard CIBSE Guide A design temperatures ($T_i$), or customize default temperatures globally on `1_Inputs`.
    - Edit room dimensions, ceiling heights, and external wall lengths directly in the sheet.
-   - Select wall, window, floor, and ceiling constructions from dropdown menus linked to live U-values and infiltration adders on `1_Inputs`.
-   - Select chimney / fireplace status from the single ventilation dropdown (air infiltration for fabric elements is automatically looked up from their respective specification tables on `1_Inputs`).
+   - Select wall, window, door, floor, and ceiling constructions from dropdown menus linked to live U-values and infiltration adders on `1_Inputs`.
+   - Select chimney / fireplace and mechanical ventilation status from dropdown menus.
    - Automatically size low-temperature 45°C radiators and design flow rates (l/h) per room.
 2. **Offline Backup & CSV Utilities**:
    - To create a local snapshot of your room data at any time, run:

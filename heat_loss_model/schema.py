@@ -20,6 +20,7 @@ COLUMN_DEFINITIONS: List[Tuple[str, str, int, str]] = [
     ("NAME", "Room Name", 220, "ROOM"),
     ("FLOOR", "Floor Level", 100, "ROOM"),
     ("ZONE", "Zone / Wing", 150, "ROOM"),
+    ("ROOM_TYPE", "Room Type", 210, "ROOM"),
     ("TI", "Design Ti (°C)", 105, "ROOM"),
     ("LENGTH", "Length (m)", 85, "DIMENSIONS"),
     ("WIDTH", "Width (m)", 85, "DIMENSIONS"),
